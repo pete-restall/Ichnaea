@@ -22,8 +22,7 @@ namespace Restall.Ichnaea.Demo
 
 		private static string ModelTypeToViewPath(Type modelType)
 		{
-			int lengthOfRootNamespaceAndDot = typeof(Bootstrapper).Namespace.Length + 1;
-			var typeNameRelativeToRoot = modelType.FullName.Remove(0, lengthOfRootNamespaceAndDot);
+			var typeNameRelativeToRoot = modelType.FullName.Remove(0, "Restall.Ichnaea.Demo.".Length);
 			return typeNameRelativeToRoot.Replace('.', '/') + "View";
 		}
 	}
