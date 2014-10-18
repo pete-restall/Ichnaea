@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Ichnaea")]
-[assembly: AssemblyDescription("Aggregate Tracking for .NET")]
+[assembly: AssemblyDescription("Unobtrusive Aggregate Tracking for .NET")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Pete Restall <pete@restall.net>")]
 [assembly: AssemblyProduct("Ichnaea")]

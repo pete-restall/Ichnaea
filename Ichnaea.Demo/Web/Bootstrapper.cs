@@ -1,17 +1,31 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Nancy;
 using Nancy.Conventions;
 using Nancy.TinyIoc;
 using Restall.Nancy.ServiceRouting;
 
-namespace Restall.Ichnaea.Demo
+namespace Restall.Ichnaea.Demo.Web
 {
 	public class Bootstrapper: DefaultNancyBootstrapper
 	{
+		protected override IEnumerable<Func<Assembly, bool>> AutoRegisterIgnoredAssemblies
+		{
+			get { return new Func<Assembly, bool>[] {asm => asm.GetName().Name != "Restall.Ichnaea.Demo"}; }
+		}
+
+		protected override void ConfigureApplicationContainer(TinyIoCContainer container)
+		{
+			base.ConfigureApplicationContainer(container);
+			container.Register((ctx, _) => RouteRegistrarFactory.CreateDefaultInstance(ctx.Resolve));
+			DatabaseBootstrapper.RegisterDatabaseDependenciesInto(container);
+		}
+
 		protected override void ConfigureRequestContainer(TinyIoCContainer container, NancyContext context)
 		{
 			base.ConfigureRequestContainer(container, context);
-			container.Register((ctx, _) => RouteRegistrarFactory.CreateDefaultInstance(ctx.Resolve));
+			container.Register((ctx, _) => context);
 		}
 
 		protected override void ConfigureConventions(NancyConventions nancyConventions)

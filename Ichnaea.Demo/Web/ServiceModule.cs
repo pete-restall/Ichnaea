@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Nancy;
 using Restall.Nancy.ServiceRouting;
 
-namespace Restall.Ichnaea.Demo
+namespace Restall.Ichnaea.Demo.Web
 {
 	public class ServiceModule: NancyModule
 	{
@@ -18,7 +18,10 @@ namespace Restall.Ichnaea.Demo
 		{
 			get
 			{
-				return Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsClass && !x.IsAbstract && x.Name.EndsWith("Service"));
+				return Assembly
+					.GetExecutingAssembly()
+					.GetTypes()
+					.Where(x => x.IsClass && !x.IsAbstract && x.Namespace != null && x.Namespace.Contains(".Web") && x.Name.EndsWith("Service"));
 			}
 		}
 	}

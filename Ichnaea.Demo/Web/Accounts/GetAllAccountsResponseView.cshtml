@@ -1,0 +1,24 @@
+@inherits NancyRazorViewBase<GetAllAccountsResponse>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Ichnaea.Demo - All Accounts</title>
+	</head>
+
+	<body>
+		<h2>All Accounts</h2>
+		<table>
+			<thead>
+				<tr><td>Sort Code / Account</td><td>Account Holder</td></tr>
+			</thead>
+			<tbody>
+				@foreach (var account in @Model.Accounts)
+				{
+					<tr><td><a href="@account.GetDetailsUri">@account.SortCode / @account.AccountNumber</a></td><td>account.Holder</td></tr>
+				}
+			</tbody>
+		</table>
+
+		<a href="@Model.AddAccountUri">Add Account</a>
+	</body>
+</html>
