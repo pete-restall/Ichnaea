@@ -45,7 +45,7 @@ namespace Restall.Ichnaea.Fody
 			if (this.ModuleDefinition == null)
 				throw new InvalidOperationException("ModuleDefinition cannot be null.  Is Fody integrated into the build correctly ?");
 
-			var type = this.ModuleDefinition.GetType("Restall.Ichnaea.Fody.AssemblyToProcess.AggregateWithSingleEvent");
+			var type = this.ModuleDefinition.GetType("Restall.Ichnaea.Fody.AssemblyToProcess.AggregateRootWithSingleEvent");
 			var eventSourcingMethod = this.CreateMethodToRaiseEvent(type);
 			type.Methods.Add(eventSourcingMethod);
 			foreach (var method in type.Methods.Where(x => x.Name.StartsWith("DoSomething")))

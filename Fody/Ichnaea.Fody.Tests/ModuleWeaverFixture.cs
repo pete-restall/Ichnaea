@@ -19,7 +19,7 @@ namespace Restall.Ichnaea.Fody.Tests
 			File.Copy(OriginalAssemblyFilename, WovenAssemblyFilename, true);
 			WeaveAssembly();
 			LoadWovenAssembly();
-			AggregateFactory = new AggregateFactory();
+			AggregateRootFactory = new AggregateRootFactory();
 		}
 
 		private static void SetAssemblyFilenames()
@@ -46,7 +46,7 @@ namespace Restall.Ichnaea.Fody.Tests
 			Assembly = Assembly.LoadFile(WovenAssemblyFilename);
 		}
 
-		public static AggregateFactory AggregateFactory { get; private set; }
+		public static AggregateRootFactory AggregateRootFactory { get; private set; }
 
 		public static string OriginalAssemblyFilename { get; private set; }
 

@@ -62,10 +62,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AggregateFactory.cs" />
+    <Compile Include="AggregateRootFactory.cs" />
     <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="Integration\AggregateTest.cs" />
-    <Compile Include="Integration\AggregateWithSingleEventTest.cs" />
+    <Compile Include="Integration\AggregateRootTest.cs" />
+    <Compile Include="Integration\AggregateRootWithSingleEventTest.cs" />
     <Compile Include="Integration\AssemblyVerificationTest.cs" />
     <Compile Include="ModuleWeaverFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

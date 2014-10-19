@@ -1,4 +1,4 @@
-﻿namespace Restall.Ichnaea.Demo
+namespace Restall.Ichnaea.Demo.Accounts
 {
 	public class OverdraftAdjusted: AccountEvent
 	{
@@ -7,6 +7,6 @@
 			this.Amount = amount;
 		}
 
-		public decimal Amount { get; set; }
+		public decimal Amount { get; private set; }
 	}
 }

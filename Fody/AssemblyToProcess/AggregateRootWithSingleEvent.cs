@@ -3,8 +3,8 @@ using System.Threading;
 
 namespace Restall.Ichnaea.Fody.AssemblyToProcess
 {
-	[Aggregate]
-	public class AggregateWithSingleEvent
+	[AggregateRoot]
+	public class AggregateRootWithSingleEvent
 	{
 		public void DoSomething(Guid token)
 		{

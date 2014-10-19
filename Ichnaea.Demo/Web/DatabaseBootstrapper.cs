@@ -1,3 +1,4 @@
+using System.Reflection;
 using NEventStore;
 using NEventStore.Persistence;
 using NEventStore.Persistence.RavenDB;
@@ -6,6 +7,7 @@ using Nancy.TinyIoc;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
+using Raven.Client.Indexes;
 
 namespace Restall.Ichnaea.Demo.Web
 {
@@ -25,6 +27,7 @@ namespace Restall.Ichnaea.Demo.Web
 		{
 			var store = new EmbeddableDocumentStore { DataDirectory = RavenDatabaseDirectory };
 			store.Initialize();
+			IndexCreation.CreateIndexes(Assembly.GetExecutingAssembly(), store);
 			return store;
 		}
 

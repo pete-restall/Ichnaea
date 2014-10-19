@@ -2,7 +2,7 @@
 
 namespace Restall.Ichnaea
 {
-	public class AggregateAttribute: Attribute
+	public class AggregateRootAttribute: Attribute
 	{
 	}
 }

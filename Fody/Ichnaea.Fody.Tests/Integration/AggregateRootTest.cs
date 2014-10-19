@@ -3,21 +3,21 @@ using FluentAssertions;
 
 namespace Restall.Ichnaea.Fody.Tests.Integration
 {
-	public abstract class AggregateTest
+	public abstract class AggregateRootTest
 	{
-		protected readonly object Aggregate;
+		protected readonly object AggregateRoot;
 
-		protected AggregateTest(object aggregate)
+		protected AggregateRootTest(object aggregateRoot)
 		{
-			this.Aggregate = aggregate;
+			this.AggregateRoot = aggregateRoot;
 		}
 
 		protected void ExpectDynamicCallRaisesDomainEventWithSameToken(string eventFieldName, Action<dynamic, Guid> action)
 		{
 			var token = Guid.NewGuid();
-			this.Aggregate.MonitorEvents();
-			action(this.Aggregate, token);
-			this.Aggregate.ShouldRaise(eventFieldName).WithDomainEvent<object>(this.Aggregate, x => SomethingHappenedWithToken(x, token));
+			this.AggregateRoot.MonitorEvents();
+			action(this.AggregateRoot, token);
+			this.AggregateRoot.ShouldRaise(eventFieldName).WithDomainEvent<object>(this.AggregateRoot, x => SomethingHappenedWithToken(x, token));
 		}
 
 		protected static bool SomethingHappenedWithToken(object args, Guid token)

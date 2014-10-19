@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AggregateAttribute.cs" />
+    <Compile Include="AggregateRootAttribute.cs" />
+    <Compile Include="IDomainEventStream.cs" />
+    <Compile Include="IDomainEventTracker.cs" />
     <Compile Include="Source.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

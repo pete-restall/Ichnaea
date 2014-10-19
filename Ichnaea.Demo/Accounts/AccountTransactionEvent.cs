@@ -1,4 +1,4 @@
-﻿namespace Restall.Ichnaea.Demo
+namespace Restall.Ichnaea.Demo.Accounts
 {
 	public abstract class AccountTransactionEvent: AccountEvent
 	{
@@ -8,8 +8,8 @@
 			this.Description = description;
 		}
 
-		public decimal Amount { get; set; }
+		public decimal Amount { get; private set; }
 
-		public string Description { get; set; }
+		public string Description { get; private set; }
 	}
 }

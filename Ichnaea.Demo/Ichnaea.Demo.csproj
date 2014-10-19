@@ -143,28 +143,36 @@
     <Content Include="Web.config" />
     <Content Include="Web\Accounts\GetAccountResponseView.cshtml" />
     <Content Include="Web\Accounts\GetAllAccountsResponseView.cshtml" />
-    <Content Include="Web\Accounts\IncompleteAddAccountResponseView.cshtml" />
-    <Content Include="Web\Accounts\AddAccountResponseView.cshtml" />
+    <Content Include="Web\Accounts\IncompleteOpenAccountResponseView.cshtml" />
+    <Content Include="Web\Accounts\OpenAccountResponseView.cshtml" />
     <Content Include="Web\Home\IndexResponseView.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account.cs" />
-    <Compile Include="AccountCredited.cs" />
-    <Compile Include="AccountDebited.cs" />
-    <Compile Include="AccountDebitRejected.cs" />
-    <Compile Include="AccountEvent.cs" />
-    <Compile Include="AccountTransactionEvent.cs" />
-    <Compile Include="OverdraftAdjusted.cs" />
+    <Compile Include="Accounts\Account.cs" />
+    <Compile Include="Accounts\AccountEvent.cs" />
+    <Compile Include="Accounts\AccountId.cs" />
+    <Compile Include="Accounts\AccountOpened.cs" />
+    <Compile Include="Accounts\AccountRepository.cs" />
+    <Compile Include="Accounts\AccountTransactionEvent.cs" />
+    <Compile Include="Accounts\BalanceCredited.cs" />
+    <Compile Include="Accounts\BalanceDebited.cs" />
+    <Compile Include="Accounts\BalanceDebitRejected.cs" />
+    <Compile Include="Accounts\AccountFactory.cs" />
+    <Compile Include="Accounts\OverdraftAdjusted.cs" />
+    <Compile Include="Accounts\OverdraftAdjustmentRejected.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Web\Accounts\AccountService.cs" />
+    <Compile Include="Web\AccountSummaryIndex.cs" />
+    <Compile Include="Web\Accounts\AccountQueryService.cs" />
     <Compile Include="Web\Accounts\AccountSummary.cs" />
-    <Compile Include="Web\Accounts\AddAccountRequest.cs" />
-    <Compile Include="Web\Accounts\AddAccountResponse.cs" />
+    <Compile Include="Web\Accounts\AccountIdSurrogate.cs" />
+    <Compile Include="Web\Accounts\OpenAccountRequest.cs" />
+    <Compile Include="Web\Accounts\OpenAccountResponse.cs" />
+    <Compile Include="Web\Accounts\AccountCommandService.cs" />
     <Compile Include="Web\Accounts\GetAccountRequest.cs" />
     <Compile Include="Web\Accounts\GetAccountResponse.cs" />
     <Compile Include="Web\Accounts\GetAllAccountsRequest.cs" />
     <Compile Include="Web\Accounts\GetAllAccountsResponse.cs" />
-    <Compile Include="Web\Accounts\IncompleteAddAccountResponse.cs" />
+    <Compile Include="Web\Accounts\IncompleteOpenAccountResponse.cs" />
     <Compile Include="Web\Bootstrapper.cs" />
     <Compile Include="Web\DatabaseBootstrapper.cs" />
     <Compile Include="Web\Home\HomeService.cs" />
@@ -188,6 +196,7 @@
       <Name>Ichnaea</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

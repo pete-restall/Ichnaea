@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace Restall.Ichnaea.Demo
+namespace Restall.Ichnaea.Demo.Accounts
 {
 	public abstract class AccountEvent
 	{
@@ -9,6 +9,6 @@ namespace Restall.Ichnaea.Demo
 			this.Timestamp = DateTime.Now;
 		}
 
-		public DateTime Timestamp { get; set; }
+		public DateTime Timestamp { get; private set; }
 	}
 }

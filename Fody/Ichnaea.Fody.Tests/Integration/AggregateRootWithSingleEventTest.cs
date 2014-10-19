@@ -4,12 +4,12 @@ using Xunit;
 
 namespace Restall.Ichnaea.Fody.Tests.Integration
 {
-	public class AggregateWithSingleEventTest: AggregateTest
+	public class AggregateRootWithSingleEventTest: AggregateRootTest
 	{
 		private const string EventName = "EventSource";
 
-		public AggregateWithSingleEventTest():
-			base(ModuleWeaverFixture.AggregateFactory.CreateAggregateWithSingleEvent())
+		public AggregateRootWithSingleEventTest():
+			base(ModuleWeaverFixture.AggregateRootFactory.CreateAggregateRootWithSingleEvent())
 		{
 		}
 
@@ -22,17 +22,17 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 		[Fact]
 		public void DoSomething_CalledWhenEventHasNoSubscribers_ExpectNoExceptionIsThrown()
 		{
-			this.Invoking(x => ((dynamic) this.Aggregate).DoSomething(Guid.NewGuid())).ShouldNotThrow<Exception>();
+			this.Invoking(x => ((dynamic) this.AggregateRoot).DoSomething(Guid.NewGuid())).ShouldNotThrow<Exception>();
 		}
 
 		[Fact]
 		public void DoSomethingAsTwoSeparateSourceEventCalls_Called_ExpectBothCallsToSourceEventsAreWovenToRaiseCliEvents()
 		{
 			var tokens = new[] {Guid.NewGuid(), Guid.NewGuid()};
-			this.Aggregate.MonitorEvents();
-			((dynamic) this.Aggregate).DoSomethingAsTwoSeparateSourceEventCalls(tokens[0], tokens[1]);
+			this.AggregateRoot.MonitorEvents();
+			((dynamic) this.AggregateRoot).DoSomethingAsTwoSeparateSourceEventCalls(tokens[0], tokens[1]);
 			tokens.ForEach(token =>
-				this.Aggregate.ShouldRaise(EventName).WithDomainEvent<object>(this.Aggregate, x => SomethingHappenedWithToken(x, token)));
+				this.AggregateRoot.ShouldRaise(EventName).WithDomainEvent<object>(this.AggregateRoot, x => SomethingHappenedWithToken(x, token)));
 		}
 
 		[Fact]
