@@ -6,8 +6,23 @@
 	</head>
 
 	<body>
-		<form>
-			Get Sort Code, Account Number and Holder...
+		<form method="POST" action="@Model.OpenAccountUri">
+			<fieldset>
+				<legend>Bank Account Details</legend>
+				<div>
+					<label for="SortCode">Sort Code:</label>
+					<input type="text" maxlength="8" required="" name="SortCode" />
+				</div>
+				<div>
+					<label for="AccountNumber">Account Number:</label>
+					<input type="text" maxlength="8" required="" name="AccountNumber" />
+				</div>
+				<div>
+					<label for="Holder">Name of Account Holder:</label>
+					<input type="text" maxlength="8" required="" name="Holder" />
+				</div>
+			</fieldset>
+			<button type="submit">Open Account</button>
 		</form>
 	</body>
 </html>

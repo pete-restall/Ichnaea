@@ -3,8 +3,8 @@ using Restall.Nancy.ServiceRouting;
 
 namespace Restall.Ichnaea.Demo.Web.Accounts
 {
-	[NamedRoute("AddAccount", "/accounts/add", "GET")]
-	[Route("/accounts/add", "PUT")]
+	[NamedRoute("AddAccount", "accounts/open", "GET")]
+	[Route("accounts/open", "POST")]
 	[NullGuard(ValidationFlags.None)]
 	public class OpenAccountRequest
 	{

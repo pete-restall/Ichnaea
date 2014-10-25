@@ -4,16 +4,19 @@ using Restall.Ichnaea.Demo.Accounts;
 
 namespace Restall.Ichnaea.Demo.Web.Accounts
 {
-	public class AccountCommandService
+	public class AccountAdministrationService
 	{
+		private readonly RouteLinks links;
+
 		private readonly IDocumentSession documents;
 
 		private readonly AccountFactory factory;
 
 		private readonly AccountRepository repository;
 
-		public AccountCommandService(IDocumentSession documents, AccountFactory factory, AccountRepository repository)
+		public AccountAdministrationService(RouteLinks links, IDocumentSession documents, AccountFactory factory, AccountRepository repository)
 		{
+			this.links = links;
 			this.documents = documents;
 			this.factory = factory;
 			this.repository = repository;
@@ -22,7 +25,13 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 		public object OpenAccount(OpenAccountRequest request)
 		{
 			if (request.SortCode == null || request.AccountNumber == null || request.Holder == null)
-				return new IncompleteOpenAccountResponse { Request = request };
+			{
+				return new IncompleteOpenAccountResponse
+					{
+						Request = request,
+						OpenAccountUri = this.links.Relative("OpenAccount")
+					};
+			}
 
 			var account = this.factory.Create(request.SortCode, request.AccountNumber, request.Holder);
 			this.repository.Add(account);

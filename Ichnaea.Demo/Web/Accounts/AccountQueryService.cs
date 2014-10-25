@@ -24,7 +24,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 			return new GetAllAccountsResponse
 				{
 					Accounts = this.documents.Query<AccountSummary, AccountSummaryIndex>().ToArray(),
-					AddAccountUri = this.links.Relative("AddAccount")
+					OpenAccountUri = this.links.Relative("OpenAccount")
 				};
 		}
 

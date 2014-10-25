@@ -16,7 +16,7 @@ namespace Restall.Ichnaea.Tests.Unit
 
 		private static Expression<Func<NotImplementedException, bool>> ExceptionMessageContainsFodyAndAggregate()
 		{
-			return x => x.Message.Contains("Fody") && x.Message.Contains("[Aggregate]");
+			return x => x.Message.Contains("Fody") && x.Message.Contains("[AggregateRoot]");
 		}
 
 		[Fact]
