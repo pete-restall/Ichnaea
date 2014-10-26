@@ -53,8 +53,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IntegerEnumerableExtensions.cs" />
+    <Compile Include="IntegerGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Unit\DomainEventFunnelTest.cs" />
+    <Compile Include="Unit\InMemoryDomainEventTrackerTest.cs" />
     <Compile Include="Unit\EnumerableExtensionsTest.cs" />
     <Compile Include="Unit\SourceTest.cs" />
   </ItemGroup>

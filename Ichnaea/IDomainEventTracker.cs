@@ -1,7 +1,7 @@
 ﻿namespace Restall.Ichnaea
 {
-	public interface IDomainEventTracker<in T>
+	public interface IDomainEventTracker<in TAggregateRoot>
 	{
-		void AggregateRootCreated(T aggregateRoot, object domainEvent);
+		void AggregateRootCreated(TAggregateRoot aggregateRoot, object domainEvent);
 	}
 }

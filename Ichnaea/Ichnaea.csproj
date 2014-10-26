@@ -45,8 +45,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregateRootAlreadyBeingTrackedException.cs" />
     <Compile Include="AggregateRootAttribute.cs" />
     <Compile Include="DomainEventFunnel.cs" />
+    <Compile Include="InMemoryDomainEventTracker.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IDomainEventStream.cs" />
     <Compile Include="IDomainEventTracker.cs" />
