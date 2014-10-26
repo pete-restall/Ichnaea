@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ichnaea.Tests", "Ichnaea.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ichnaea.Demo", "Ichnaea.Demo\Ichnaea.Demo.csproj", "{3ED39EF9-C50A-4EF7-8C50-51C85C79A932}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ichnaea.NEventStore", "Ichnaea.NEventStore\Ichnaea.NEventStore.csproj", "{2BA85D45-253B-489D-8A2B-B1C1CB5163B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{3ED39EF9-C50A-4EF7-8C50-51C85C79A932}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ED39EF9-C50A-4EF7-8C50-51C85C79A932}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3ED39EF9-C50A-4EF7-8C50-51C85C79A932}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BA85D45-253B-489D-8A2B-B1C1CB5163B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BA85D45-253B-489D-8A2B-B1C1CB5163B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BA85D45-253B-489D-8A2B-B1C1CB5163B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BA85D45-253B-489D-8A2B-B1C1CB5163B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

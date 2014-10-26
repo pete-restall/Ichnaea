@@ -2,7 +2,7 @@
 {
 	public interface IDomainEventStream<TAggregateRoot>
 	{
-		void CreateFrom(TAggregateRoot root);
+		void CreateFrom(TAggregateRoot aggregateRoot);
 		TAggregateRoot Replay(string id);
 	}
 }

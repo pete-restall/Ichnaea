@@ -4,10 +4,12 @@ using System.Runtime.CompilerServices;
 
 namespace Restall.Ichnaea
 {
-	public class InMemoryDomainEventTracker<TAggregateRoot>: IDomainEventTracker<TAggregateRoot>, IDisposable where TAggregateRoot: class
+	public class InMemoryDomainEventTracker<TAggregateRoot>: IPrePersistenceDomainEventTracker<TAggregateRoot>, IDisposable
+		where TAggregateRoot: class
 	{
 		private readonly List<DomainEventFunnel> funnels = new List<DomainEventFunnel>();
 
+		// TODO: PROBABLY A TABLE OF Queue<object> ONCE THE PrePersistence INTERFACE IS IMPLEMENTED
 		private ConditionalWeakTable<TAggregateRoot, List<object>> aggregateToDomainEventsMap =
 			new ConditionalWeakTable<TAggregateRoot, List<object>>();
 
@@ -29,6 +31,12 @@ namespace Restall.Ichnaea
 				return domainEvents;
 
 			return new object[0];
+		}
+
+		public void SwitchTrackingToPersistentStore(TAggregateRoot aggregateRoot, Source.Of<object> persistentObserver)
+		{
+			// TODO: Method needs writing
+			throw new NotImplementedException();
 		}
 
 		public void Dispose()

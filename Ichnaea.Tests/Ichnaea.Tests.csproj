@@ -38,6 +38,9 @@
     <Reference Include="FluentAssertions.Core">
       <HintPath>..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
+    <Reference Include="NEventStore">
+      <HintPath>..\packages\NEventStore.5.0.0.100\lib\net40\NEventStore.dll</HintPath>
+    </Reference>
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
     </Reference>
@@ -56,15 +59,21 @@
     <Compile Include="IntegerEnumerableExtensions.cs" />
     <Compile Include="IntegerGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringGenerator.cs" />
     <Compile Include="Unit\DomainEventFunnelTest.cs" />
     <Compile Include="Unit\InMemoryDomainEventTrackerTest.cs" />
     <Compile Include="Unit\EnumerableExtensionsTest.cs" />
+    <Compile Include="Unit\NEventStore\DomainEventStreamTest.cs" />
     <Compile Include="Unit\SourceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Ichnaea.NEventStore\Ichnaea.NEventStore.csproj">
+      <Project>{2ba85d45-253b-489d-8a2b-b1c1cb5163b7}</Project>
+      <Name>Ichnaea.NEventStore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ichnaea\Ichnaea.csproj">
       <Project>{44da0c89-630c-4664-ac14-fa648f2fc124}</Project>
       <Name>Ichnaea</Name>
