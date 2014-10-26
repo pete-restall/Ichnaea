@@ -73,7 +73,7 @@ namespace Restall.Ichnaea.Tests.Unit
 			protected internal event Source.Of<object> ProtectedInternalEvent;
 		}
 
-		private class ObservableWithNonDomainEvents: HasEventConvenienceMethods
+		private class ObservableWithNonDomainEvent: HasEventConvenienceMethods
 		{
 			public void RaiseFirstEvent(object sender, EventArgs args)
 			{
@@ -81,6 +81,16 @@ namespace Restall.Ichnaea.Tests.Unit
 			}
 
 			public event EventHandler<EventArgs> FirstEvent;
+		}
+
+		private class ObservableWithStaticDomainEvent: HasEventConvenienceMethods
+		{
+			public void SourceFirstEvent(object sender, object args)
+			{
+				SourceEvent(FirstEvent, sender, args);
+			}
+
+			public static event Source.Of<object> FirstEvent;
 		}
 
 		[Fact]
@@ -118,7 +128,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
-		public void Constructor_CalledWhenObservableHasTwoEvents_ExpectBothEventsAreSubscribedTo()
+		public void Constructor_CalledWhenObservableHasMultipleEvents_ExpectAllEventsAreSubscribedTo()
 		{
 			var observer = Substitute.For<Source.Of<object>>();
 			var observable = new ObservableWithTwoDomainEvents();
@@ -166,24 +176,38 @@ namespace Restall.Ichnaea.Tests.Unit
 		public void Constructor_CalledWhenObservableHasNonDomainEvent_ExpectTheNonDomainEventIsNotSubscribedTo()
 		{
 			var observer = Substitute.For<Source.Of<object>>();
-			var observable = new ObservableWithNonDomainEvents();
+			var observable = new ObservableWithNonDomainEvent();
 			using (new DomainEventFunnel(observable, observer))
 			{
 				var sender = new object();
 				var args = new EventArgs();
 				observable.RaiseFirstEvent(sender, args);
-				observer.DidNotReceive().Invoke(Arg.Any<object>(), Arg.Any<EventArgs>());
+				observer.DidNotReceive().Invoke(Arg.Any<object>(), Arg.Any<object>());
+			}
+		}
+
+		[Fact]
+		public void Constructor_CalledWhenObservableHasStaticDomainEvent_ExpectTheStaticDomainEventIsNotSubscribedTo()
+		{
+			var observer = Substitute.For<Source.Of<object>>();
+			var observable = new ObservableWithStaticDomainEvent();
+			using (new DomainEventFunnel(observable, observer))
+			{
+				var sender = new object();
+				var args = new object();
+				observable.SourceFirstEvent(sender, args);
+				observer.DidNotReceive().Invoke(Arg.Any<object>(), Arg.Any<object>());
 			}
 		}
 
 		[Fact]
 		public void Dispose_CalledWhenObservableHasOneEvent_ExpectTheSingleEventIsUnsubscribedFrom()
 		{
-			ExpectObserverIsNotCalledForSourcedEvent<ObservableWithOneDomainEvent>(
+			ExpectObserverIsNotCalledForSourcedEventAfterFunnelDisposed<ObservableWithOneDomainEvent>(
 				(observer, sender, args) => observer.SourceFirstEvent(sender, args));
 		}
 
-		private static void ExpectObserverIsNotCalledForSourcedEvent<T>(Action<T, object, object> sourceEvent) where T: new()
+		private static void ExpectObserverIsNotCalledForSourcedEventAfterFunnelDisposed<T>(Action<T, object, object> sourceEvent) where T: new()
 		{
 			var observer = Substitute.For<Source.Of<object>>();
 			var observable = new T();
@@ -194,7 +218,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
-		public void Dispose_CalledWhenObservableHasTwoEvents_ExpectBothEventsAreUnsubscribedFrom()
+		public void Dispose_CalledWhenObservableHasMultipleEvents_ExpectAllEventsAreUnsubscribedFrom()
 		{
 			var observer = Substitute.For<Source.Of<object>>();
 			var observable = new ObservableWithTwoDomainEvents();
@@ -208,28 +232,28 @@ namespace Restall.Ichnaea.Tests.Unit
 		[Fact]
 		public void Dispose_CalledWhenObservableHasPrivateEvent_ExpectThePrivateEventIsUnsubscribedFrom()
 		{
-			ExpectObserverIsNotCalledForSourcedEvent<ObservableWithNonPublicDomainEvents>(
+			ExpectObserverIsNotCalledForSourcedEventAfterFunnelDisposed<ObservableWithNonPublicDomainEvents>(
 				(observer, sender, args) => observer.SourcePrivateEvent(sender, args));
 		}
 
 		[Fact]
 		public void Dispose_CalledWhenObservableHasProtectedEvent_ExpectTheProtectedEventIsUnsubscribedFrom()
 		{
-			ExpectObserverIsNotCalledForSourcedEvent<ObservableWithNonPublicDomainEvents>(
+			ExpectObserverIsNotCalledForSourcedEventAfterFunnelDisposed<ObservableWithNonPublicDomainEvents>(
 				(observer, sender, args) => observer.SourceProtectedEvent(sender, args));
 		}
 
 		[Fact]
 		public void Dispose_CalledWhenObservableHasInternalEvent_ExpectTheInternalEventIsUnsubscribedFrom()
 		{
-			ExpectObserverIsNotCalledForSourcedEvent<ObservableWithNonPublicDomainEvents>(
+			ExpectObserverIsNotCalledForSourcedEventAfterFunnelDisposed<ObservableWithNonPublicDomainEvents>(
 				(observer, sender, args) => observer.SourceInternalEvent(sender, args));
 		}
 
 		[Fact]
 		public void Dispose_CalledWhenObservableHasProtectedInternalEvent_ExpectTheProtectedInternalEventIsUnsubscribedFrom()
 		{
-			ExpectObserverIsNotCalledForSourcedEvent<ObservableWithNonPublicDomainEvents>(
+			ExpectObserverIsNotCalledForSourcedEventAfterFunnelDisposed<ObservableWithNonPublicDomainEvents>(
 				(observer, sender, args) => observer.SourceProtectedInternalEvent(sender, args));
 		}
 
@@ -248,7 +272,5 @@ namespace Restall.Ichnaea.Tests.Unit
 			funnel.Dispose();
 			funnel.Invoking(x => x.Dispose()).ShouldNotThrow();
 		}
-
-		// TODO: STATIC EVENTS !  IGNORE THEM...?
 	}
 }

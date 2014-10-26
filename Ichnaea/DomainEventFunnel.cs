@@ -25,8 +25,13 @@ namespace Restall.Ichnaea
 
 		private static IEnumerable<EventInfo> GetDomainEventsFrom(object observable)
 		{
-			return observable.GetType().GetEvents(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+			return GetAllInstanceEventsFrom(observable)
 				.Where(x => x.EventHandlerType.GetGenericTypeDefinition() == typeof(Source.Of<>));
+		}
+
+		private static IEnumerable<EventInfo> GetAllInstanceEventsFrom(object observable)
+		{
+			return observable.GetType().GetEvents(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 		}
 
 		public void Dispose()
