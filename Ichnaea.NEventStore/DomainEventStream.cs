@@ -10,26 +10,26 @@ namespace Restall.Ichnaea.NEventStore
 		private readonly IStoreEvents eventStore;
 		private readonly IPrePersistenceDomainEventTracker<TAggregateRoot> prePersistenceDomainEventTracker;
 		private readonly AggregateRootIdGetter<TAggregateRoot> aggregateRootIdGetter;
-		private readonly BucketIdGetter<TAggregateRoot> bucketIdGetter;
+		private readonly string bucketId;
 		private readonly Converter<object, EventMessage> domainEventToPersistableConverter;
 
 		public DomainEventStream(
 			IStoreEvents eventStore,
 			IPrePersistenceDomainEventTracker<TAggregateRoot> prePersistenceDomainEventTracker,
 			AggregateRootIdGetter<TAggregateRoot> aggregateRootIdGetter,
-			BucketIdGetter<TAggregateRoot> bucketIdGetter,
+			string bucketId,
 			Converter<object, EventMessage> domainEventToPersistableConverter)
 		{
 			this.eventStore = eventStore;
 			this.prePersistenceDomainEventTracker = prePersistenceDomainEventTracker;
 			this.aggregateRootIdGetter = aggregateRootIdGetter;
-			this.bucketIdGetter = bucketIdGetter;
+			this.bucketId = bucketId;
 			this.domainEventToPersistableConverter = domainEventToPersistableConverter;
 		}
 
 		public void CreateFrom(TAggregateRoot aggregateRoot)
 		{
-			var eventStoreStream = this.eventStore.CreateStream(this.bucketIdGetter(aggregateRoot), this.aggregateRootIdGetter(aggregateRoot));
+			var eventStoreStream = this.eventStore.CreateStream(this.bucketId, this.aggregateRootIdGetter(aggregateRoot));
 			this.eventStoreStreams.Add(eventStoreStream);
 			this.prePersistenceDomainEventTracker.SwitchTrackingToPersistentStore(
 				aggregateRoot,

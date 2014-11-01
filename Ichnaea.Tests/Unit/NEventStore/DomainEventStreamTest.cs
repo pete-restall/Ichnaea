@@ -15,7 +15,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Constructor_CalledWithNullEventStore_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventStream<object>(
-				null, DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyIdGetter, DummyEventConverter);
+				null, DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyBucketId(), DummyEventConverter);
 
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("eventStore");
 		}
@@ -30,6 +30,11 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			return string.Empty;
 		}
 
+		private static string DummyBucketId()
+		{
+			return StringGenerator.AnyNonNull();
+		}
+
 		private static EventMessage DummyEventConverter(object domainEvent)
 		{
 			return new EventMessage();
@@ -39,7 +44,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Constructor_CalledWithNullPrePersistenceDomainEventTracker_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventStream<object>(
-				DummyEventStore(), null, DummyIdGetter, DummyIdGetter, DummyEventConverter);
+				DummyEventStore(), null, DummyIdGetter, DummyBucketId(), DummyEventConverter);
 
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("prePersistenceDomainEventTracker");
 		}
@@ -53,24 +58,24 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Constructor_CalledWithNullAggregateRootIdGetter_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventStream<object>(
-				DummyEventStore(), DummyPrePersistenceTracker<object>(), null, DummyIdGetter, DummyEventConverter);
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), null, DummyBucketId(), DummyEventConverter);
 
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRootIdGetter");
 		}
 
 		[Fact]
-		public void Constructor_CalledWithNullBucketIdGetter_ExpectArgumentNullExceptionWithCorrectParamName()
+		public void Constructor_CalledWithNullBucketId_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventStream<object>(
 				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, null, DummyEventConverter);
-			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("bucketIdGetter");
+			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("bucketId");
 		}
 
 		[Fact]
 		public void Constructor_CalledWithNullDomainEventToPersistableConverter_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventStream<object>(
-				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyIdGetter, null);
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyBucketId(), null);
 
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("domainEventToPersistableConverter");
 		}
@@ -79,7 +84,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void CreateFrom_CalledWithNullAggregateRoot_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			var stream = new DomainEventStream<object>(
-				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyIdGetter, DummyEventConverter);
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyBucketId(), DummyEventConverter);
 
 			stream.Invoking(x => x.CreateFrom(null)).ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRoot");
 		}
@@ -97,7 +102,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				eventStore,
 				DummyPrePersistenceTracker<object>(),
 				StubAggregateRootIdGetter(aggregateRoot, aggregateRootId),
-				StubBucketIdGetter(aggregateRoot, bucketId),
+				bucketId,
 				DummyEventConverter))
 			{
 				stream.CreateFrom(aggregateRoot);
@@ -113,13 +118,6 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			return aggregateRootIdGetter;
 		}
 
-		private static BucketIdGetter<object> StubBucketIdGetter(object aggregateRoot, string bucketId)
-		{
-			var bucketIdGetter = Substitute.For<BucketIdGetter<object>>();
-			bucketIdGetter(aggregateRoot).Returns(bucketId);
-			return bucketIdGetter;
-		}
-
 		[Fact]
 		public void CreateFrom_Called_ExpectPrePersistenceTrackerIsSwitchedToTheEventStoreForTheAggregateRoot()
 		{
@@ -128,7 +126,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				DummyEventStore(),
 				prePersistenceTracker,
 				DummyIdGetter,
-				DummyIdGetter,
+				DummyBucketId(),
 				DummyEventConverter))
 			{
 				var aggregateRoot = new object();
@@ -154,7 +152,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				eventStore,
 				StubPrePersistenceDomainEventTracker(aggregateRoot, domainEvents),
 				StubAggregateRootIdGetter(aggregateRoot, aggregateRootId),
-				StubBucketIdGetter(aggregateRoot, bucketId),
+				bucketId,
 				StubEventMessageConverter(domainEvents, eventStoreEvents)))
 			{
 				stream.CreateFrom(aggregateRoot);
@@ -202,7 +200,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				StubEventStoreCreateStream(eventStoreStream),
 				prePersistenceTracker,
 				DummyIdGetter,
-				DummyIdGetter,
+				DummyBucketId(),
 				StubEventMessageConverter(domainEvents, eventStoreEvents)))
 			{
 				stream.CreateFrom(aggregateRoot);
@@ -231,7 +229,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				StubEventStoreCreateStream(eventStoreStream),
 				prePersistenceTracker,
 				DummyIdGetter,
-				DummyIdGetter,
+				DummyBucketId(),
 				DummyEventConverter))
 			{
 				stream.Invoking(x => x.CreateFrom(new object())).ShouldThrow<Exception>();
@@ -251,7 +249,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				StubEventStoreCreateStream(eventStoreStreams),
 				StubPrePersistenceDomainEventTrackerToSourceOneDomainEventPerAggregateRoot(aggregateRoots, domainEvents),
 				DummyIdGetter,
-				DummyIdGetter,
+				DummyBucketId(),
 				x => (EventMessage) x))
 			{
 				aggregateRoots.ForEach(aggregateRoot => stream.CreateFrom(aggregateRoot));
@@ -276,7 +274,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Replay_CalledWithNullId_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			var stream = new DomainEventStream<object>(
-				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyIdGetter, DummyEventConverter);
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyBucketId(), DummyEventConverter);
 
 			stream.Invoking(x => x.Replay(null)).ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("id");
 		}
@@ -289,7 +287,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
 				DummyIdGetter,
-				DummyIdGetter,
+				DummyBucketId(),
 				DummyEventConverter))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
@@ -320,7 +318,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
 				DummyIdGetter,
-				DummyIdGetter,
+				DummyBucketId(),
 				DummyEventConverter))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
@@ -345,7 +343,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
 				DummyIdGetter,
-				DummyIdGetter,
+				DummyBucketId(),
 				DummyEventConverter))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
@@ -363,7 +361,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
 				DummyIdGetter,
-				DummyIdGetter,
+				DummyBucketId(),
 				DummyEventConverter))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
@@ -381,7 +379,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
 				DummyIdGetter,
-				DummyIdGetter,
+				DummyBucketId(),
 				DummyEventConverter))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
@@ -398,7 +396,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
 				DummyIdGetter,
-				DummyIdGetter,
+				DummyBucketId(),
 				DummyEventConverter))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
@@ -415,7 +413,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
 				DummyIdGetter,
-				DummyIdGetter,
+				DummyBucketId(),
 				DummyEventConverter))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
