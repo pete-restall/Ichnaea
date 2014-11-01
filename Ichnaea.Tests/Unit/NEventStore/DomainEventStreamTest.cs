@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using NEventStore;
 using NSubstitute;
@@ -12,7 +14,9 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void Constructor_CalledWithNullEventStore_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new DomainEventStream<object>(null, DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyIdGetter);
+			Action constructor = () => new DomainEventStream<object>(
+				null, DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyIdGetter, DummyEventConverter);
+
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("eventStore");
 		}
 
@@ -26,10 +30,17 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			return string.Empty;
 		}
 
+		private static EventMessage DummyEventConverter(object domainEvent)
+		{
+			return new EventMessage();
+		}
+
 		[Fact]
 		public void Constructor_CalledWithNullPrePersistenceDomainEventTracker_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new DomainEventStream<object>(DummyEventStore(), null, DummyIdGetter, DummyIdGetter);
+			Action constructor = () => new DomainEventStream<object>(
+				DummyEventStore(), null, DummyIdGetter, DummyIdGetter, DummyEventConverter);
+
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("prePersistenceDomainEventTracker");
 		}
 
@@ -41,21 +52,35 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void Constructor_CalledWithNullAggregateRootIdGetter_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new DomainEventStream<object>(DummyEventStore(), DummyPrePersistenceTracker<object>(), null, DummyIdGetter);
+			Action constructor = () => new DomainEventStream<object>(
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), null, DummyIdGetter, DummyEventConverter);
+
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRootIdGetter");
 		}
 
 		[Fact]
 		public void Constructor_CalledWithNullBucketIdGetter_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new DomainEventStream<object>(DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, null);
+			Action constructor = () => new DomainEventStream<object>(
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, null, DummyEventConverter);
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("bucketIdGetter");
+		}
+
+		[Fact]
+		public void Constructor_CalledWithNullDomainEventToPersistableConverter_ExpectArgumentNullExceptionWithCorrectParamName()
+		{
+			Action constructor = () => new DomainEventStream<object>(
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyIdGetter, null);
+
+			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("domainEventToPersistableConverter");
 		}
 
 		[Fact]
 		public void CreateFrom_CalledWithNullAggregateRoot_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			var stream = new DomainEventStream<object>(DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyIdGetter);
+			var stream = new DomainEventStream<object>(
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyIdGetter, DummyEventConverter);
+
 			stream.Invoking(x => x.CreateFrom(null)).ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRoot");
 		}
 
@@ -68,19 +93,29 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			eventStore.CreateStream(bucketId, aggregateRootId).Returns(Substitute.For<IEventStream>());
 
 			var aggregateRoot = new object();
-			var stream = new DomainEventStream<object>(
+			using (var stream = new DomainEventStream<object>(
 				eventStore,
 				DummyPrePersistenceTracker<object>(),
-				StubIdGetter(aggregateRoot, aggregateRootId),
-				StubIdGetter(aggregateRoot, bucketId));
+				StubAggregateRootIdGetter(aggregateRoot, aggregateRootId),
+				StubBucketIdGetter(aggregateRoot, bucketId),
+				DummyEventConverter))
+			{
+				stream.CreateFrom(aggregateRoot);
+			}
 
-			stream.CreateFrom(aggregateRoot);
 			eventStore.Received(1).CreateStream(bucketId, aggregateRootId);
 		}
 
-		private static Func<object, string> StubIdGetter(object aggregateRoot, string bucketId)
+		private static AggregateRootIdGetter<object> StubAggregateRootIdGetter(object aggregateRoot, string aggregateRootId)
 		{
-			var bucketIdGetter = Substitute.For<Func<object, string>>();
+			var aggregateRootIdGetter = Substitute.For<AggregateRootIdGetter<object>>();
+			aggregateRootIdGetter(aggregateRoot).Returns(aggregateRootId);
+			return aggregateRootIdGetter;
+		}
+
+		private static BucketIdGetter<object> StubBucketIdGetter(object aggregateRoot, string bucketId)
+		{
+			var bucketIdGetter = Substitute.For<BucketIdGetter<object>>();
 			bucketIdGetter(aggregateRoot).Returns(bucketId);
 			return bucketIdGetter;
 		}
@@ -89,28 +124,309 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void CreateFrom_Called_ExpectPrePersistenceTrackerIsSwitchedToTheEventStoreForTheAggregateRoot()
 		{
 			var prePersistenceTracker = Substitute.For<IPrePersistenceDomainEventTracker<object>>();
-			var stream = new DomainEventStream<object>(
+			using (var stream = new DomainEventStream<object>(
 				DummyEventStore(),
 				prePersistenceTracker,
 				DummyIdGetter,
-				DummyIdGetter);
+				DummyIdGetter,
+				DummyEventConverter))
+			{
+				var aggregateRoot = new object();
+				stream.CreateFrom(aggregateRoot);
+				prePersistenceTracker.Received(1).SwitchTrackingToPersistentStore(aggregateRoot, Arg.Is<Source.Of<object>>(x => x != null));
+			}
+		}
+
+		[Fact]
+		public void CreateFrom_Called_ExpectDomainEventsFromPrePersistenceTrackerAreWrittenToTheEventStore()
+		{
+			var domainEvents = CreateAtLeastOneDomainEvent();
+			var eventStoreEvents = domainEvents.Select(x => new EventMessage()).ToArray();
+
+			string bucketId = StringGenerator.AnyNonNull();
+			string aggregateRootId = StringGenerator.AnyNonNull();
+			var eventStoreStream = Substitute.For<IEventStream>();
+			var eventStore = Substitute.For<IStoreEvents>();
+			eventStore.CreateStream(bucketId, aggregateRootId).Returns(eventStoreStream);
 
 			var aggregateRoot = new object();
-			stream.CreateFrom(aggregateRoot);
+			using (var stream = new DomainEventStream<object>(
+				eventStore,
+				StubPrePersistenceDomainEventTracker(aggregateRoot, domainEvents),
+				StubAggregateRootIdGetter(aggregateRoot, aggregateRootId),
+				StubBucketIdGetter(aggregateRoot, bucketId),
+				StubEventMessageConverter(domainEvents, eventStoreEvents)))
+			{
+				stream.CreateFrom(aggregateRoot);
+			}
 
-			prePersistenceTracker.Received(1).SwitchTrackingToPersistentStore(aggregateRoot, Arg.Is<Source.Of<object>>(x => x != null));
+			Received.InOrder(() => domainEvents.Length.Repeat(i => eventStoreStream.Add(eventStoreEvents[i])));
+		}
+
+		private static object[] CreateAtLeastOneDomainEvent()
+		{
+			int numberOfDomainEvents = IntegerGenerator.WithinExclusiveRange(1, 10);
+			return numberOfDomainEvents.Select(() => new object()).ToArray();
+		}
+
+		private static IPrePersistenceDomainEventTracker<object> StubPrePersistenceDomainEventTracker(object aggregateRoot, IEnumerable<object> domainEvents)
+		{
+			var prePersistenceTracker = Substitute.For<IPrePersistenceDomainEventTracker<object>>();
+			prePersistenceTracker.SwitchTrackingToPersistentStore(
+				aggregateRoot,
+				Arg.Do<Source.Of<object>>(sourceEvent => domainEvents.ForEach(domainEvent => sourceEvent(aggregateRoot, domainEvent))));
+
+			return prePersistenceTracker;
+		}
+
+		private static Converter<object, EventMessage> StubEventMessageConverter(IList<object> domainEvents, IList<EventMessage> eventStoreEvents)
+		{
+			var eventMessageConverter = Substitute.For<Converter<object, EventMessage>>();
+			domainEvents.Count.Repeat(i => eventMessageConverter(domainEvents[i]).Returns(eventStoreEvents[i]));
+			return eventMessageConverter;
+		}
+
+		[Fact]
+		public void CreateFrom_Called_ExpectFutureDomainEventsAreWrittenToEventStore()
+		{
+			var domainEvents = CreateAtLeastOneDomainEvent();
+			var eventStoreEvents = domainEvents.Select(x => new EventMessage()).ToArray();
+
+			var aggregateRoot = new object();
+			Source.Of<object> capturedSourceEvent = (sender, args) => { };
+			var prePersistenceTracker = Substitute.For<IPrePersistenceDomainEventTracker<object>>();
+			prePersistenceTracker.SwitchTrackingToPersistentStore(aggregateRoot, Arg.Do<Source.Of<object>>(x => capturedSourceEvent = x));
+
+			var eventStoreStream = Substitute.For<IEventStream>();
+			using (var stream = new DomainEventStream<object>(
+				StubEventStoreCreateStream(eventStoreStream),
+				prePersistenceTracker,
+				DummyIdGetter,
+				DummyIdGetter,
+				StubEventMessageConverter(domainEvents, eventStoreEvents)))
+			{
+				stream.CreateFrom(aggregateRoot);
+				domainEvents.ForEach(domainEvent => capturedSourceEvent(aggregateRoot, domainEvent));
+			}
+
+			Received.InOrder(() => domainEvents.Length.Repeat(i => eventStoreStream.Add(eventStoreEvents[i])));
+		}
+
+		private static IStoreEvents StubEventStoreCreateStream(params IEventStream[] eventStoreStreams)
+		{
+			var eventStore = Substitute.For<IStoreEvents>();
+			eventStore.CreateStream(Arg.Any<string>(), Arg.Any<string>()).Returns(eventStoreStreams.First(), eventStoreStreams.Skip(1).ToArray());
+			return eventStore;
+		}
+
+		[Fact]
+		public void CreateFrom_CalledWhenSwitchingThrowsException_ExpectCreatedEventStoreStreamIsStillTrackedForDisposal()
+		{
+			var prePersistenceTracker = Substitute.For<IPrePersistenceDomainEventTracker<object>>();
+			prePersistenceTracker.When(x => x.SwitchTrackingToPersistentStore(Arg.Any<object>(), Arg.Any<Source.Of<object>>()))
+				.Do(x => { throw new Exception(); });
+
+			var eventStoreStream = Substitute.For<IEventStream>();
+			using (var stream = new DomainEventStream<object>(
+				StubEventStoreCreateStream(eventStoreStream),
+				prePersistenceTracker,
+				DummyIdGetter,
+				DummyIdGetter,
+				DummyEventConverter))
+			{
+				stream.Invoking(x => x.CreateFrom(new object())).ShouldThrow<Exception>();
+			}
+
+			eventStoreStream.Received(1).Dispose();
+		}
+
+		[Fact]
+		public void CreateFrom_CalledWithMultipleAggregateRoots_ExpectDomainEventsAreSentToCorrespondingStreams()
+		{
+			int numberOfAggregateRoots = IntegerGenerator.WithinExclusiveRange(2, 10);
+			var aggregateRoots = numberOfAggregateRoots.Select(() => new object()).ToArray();
+			var domainEvents = numberOfAggregateRoots.Select(() => new EventMessage()).ToArray();
+			var eventStoreStreams = numberOfAggregateRoots.Select(() => Substitute.For<IEventStream>()).ToArray();
+			using (var stream = new DomainEventStream<object>(
+				StubEventStoreCreateStream(eventStoreStreams),
+				StubPrePersistenceDomainEventTrackerToSourceOneDomainEventPerAggregateRoot(aggregateRoots, domainEvents),
+				DummyIdGetter,
+				DummyIdGetter,
+				x => (EventMessage) x))
+			{
+				aggregateRoots.ForEach(aggregateRoot => stream.CreateFrom(aggregateRoot));
+			}
+
+			numberOfAggregateRoots.Repeat(i => eventStoreStreams[i].Received(1).Add(domainEvents[i]));
+		}
+
+		private static IPrePersistenceDomainEventTracker<object> StubPrePersistenceDomainEventTrackerToSourceOneDomainEventPerAggregateRoot(
+			IList<object> aggregateRoots, IList<object> domainEvents)
+		{
+			var prePersistenceDomainEventTracker = Substitute.For<IPrePersistenceDomainEventTracker<object>>();
+			aggregateRoots.Count.Repeat(i =>
+				prePersistenceDomainEventTracker.SwitchTrackingToPersistentStore(
+					aggregateRoots[i],
+					Arg.Do<Source.Of<object>>(eventSource => eventSource(aggregateRoots[i], domainEvents[i]))));
+
+			return prePersistenceDomainEventTracker;
 		}
 
 		[Fact]
 		public void Replay_CalledWithNullId_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			var stream = new DomainEventStream<object>(DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyIdGetter);
+			var stream = new DomainEventStream<object>(
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyIdGetter, DummyEventConverter);
+
 			stream.Invoking(x => x.Replay(null)).ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("id");
 		}
 
-		// TODO: CreateFrom() - error conditions for SwitchTrackingToPersistentStore() - should the stream stay created and empty or be rolled back (prolly not possible to roll back if events half persisted) ?
-		// TODO: CreateFrom() - when NEventStore throws exception, should not lose Domain Events...(ie. should be able to try again)
-		// TODO: CreateFrom() - Disposal of stream (eventually...)
-		// TODO: CreateFrom() - Future events are persisted to the store, not the previous in-memory tracker
+		[Fact]
+		public void Commit_CalledWithNoExplicitCommitId_ExpectAllEventStoreStreamsAreCommittedWithNonEmptyId()
+		{
+			var eventStoreStreams = CreateAtLeastOneEventStoreStream();
+			using (var stream = new DomainEventStream<object>(
+				StubEventStoreCreateStream(eventStoreStreams),
+				DummyPrePersistenceTracker<object>(),
+				DummyIdGetter,
+				DummyIdGetter,
+				DummyEventConverter))
+			{
+				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
+				stream.Commit();
+			}
+
+			eventStoreStreams.ForEach(es => es.Received(1).CommitChanges(Arg.Is<Guid>(commitId => commitId != Guid.Empty)));
+		}
+
+		private static IEventStream[] CreateAtLeastOneEventStoreStream()
+		{
+			return CreateNumerOfEventStoreStreamsWithinExclusiveRange(1, 10);
+		}
+
+		private static IEventStream[] CreateNumerOfEventStoreStreamsWithinExclusiveRange(int min, int halfOpenMax)
+		{
+			int numberOfEventStoreStreams = IntegerGenerator.WithinExclusiveRange(min, halfOpenMax);
+			return numberOfEventStoreStreams.Select(() => Substitute.For<IEventStream>()).ToArray();
+		}
+
+		[Fact]
+		public void Commit_CalledWithNoExplicitCommitId_ExpectAllEventStoreStreamsAreCommittedWithSameId()
+		{
+			var commitIds = new List<Guid>();
+			var eventStoreStreams = CreateAtLeastTwoEventStoreStreams();
+			eventStoreStreams.ForEach(es => es.CommitChanges(Arg.Do<Guid>(commitIds.Add)));
+			using (var stream = new DomainEventStream<object>(
+				StubEventStoreCreateStream(eventStoreStreams),
+				DummyPrePersistenceTracker<object>(),
+				DummyIdGetter,
+				DummyIdGetter,
+				DummyEventConverter))
+			{
+				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
+				stream.Commit();
+			}
+
+			commitIds.Distinct().Count().Should().Be(1);
+		}
+
+		private static IEventStream[] CreateAtLeastTwoEventStoreStreams()
+		{
+			return CreateNumerOfEventStoreStreamsWithinExclusiveRange(2, 10);
+		}
+
+		[Fact]
+		public void Commit_CalledMultipleTimesWithNoExplicitCommitId_ExpectAllEventStoreStreamsAreCommittedWithDifferentIdsPerCall()
+		{
+			var commitIds = new List<Guid>();
+			var eventStoreStreams = CreateAtLeastTwoEventStoreStreams();
+			eventStoreStreams.ForEach(es => es.CommitChanges(Arg.Do<Guid>(commitIds.Add)));
+			using (var stream = new DomainEventStream<object>(
+				StubEventStoreCreateStream(eventStoreStreams),
+				DummyPrePersistenceTracker<object>(),
+				DummyIdGetter,
+				DummyIdGetter,
+				DummyEventConverter))
+			{
+				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
+				int numberOfCommits = IntegerGenerator.WithinExclusiveRange(2, 10);
+				numberOfCommits.Repeat(stream.Commit);
+				commitIds.Distinct().Count().Should().Be(numberOfCommits);
+			}
+		}
+
+		[Fact]
+		public void Commit_CalledWithExplicitCommitId_ExpectAllEventStoreStreamsAreCommittedWithSameId()
+		{
+			var eventStoreStreams = CreateAtLeastOneEventStoreStream();
+			using (var stream = new DomainEventStream<object>(
+				StubEventStoreCreateStream(eventStoreStreams),
+				DummyPrePersistenceTracker<object>(),
+				DummyIdGetter,
+				DummyIdGetter,
+				DummyEventConverter))
+			{
+				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
+				var commitId = Guid.NewGuid();
+				stream.Commit(commitId);
+				eventStoreStreams.ForEach(es => es.Received(1).CommitChanges(commitId));
+			}
+		}
+
+		[Fact]
+		public void ClearUncommitted_Called_ExpectAllEventStoreStreamsAreCleared()
+		{
+			var eventStoreStreams = CreateAtLeastOneEventStoreStream();
+			using (var stream = new DomainEventStream<object>(
+				StubEventStoreCreateStream(eventStoreStreams),
+				DummyPrePersistenceTracker<object>(),
+				DummyIdGetter,
+				DummyIdGetter,
+				DummyEventConverter))
+			{
+				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
+				stream.ClearUncommitted();
+				eventStoreStreams.ForEach(es => es.Received(1).ClearChanges());
+			}
+		}
+
+		[Fact]
+		public void Dispose_Called_ExpectCreatedEventStoreStreamsAreDisposed()
+		{
+			var eventStoreStreams = CreateAtLeastOneEventStoreStream();
+			using (var stream = new DomainEventStream<object>(
+				StubEventStoreCreateStream(eventStoreStreams),
+				DummyPrePersistenceTracker<object>(),
+				DummyIdGetter,
+				DummyIdGetter,
+				DummyEventConverter))
+			{
+				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
+			}
+
+			eventStoreStreams.ForEach(es => es.Received(1).Dispose());
+		}
+
+		[Fact]
+		public void Dispose_CalledMultipleTimes_ExpectCreatedEventStoreStreamsAreNotDisposedMoreThanOnce()
+		{
+			var eventStoreStreams = CreateAtLeastOneEventStoreStream();
+			using (var stream = new DomainEventStream<object>(
+				StubEventStoreCreateStream(eventStoreStreams),
+				DummyPrePersistenceTracker<object>(),
+				DummyIdGetter,
+				DummyIdGetter,
+				DummyEventConverter))
+			{
+				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
+				stream.Dispose();
+			}
+
+			eventStoreStreams.ForEach(es => es.Received(1).Dispose());
+		}
+
+		// TODO: Replay() - needs writing
+		// TODO: Dispose() - OpenStream() calls also need disposing
+		// TODO: Option to allow auto-commit on Dispose ?
 	}
 }
