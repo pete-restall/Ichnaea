@@ -15,7 +15,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Constructor_CalledWithNullEventStore_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventStream<object>(
-				null, DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyBucketId(), DummyEventConverter);
+				null, DummyPrePersistenceTracker<object>(), DummyAggregateRootIdGetter, DummyBucketId(), DummyEventConverter, DummyEventReplay());
 
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("eventStore");
 		}
@@ -25,7 +25,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			return Substitute.For<IPrePersistenceDomainEventTracker<T>>();
 		}
 
-		private static string DummyIdGetter<T>(T aggregateRoot)
+		private static string DummyAggregateRootIdGetter<T>(T aggregateRoot)
 		{
 			return string.Empty;
 		}
@@ -40,11 +40,16 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			return new EventMessage();
 		}
 
+		private static IReplayDomainEvents<object> DummyEventReplay()
+		{
+			return Substitute.For<IReplayDomainEvents<object>>();
+		}
+
 		[Fact]
 		public void Constructor_CalledWithNullPrePersistenceDomainEventTracker_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventStream<object>(
-				DummyEventStore(), null, DummyIdGetter, DummyBucketId(), DummyEventConverter);
+				DummyEventStore(), null, DummyAggregateRootIdGetter, DummyBucketId(), DummyEventConverter, DummyEventReplay());
 
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("prePersistenceDomainEventTracker");
 		}
@@ -58,7 +63,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Constructor_CalledWithNullAggregateRootIdGetter_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventStream<object>(
-				DummyEventStore(), DummyPrePersistenceTracker<object>(), null, DummyBucketId(), DummyEventConverter);
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), null, DummyBucketId(), DummyEventConverter, DummyEventReplay());
 
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRootIdGetter");
 		}
@@ -67,7 +72,8 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Constructor_CalledWithNullBucketId_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventStream<object>(
-				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, null, DummyEventConverter);
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyAggregateRootIdGetter, null, DummyEventConverter, DummyEventReplay());
+
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("bucketId");
 		}
 
@@ -75,22 +81,37 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Constructor_CalledWithNullDomainEventToPersistableConverter_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventStream<object>(
-				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyBucketId(), null);
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyAggregateRootIdGetter, DummyBucketId(), null, DummyEventReplay());
 
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("domainEventToPersistableConverter");
 		}
 
 		[Fact]
-		public void CreateFrom_CalledWithNullAggregateRoot_ExpectArgumentNullExceptionWithCorrectParamName()
+		public void Constructor_CalledWithNullDomainEventReplay_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			var stream = new DomainEventStream<object>(
-				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyBucketId(), DummyEventConverter);
+			Action constructor = () => new DomainEventStream<object>(
+				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyAggregateRootIdGetter, DummyBucketId(), DummyEventConverter, null);
 
-			stream.Invoking(x => x.CreateFrom(null)).ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRoot");
+			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("domainEventReplay");
 		}
 
 		[Fact]
-		public void CreateFrom_Called_ExpectEventStreamIsCreatedWithIdFromAggregateRoot()
+		public void CreateFrom_CalledWithNullAggregateRoot_ExpectArgumentNullExceptionWithCorrectParamName()
+		{
+			using (var stream = new DomainEventStream<object>(
+				DummyEventStore(),
+				DummyPrePersistenceTracker<object>(),
+				DummyAggregateRootIdGetter,
+				DummyBucketId(),
+				DummyEventConverter,
+				DummyEventReplay()))
+			{
+				stream.Invoking(x => x.CreateFrom(null)).ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRoot");
+			}
+		}
+
+		[Fact]
+		public void CreateFrom_Called_ExpectEventStoreStreamIsCreatedWithCorrectBucketIdAndIdFromAggregateRoot()
 		{
 			string bucketId = StringGenerator.AnyNonNull();
 			string aggregateRootId = StringGenerator.AnyNonNull();
@@ -103,7 +124,8 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				DummyPrePersistenceTracker<object>(),
 				StubAggregateRootIdGetter(aggregateRoot, aggregateRootId),
 				bucketId,
-				DummyEventConverter))
+				DummyEventConverter,
+				DummyEventReplay()))
 			{
 				stream.CreateFrom(aggregateRoot);
 			}
@@ -125,9 +147,10 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new DomainEventStream<object>(
 				DummyEventStore(),
 				prePersistenceTracker,
-				DummyIdGetter,
+				DummyAggregateRootIdGetter,
 				DummyBucketId(),
-				DummyEventConverter))
+				DummyEventConverter,
+				DummyEventReplay()))
 			{
 				var aggregateRoot = new object();
 				stream.CreateFrom(aggregateRoot);
@@ -153,7 +176,8 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				StubPrePersistenceDomainEventTracker(aggregateRoot, domainEvents),
 				StubAggregateRootIdGetter(aggregateRoot, aggregateRootId),
 				bucketId,
-				StubEventMessageConverter(domainEvents, eventStoreEvents)))
+				StubEventMessageConverter(domainEvents, eventStoreEvents),
+				DummyEventReplay()))
 			{
 				stream.CreateFrom(aggregateRoot);
 			}
@@ -199,9 +223,10 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new DomainEventStream<object>(
 				StubEventStoreCreateStream(eventStoreStream),
 				prePersistenceTracker,
-				DummyIdGetter,
+				DummyAggregateRootIdGetter,
 				DummyBucketId(),
-				StubEventMessageConverter(domainEvents, eventStoreEvents)))
+				StubEventMessageConverter(domainEvents, eventStoreEvents),
+				DummyEventReplay()))
 			{
 				stream.CreateFrom(aggregateRoot);
 				domainEvents.ForEach(domainEvent => capturedSourceEvent(aggregateRoot, domainEvent));
@@ -228,9 +253,10 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new DomainEventStream<object>(
 				StubEventStoreCreateStream(eventStoreStream),
 				prePersistenceTracker,
-				DummyIdGetter,
+				DummyAggregateRootIdGetter,
 				DummyBucketId(),
-				DummyEventConverter))
+				DummyEventConverter,
+				DummyEventReplay()))
 			{
 				stream.Invoking(x => x.CreateFrom(new object())).ShouldThrow<Exception>();
 			}
@@ -248,9 +274,10 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new DomainEventStream<object>(
 				StubEventStoreCreateStream(eventStoreStreams),
 				StubPrePersistenceDomainEventTrackerToSourceOneDomainEventPerAggregateRoot(aggregateRoots, domainEvents),
-				DummyIdGetter,
+				DummyAggregateRootIdGetter,
 				DummyBucketId(),
-				x => (EventMessage) x))
+				x => (EventMessage) x,
+				DummyEventReplay()))
 			{
 				aggregateRoots.ForEach(aggregateRoot => stream.CreateFrom(aggregateRoot));
 			}
@@ -271,13 +298,43 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
-		public void Replay_CalledWithNullId_ExpectArgumentNullExceptionWithCorrectParamName()
+		public void Replay_CalledWithNullAggregateRootId_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			var stream = new DomainEventStream<object>(
-				DummyEventStore(), DummyPrePersistenceTracker<object>(), DummyIdGetter, DummyBucketId(), DummyEventConverter);
-
-			stream.Invoking(x => x.Replay(null)).ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("id");
+			using (var stream = new DomainEventStream<object>(
+				DummyEventStore(),
+				DummyPrePersistenceTracker<object>(),
+				DummyAggregateRootIdGetter,
+				DummyBucketId(),
+				DummyEventConverter,
+				DummyEventReplay()))
+			{
+				stream.Invoking(x => x.Replay(null)).ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRootId");
+			}
 		}
+
+		[Fact]
+		public void Replay_Called_ExpectEventStoreStreamIsOpenedWithCorrectBucketIdAndAggregateRootIdPassedIn()
+		{
+			string bucketId = StringGenerator.AnyNonNull();
+			string aggregateRootId = StringGenerator.AnyNonNull();
+			var eventStore = Substitute.For<IStoreEvents>();
+			eventStore.OpenStream(bucketId, aggregateRootId, int.MinValue, int.MaxValue).Returns(Substitute.For<IEventStream>());
+
+			using (var stream = new DomainEventStream<object>(
+				eventStore,
+				DummyPrePersistenceTracker<object>(),
+				DummyAggregateRootIdGetter,
+				bucketId,
+				DummyEventConverter,
+				DummyEventReplay()))
+			{
+				stream.Replay(aggregateRootId);
+			}
+
+			eventStore.Received(1).OpenStream(bucketId, aggregateRootId, int.MinValue, int.MaxValue);
+		}
+
+		// TODO: START FROM HERE - CONTINUE ELABORATING Replay()
 
 		[Fact]
 		public void Commit_CalledWithNoExplicitCommitId_ExpectAllEventStoreStreamsAreCommittedWithNonEmptyId()
@@ -286,9 +343,10 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new DomainEventStream<object>(
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
-				DummyIdGetter,
+				DummyAggregateRootIdGetter,
 				DummyBucketId(),
-				DummyEventConverter))
+				DummyEventConverter,
+				DummyEventReplay()))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
 				stream.Commit();
@@ -317,9 +375,10 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new DomainEventStream<object>(
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
-				DummyIdGetter,
+				DummyAggregateRootIdGetter,
 				DummyBucketId(),
-				DummyEventConverter))
+				DummyEventConverter,
+				DummyEventReplay()))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
 				stream.Commit();
@@ -342,9 +401,10 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new DomainEventStream<object>(
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
-				DummyIdGetter,
+				DummyAggregateRootIdGetter,
 				DummyBucketId(),
-				DummyEventConverter))
+				DummyEventConverter,
+				DummyEventReplay()))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
 				int numberOfCommits = IntegerGenerator.WithinExclusiveRange(2, 10);
@@ -360,9 +420,10 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new DomainEventStream<object>(
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
-				DummyIdGetter,
+				DummyAggregateRootIdGetter,
 				DummyBucketId(),
-				DummyEventConverter))
+				DummyEventConverter,
+				DummyEventReplay()))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
 				var commitId = Guid.NewGuid();
@@ -378,9 +439,10 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new DomainEventStream<object>(
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
-				DummyIdGetter,
+				DummyAggregateRootIdGetter,
 				DummyBucketId(),
-				DummyEventConverter))
+				DummyEventConverter,
+				DummyEventReplay()))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
 				stream.ClearUncommitted();
@@ -395,9 +457,10 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new DomainEventStream<object>(
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
-				DummyIdGetter,
+				DummyAggregateRootIdGetter,
 				DummyBucketId(),
-				DummyEventConverter))
+				DummyEventConverter,
+				DummyEventReplay()))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
 			}
@@ -412,9 +475,10 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new DomainEventStream<object>(
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyPrePersistenceTracker<object>(),
-				DummyIdGetter,
+				DummyAggregateRootIdGetter,
 				DummyBucketId(),
-				DummyEventConverter))
+				DummyEventConverter,
+				DummyEventReplay()))
 			{
 				eventStoreStreams.ForEach(x => stream.CreateFrom(new object()));
 				stream.Dispose();
@@ -426,5 +490,6 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		// TODO: Replay() - needs writing
 		// TODO: Dispose() - OpenStream() calls also need disposing
 		// TODO: Option to allow auto-commit on Dispose ?
+		// TODO: Option to allow auto-commit after every Domain Event ?
 	}
 }

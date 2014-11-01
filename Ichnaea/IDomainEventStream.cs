@@ -3,6 +3,6 @@
 	public interface IDomainEventStream<TAggregateRoot>
 	{
 		void CreateFrom(TAggregateRoot aggregateRoot);
-		TAggregateRoot Replay(string id);
+		TAggregateRoot Replay(string aggregateRootId);
 	}
 }

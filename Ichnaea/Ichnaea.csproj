@@ -53,6 +53,7 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IDomainEventStream.cs" />
     <Compile Include="IDomainEventTracker.cs" />
+    <Compile Include="IReplayDomainEvents.cs" />
     <Compile Include="Source.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

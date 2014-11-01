@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NEventStore;
+using NullGuard;
 
 namespace Restall.Ichnaea.NEventStore
 {
@@ -18,7 +19,8 @@ namespace Restall.Ichnaea.NEventStore
 			IPrePersistenceDomainEventTracker<TAggregateRoot> prePersistenceDomainEventTracker,
 			AggregateRootIdGetter<TAggregateRoot> aggregateRootIdGetter,
 			string bucketId,
-			Converter<object, EventMessage> domainEventToPersistableConverter)
+			Converter<object, EventMessage> domainEventToPersistableConverter,
+			IReplayDomainEvents<object> domainEventReplay)
 		{
 			this.eventStore = eventStore;
 			this.prePersistenceDomainEventTracker = prePersistenceDomainEventTracker;
@@ -36,9 +38,11 @@ namespace Restall.Ichnaea.NEventStore
 				(sender, args) => eventStoreStream.Add(this.domainEventToPersistableConverter(args)));
 		}
 
-		public TAggregateRoot Replay(string id)
+		[return: AllowNull] // TODO: TEMPORARY
+		public TAggregateRoot Replay(string aggregateRootId)
 		{
-			throw new NotImplementedException();
+			this.eventStore.OpenStream(this.bucketId, aggregateRootId, int.MinValue, int.MaxValue);
+			return default(TAggregateRoot);
 		}
 
 		public void Commit()
