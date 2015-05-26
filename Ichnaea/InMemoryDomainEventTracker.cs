@@ -33,7 +33,8 @@ namespace Restall.Ichnaea
 			return new object[0];
 		}
 
-		public void SwitchTrackingToPersistentStore(TAggregateRoot aggregateRoot, Source.Of<object> persistentObserver)
+		void IPrePersistenceDomainEventTracker<TAggregateRoot>.SwitchTrackingToPersistentStore(
+			TAggregateRoot aggregateRoot, Source.Of<object> persistentObserver)
 		{
 			// TODO: Method needs writing
 			throw new NotImplementedException();

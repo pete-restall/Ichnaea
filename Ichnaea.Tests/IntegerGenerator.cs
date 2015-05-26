@@ -16,5 +16,10 @@ namespace Restall.Ichnaea.Tests
 		{
 			get { return generator ?? (generator = new Random()); }
 		}
+
+		public static int Any()
+		{
+			return Generator.Next();
+		}
 	}
 }

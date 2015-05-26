@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateRootIdGetter.cs" />
+    <Compile Include="PersistedEventToDomainEventReplayAdapter.cs" />
     <Compile Include="DomainEventStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

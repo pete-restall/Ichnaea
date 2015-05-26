@@ -54,8 +54,13 @@
     <Reference Include="xunit">
       <HintPath>..\packages\xunit.1.9.2\lib\net20\xunit.dll</HintPath>
     </Reference>
+    <Reference Include="xunit.extensions, Version=1.9.2.1705, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensions.1.9.2\lib\net20\xunit.extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IntegerEnumerableExtensions.cs" />
     <Compile Include="IntegerGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,7 +68,9 @@
     <Compile Include="Unit\DomainEventFunnelTest.cs" />
     <Compile Include="Unit\InMemoryDomainEventTrackerTest.cs" />
     <Compile Include="Unit\EnumerableExtensionsTest.cs" />
+    <Compile Include="Unit\NEventStore\PersistedEventToDomainEventReplayAdapterTest.cs" />
     <Compile Include="Unit\NEventStore\DomainEventStreamTest.cs" />
+    <Compile Include="Unit\NEventStore\PersistedEventToDomainEventReplayAdapterTestDoubles.cs" />
     <Compile Include="Unit\SourceTest.cs" />
   </ItemGroup>
   <ItemGroup>
