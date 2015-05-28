@@ -260,8 +260,13 @@ namespace Restall.Ichnaea.Tests.Unit
 		[Fact]
 		public void Dispose_CalledWhenObservableHasBeenGarbageCollected_ExpectNoException()
 		{
-			var funnel = new DomainEventFunnel(new ObservableWithOneDomainEvent(), Substitute.For<Source.Of<object>>());
-			GC.Collect(9, GCCollectionMode.Forced);
+			var observable = new ObservableWithOneDomainEvent();
+			var funnel = new DomainEventFunnel(observable, Substitute.For<Source.Of<object>>());
+			var weakObservable = new WeakReference<ObservableWithOneDomainEvent>(observable);
+			observable = null;
+			Collect.Garbage();
+
+			weakObservable.TryGetTarget(out observable).Should().BeFalse("because the observable should have been garbage collected.");
 			funnel.Invoking(x => x.Dispose()).ShouldNotThrow();
 		}
 

@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace Restall.Ichnaea
 {
-	public class InMemoryDomainEventTracker<TAggregateRoot>: IPrePersistenceDomainEventTracker<TAggregateRoot>, IDisposable
+	public class InMemoryDomainEventTracker<TAggregateRoot>: IDomainEventTracker<TAggregateRoot>, IPrePersistenceDomainEventTracker<TAggregateRoot>, IDisposable
 		where TAggregateRoot: class
 	{
 		private readonly List<DomainEventFunnel> funnels = new List<DomainEventFunnel>();

@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AggregateRootAlreadyBeingTrackedException.cs" />
     <Compile Include="AggregateRootAttribute.cs" />
+    <Compile Include="IPostPersistenceDomainEventTracker.cs" />
     <Compile Include="DomainEventStreamCannotBeReplayedException.cs" />
     <Compile Include="IPrePersistenceDomainEventTracker.cs" />
     <Compile Include="DomainEventFunnel.cs" />

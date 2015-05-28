@@ -1,26 +1,28 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NEventStore;
 using NSubstitute;
 using Restall.Ichnaea.NEventStore;
 
-namespace Restall.Ichnaea.Tests.Unit.NEventStore
+namespace Restall.Ichnaea.Tests
 {
 	public static class PersistedEventToDomainEventReplayAdapterTestDoubles
 	{
-		public static PersistedEventToDomainEventReplayAdapter<object> Dummy()
+		private class DummyReplayAdapterThatWillNotHoldOntoReferences: PersistedEventToDomainEventReplayAdapter<object>
 		{
-			var replay = Stub();
-			replay.CanReplay(Arg.Any<object>(), Arg.Any<EventMessage>()).Returns(true);
-			replay.Replay(Arg.Any<object>(), Arg.Any<EventMessage>()).Returns(new object());
-			return replay;
-		}
+			public DummyReplayAdapterThatWillNotHoldOntoReferences(): base(DummyConverter, DummyDomainEventReplay())
+			{
+			}
 
-		public static PersistedEventToDomainEventReplayAdapter<object> Stub()
-		{
-			return Substitute.For<PersistedEventToDomainEventReplayAdapter<object>>(
-				new Converter<EventMessage, object>(DummyConverter),
-				DummyDomainEventReplay());
+			public override bool CanReplay(object aggregateRoot, EventMessage persistedEvent)
+			{
+				return true;
+			}
+
+			public override object Replay(object aggregateRoot, EventMessage persistedEvent)
+			{
+				return new object();
+			}
 		}
 
 		private static object DummyConverter(EventMessage persistedEvent)
@@ -31,6 +33,11 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		private static IReplayDomainEvents<object> DummyDomainEventReplay()
 		{
 			return Substitute.For<IReplayDomainEvents<object>>();
+		}
+
+		public static PersistedEventToDomainEventReplayAdapter<object> Dummy()
+		{
+			return new DummyReplayAdapterThatWillNotHoldOntoReferences();
 		}
 
 		public static PersistedEventToDomainEventReplayAdapter<object> StubForCommittedEventSequence(
@@ -45,6 +52,13 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				});
 
 			return replay;
+		}
+
+		public static PersistedEventToDomainEventReplayAdapter<object> Stub()
+		{
+			return Substitute.For<PersistedEventToDomainEventReplayAdapter<object>>(
+				new Converter<EventMessage, object>(DummyConverter),
+				DummyDomainEventReplay());
 		}
 	}
 }

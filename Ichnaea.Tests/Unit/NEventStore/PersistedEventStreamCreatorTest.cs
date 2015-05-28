@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Restall.Ichnaea.Tests.Unit.NEventStore
 {
-	public class DomainEventStreamTest
+	public class PersistedEventStreamCreatorTest
 	{
 		[Fact]
 		public void Constructor_CalledWithNullEventStore_ExpectArgumentNullExceptionWithCorrectParamName()

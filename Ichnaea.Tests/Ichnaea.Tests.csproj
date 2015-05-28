@@ -60,17 +60,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collect.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IntegerEnumerableExtensions.cs" />
     <Compile Include="IntegerGenerator.cs" />
+    <Compile Include="PersistedEventToDomainEventReplayAdapterTestDoubles.cs" />
+    <Compile Include="PostPersistenceDomainEventTrackerTestDoubles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringGenerator.cs" />
     <Compile Include="Unit\DomainEventFunnelTest.cs" />
     <Compile Include="Unit\InMemoryDomainEventTrackerTest.cs" />
     <Compile Include="Unit\EnumerableExtensionsTest.cs" />
+    <Compile Include="Unit\NEventStore\PersistedEventStreamContainerTest.cs" />
+    <Compile Include="Unit\NEventStore\PersistedEventStreamOpenerTest.cs" />
+    <Compile Include="Unit\NEventStore\PersistedEventStreamCreatorTest.cs" />
     <Compile Include="Unit\NEventStore\PersistedEventToDomainEventReplayAdapterTest.cs" />
     <Compile Include="Unit\NEventStore\DomainEventStreamTest.cs" />
-    <Compile Include="Unit\NEventStore\PersistedEventToDomainEventReplayAdapterTestDoubles.cs" />
     <Compile Include="Unit\SourceTest.cs" />
   </ItemGroup>
   <ItemGroup>

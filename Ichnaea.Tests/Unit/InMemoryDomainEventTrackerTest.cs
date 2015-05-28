@@ -160,7 +160,7 @@ namespace Restall.Ichnaea.Tests.Unit
 				tracker.AggregateRootCreated(aggregateRoot, new object());
 				var weakAggregateRoot = new WeakReference<object>(aggregateRoot);
 				aggregateRoot = null;
-				GC.Collect(9, GCCollectionMode.Forced);
+				Collect.Garbage();
 				weakAggregateRoot.TryGetTarget(out aggregateRoot).Should().BeFalse();
 			}
 		}
