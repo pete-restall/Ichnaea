@@ -1,6 +1,7 @@
 using System;
 using Raven.Client;
 using Restall.Ichnaea.Demo.Accounts;
+using Restall.Ichnaea.NEventStore;
 
 namespace Restall.Ichnaea.Demo.Web.Accounts
 {
@@ -10,14 +11,18 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 
 		private readonly IDocumentSession documents;
 
+		private readonly NEventStoreSession eventStore;
+
 		private readonly AccountFactory factory;
 
 		private readonly AccountRepository repository;
 
-		public AccountAdministrationService(RouteLinks links, IDocumentSession documents, AccountFactory factory, AccountRepository repository)
+		public AccountAdministrationService(
+			RouteLinks links, IDocumentSession documents, NEventStoreSession eventStore, AccountFactory factory, AccountRepository repository)
 		{
 			this.links = links;
 			this.documents = documents;
+			this.eventStore = eventStore;
 			this.factory = factory;
 			this.repository = repository;
 		}
@@ -35,6 +40,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 
 			var account = this.factory.Create(request.SortCode, request.AccountNumber, request.Holder);
 			this.repository.Add(account);
+			this.eventStore.Commit();
 
 			var surrogateId = new AccountIdSurrogate(Guid.NewGuid(), request.SortCode, request.AccountNumber);
 			this.documents.Store(surrogateId, surrogateId.SurrogateId);

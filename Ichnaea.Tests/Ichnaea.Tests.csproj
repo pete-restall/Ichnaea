@@ -71,7 +71,9 @@
     <Compile Include="Unit\DomainEventFunnelTest.cs" />
     <Compile Include="Unit\InMemoryDomainEventTrackerTest.cs" />
     <Compile Include="Unit\EnumerableExtensionsTest.cs" />
-    <Compile Include="Unit\NEventStore\PersistedEventStreamContainerTest.cs" />
+    <Compile Include="Unit\NEventStore\NEventStoreSessionStreamTest.cs" />
+    <Compile Include="Unit\NEventStore\NEventStoreSessionTest.cs" />
+    <Compile Include="Unit\NEventStore\DisposableContainerTest.cs" />
     <Compile Include="Unit\NEventStore\PersistedEventStreamOpenerTest.cs" />
     <Compile Include="Unit\NEventStore\PersistedEventStreamCreatorTest.cs" />
     <Compile Include="Unit\NEventStore\PersistedEventToDomainEventReplayAdapterTest.cs" />

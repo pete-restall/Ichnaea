@@ -194,6 +194,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Ichnaea.NEventStore\Ichnaea.NEventStore.csproj">
+      <Project>{2ba85d45-253b-489d-8a2b-b1c1cb5163b7}</Project>
+      <Name>Ichnaea.NEventStore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ichnaea\Ichnaea.csproj">
       <Project>{44da0c89-630c-4664-ac14-fa648f2fc124}</Project>
       <Name>Ichnaea</Name>

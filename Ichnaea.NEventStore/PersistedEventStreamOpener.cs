@@ -4,8 +4,7 @@ using NEventStore;
 
 namespace Restall.Ichnaea.NEventStore
 {
- 	// TODO: MAKE THE CLASS TAKE AN IPersistedEventStreamContainer (MULTIPLE IMPLEMENTATIONS - THREAD-SAFE OR NON-THREAD-SAFE ?) RATHER THAN INHERIT FROM IT; THIS MEANS MULTIPLE CLASSES CAN USE THE SAME CONTAINER, MEANING MORE TRANSACTIONAL OPPORTUNITIES (IE. Commit() CAN DO AN ENTIRE DOMAIN RATHER THAN A SINGLE AGGREGATE ROOT IN THAT DOMAIN)
-	public class PersistedEventStreamOpener<TAggregateRoot>: PersistedEventStreamContainer
+	public class PersistedEventStreamOpener<TAggregateRoot>: DisposableContainer
 		where TAggregateRoot: class
 	{
 		private readonly IStoreEvents eventStore;
@@ -31,7 +30,7 @@ namespace Restall.Ichnaea.NEventStore
 		public TAggregateRoot Replay(string aggregateRootId)
 		{
 			var eventStoreStream = this.eventStore.OpenStream(this.bucketId, aggregateRootId, int.MinValue, int.MaxValue);
-			base.AddStream(eventStoreStream);
+			base.AddDisposable(eventStoreStream);
 
 			var aggregateRoot = eventStoreStream.CommittedEvents.Aggregate(default(TAggregateRoot), this.ReplaySinglePersistedEvent);
 			if (aggregateRoot == null)

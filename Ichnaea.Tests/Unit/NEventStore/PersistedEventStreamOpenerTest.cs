@@ -70,7 +70,8 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		{
 			Action constructor = () => new PersistedEventStreamOpener<object>(
 				DummyEventStore(),
-				DummyBucketId(), PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
+				DummyBucketId(),
+				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				null,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy());
 

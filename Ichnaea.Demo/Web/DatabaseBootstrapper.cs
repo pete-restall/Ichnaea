@@ -8,6 +8,7 @@ using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
 using Raven.Client.Indexes;
+using Restall.Ichnaea.NEventStore;
 
 namespace Restall.Ichnaea.Demo.Web
 {
@@ -15,11 +16,10 @@ namespace Restall.Ichnaea.Demo.Web
 	{
 		private const string RavenDatabaseDirectory = @"~\App_Data\Database";
 
-		public static void RegisterDatabaseDependenciesInto(TinyIoCContainer container)
+		public static void RegisterApplicationScopeDatabaseDependenciesInto(TinyIoCContainer container)
 		{
 			var documentStore = CreateDocumentStore();
 			container.Register(documentStore);
-			container.Register((ctx, _) => ctx.Resolve<DocumentStore>().OpenSession());
 			container.Register(CreateEventStore(documentStore));
 		}
 
@@ -43,6 +43,12 @@ namespace Restall.Ichnaea.Demo.Web
 				.With<ICommitEvents>(persistence)
 				.With<IAccessSnapshots>(persistence)
 				.Build();
+		}
+
+		public static void RegisterRequestScopeDatabaseDependenciesInto(TinyIoCContainer container)
+		{
+			container.Register(container.Resolve<DocumentStore>().OpenSession());
+			container.Register(new NEventStoreSession(container.Resolve<IStoreEvents>()));
 		}
 	}
 }
