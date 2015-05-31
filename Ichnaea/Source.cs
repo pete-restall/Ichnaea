@@ -1,4 +1,5 @@
 ﻿using System;
+using NullGuard;
 
 namespace Restall.Ichnaea
 {
@@ -6,7 +7,7 @@ namespace Restall.Ichnaea
 	{
 		public class EventFluency
 		{
-			public void Of<T>(T domainEvent)
+			public void Of<T>([AllowNull] T domainEvent)
 			{
 				throw new NotImplementedException(
 					"Domain Events should only be Sourced by Aggregate Roots.  Ichnaea will only weave calls to " +

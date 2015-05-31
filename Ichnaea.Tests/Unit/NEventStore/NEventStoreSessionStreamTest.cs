@@ -157,6 +157,18 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		public void BucketId_Get_ExpectSameValueAsEventStream()
+		{
+			var eventStream = StubEventStream();
+			eventStream.BucketId.Returns(StringGenerator.AnyNonNull());
+
+			using (var stream = new NEventStoreSessionStream(DummyEventStreamsInSession(), eventStream))
+			{
+				stream.BucketId.Should().BeSameAs(eventStream.BucketId);
+			}
+		}
+
+		[Fact]
 		public void StreamId_Get_ExpectSameValueAsEventStream()
 		{
 			var eventStream = StubEventStream();

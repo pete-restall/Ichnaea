@@ -40,6 +40,8 @@ namespace Restall.Ichnaea.NEventStore
 			this.eventStream.ClearChanges();
 		}
 
+		public string BucketId { get { return this.eventStream.BucketId; } }
+
 		public string StreamId { get { return this.eventStream.StreamId; } }
 
 		public int StreamRevision { get { return this.eventStream.StreamRevision; } }
