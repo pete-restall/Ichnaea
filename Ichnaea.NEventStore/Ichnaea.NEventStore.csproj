@@ -56,7 +56,7 @@
     <Compile Include="PersistedEventStreamOpener.cs" />
     <Compile Include="PersistedEventStreamCreator.cs" />
     <Compile Include="PersistedEventToDomainEventReplayAdapter.cs" />
-    <Compile Include="DomainEventStream.cs" />
+    <Compile Include="DomainEventStreamAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

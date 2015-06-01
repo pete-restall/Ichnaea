@@ -27,7 +27,7 @@ namespace Restall.Ichnaea.NEventStore
 			this.persistedEventReplay = persistedEventReplay;
 		}
 
-		public TAggregateRoot Replay(string aggregateRootId)
+		public virtual TAggregateRoot Replay(string aggregateRootId)
 		{
 			var eventStoreStream = this.eventStore.OpenStream(this.bucketId, aggregateRootId, int.MinValue, int.MaxValue);
 			base.AddDisposable(eventStoreStream);

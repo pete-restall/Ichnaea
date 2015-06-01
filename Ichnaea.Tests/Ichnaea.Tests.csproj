@@ -82,7 +82,7 @@
     <Compile Include="Unit\NEventStore\PersistedEventStreamOpenerTest.cs" />
     <Compile Include="Unit\NEventStore\PersistedEventStreamCreatorTest.cs" />
     <Compile Include="Unit\NEventStore\PersistedEventToDomainEventReplayAdapterTest.cs" />
-    <Compile Include="Unit\NEventStore\DomainEventStreamTest.cs" />
+    <Compile Include="Unit\NEventStore\DomainEventStreamAdapterTest.cs" />
     <Compile Include="Unit\SourceTest.cs" />
   </ItemGroup>
   <ItemGroup>

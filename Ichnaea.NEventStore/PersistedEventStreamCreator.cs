@@ -26,7 +26,7 @@ namespace Restall.Ichnaea.NEventStore
 			this.domainEventToPersistedEventConverter = domainEventToPersistedEventConverter;
 		}
 
-		public void CreateFrom(TAggregateRoot aggregateRoot)
+		public virtual void CreateFrom(TAggregateRoot aggregateRoot)
 		{
 			var eventStoreStream = this.eventStore.CreateStream(this.bucketId, this.aggregateRootIdGetter(aggregateRoot));
 			base.AddDisposable(eventStoreStream);
