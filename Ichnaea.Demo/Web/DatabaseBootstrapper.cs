@@ -5,16 +5,16 @@ using NEventStore.Persistence.RavenDB;
 using NEventStore.Serialization;
 using Nancy.TinyIoc;
 using Raven.Client;
-using Raven.Client.Document;
 using Raven.Client.Embedded;
 using Raven.Client.Indexes;
+using Raven.Database.Server;
 using Restall.Ichnaea.NEventStore;
 
 namespace Restall.Ichnaea.Demo.Web
 {
 	public static class DatabaseBootstrapper
 	{
-		private const string RavenDatabaseDirectory = @"~\App_Data\Database";
+		private const int RavenDatabaseHttpPort = 1234;
 
 		public static void RegisterApplicationScopeDatabaseDependenciesInto(TinyIoCContainer container)
 		{
@@ -23,11 +23,15 @@ namespace Restall.Ichnaea.Demo.Web
 			container.Register(CreateEventStore(documentStore));
 		}
 
-		private static DocumentStore CreateDocumentStore()
+		private static IDocumentStore CreateDocumentStore()
 		{
-			var store = new EmbeddableDocumentStore { DataDirectory = RavenDatabaseDirectory };
+			var store = new EmbeddableDocumentStore { ConnectionStringName = "RavenEmbedded", UseEmbeddedHttpServer = true };
+			store.Configuration.Port = RavenDatabaseHttpPort;
+
+			NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(RavenDatabaseHttpPort);
 			store.Initialize();
 			IndexCreation.CreateIndexes(Assembly.GetExecutingAssembly(), store);
+
 			return store;
 		}
 
@@ -40,14 +44,12 @@ namespace Restall.Ichnaea.Demo.Web
 
 			return Wireup.Init()
 				.With<IPersistStreams>(persistence)
-				.With<ICommitEvents>(persistence)
-				.With<IAccessSnapshots>(persistence)
 				.Build();
 		}
 
 		public static void RegisterRequestScopeDatabaseDependenciesInto(TinyIoCContainer container)
 		{
-			container.Register(container.Resolve<DocumentStore>().OpenSession());
+			container.Register(container.Resolve<IDocumentStore>().OpenSession());
 			container.Register(new NEventStoreSession(container.Resolve<IStoreEvents>()));
 		}
 	}

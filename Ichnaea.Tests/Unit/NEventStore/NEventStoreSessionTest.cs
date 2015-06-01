@@ -212,25 +212,6 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
-		public void Dispose_Called_ExpectEventStoreIsDisposedAfterStreams()
-		{
-			var eventStream = MockEventStream();
-			var eventStore = MockEventStore();
-			eventStore.CreateStream(Arg.Any<string>(), Arg.Any<string>()).Returns(eventStream);
-
-			using (var session = new NEventStoreSession(eventStore))
-			{
-				session.CreateStream(DummyBucketId(), DummyStreamId());
-			}
-
-			Received.InOrder(() =>
-				{
-					eventStream.Dispose();
-					eventStore.Dispose();
-				});
-		}
-
-		[Fact]
 		public void Dispose_Called_ExpectCreatedStreamsAreDisposed()
 		{
 			var eventStreams = MockAtLeastOneEventStream();
@@ -305,18 +286,6 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			}
 
 			eventStreams.ForEach(stream => stream.Received(1).Dispose());
-		}
-
-		[Fact]
-		public void Dispose_CalledMultipleTimes_ExpectEventStoreIsNotDisposedMoreThanOnce()
-		{
-			var eventStore = MockEventStore();
-			using (var session = new NEventStoreSession(eventStore))
-			{
-				session.Dispose();
-			}
-
-			eventStore.Received(1).Dispose();
 		}
 
 		[Fact]

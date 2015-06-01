@@ -9,13 +9,11 @@ namespace Restall.Ichnaea.NEventStore
 	{
 		private readonly IStoreEvents eventStore;
 		private readonly ConcurrentDictionary<Guid, IEventStream> eventStreams;
-		private bool disposed;
 
 		public NEventStoreSession(IStoreEvents eventStore)
 		{
 			this.eventStore = eventStore;
 			this.eventStreams = new ConcurrentDictionary<Guid, IEventStream>();
-			this.disposed = false;
 		}
 
 		public IEventStream CreateStream(string bucketId, string streamId)
@@ -41,10 +39,6 @@ namespace Restall.Ichnaea.NEventStore
 		public void Dispose()
 		{
 			this.eventStreams.ForEach(stream => stream.Value.Dispose());
-			if (!this.disposed)
-				this.eventStore.Dispose();
-
-			this.disposed = true;
 		}
 
 		public void Commit()
