@@ -106,9 +106,9 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		{
 			string bucketId = DummyBucketId();
 			string aggregateRootId = DummyAggregateRootId();
-			var eventStorStreamWithCommittedEvents = StubEventStoreStreamForAtLeastOneCommittedEvent();
+			var eventStoreStreamWithCommittedEvents = StubEventStoreStreamForAtLeastOneCommittedEvent();
 			var eventStore = MockEventStore();
-			eventStore.OpenStream(bucketId, aggregateRootId, int.MinValue, int.MaxValue).Returns(eventStorStreamWithCommittedEvents);
+			eventStore.OpenStream(bucketId, aggregateRootId, int.MinValue, int.MaxValue).Returns(eventStoreStreamWithCommittedEvents);
 
 			using (var stream = new PersistedEventStreamOpener<object>(
 				eventStore,
@@ -434,6 +434,61 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		public void Dispose_Called_ExpectOpenedEventStoreStreamsAreDisposed()
+		{
+			var eventStoreStreams = MockAtLeastOneEventStoreStreamEachStubbedForAtLeastOneCommittedEvent();
+			using (var stream = new PersistedEventStreamOpener<object>(
+				StubEventStoreOpenStream(eventStoreStreams),
+				DummyBucketId(),
+				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
+				DummyEventConverter,
+				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
+			{
+				eventStoreStreams.ForEach(x => stream.Replay(DummyAggregateRootId()));
+			}
+
+			eventStoreStreams.ForEach(stream => stream.Received(1).Dispose());
+		}
+
+		private static IEventStream[] MockAtLeastOneEventStoreStreamEachStubbedForAtLeastOneCommittedEvent()
+		{
+			return CreateNumerOfMockEventStoreStreamsWithinExclusiveRangeEachStubbedForAtLeastOneCommittedEvent(1, 10);
+		}
+
+		private static IEventStream[] CreateNumerOfMockEventStoreStreamsWithinExclusiveRangeEachStubbedForAtLeastOneCommittedEvent(int min, int halfOpenMax)
+		{
+			int numberOfEventStoreStreams = IntegerGenerator.WithinExclusiveRange(min, halfOpenMax);
+			return numberOfEventStoreStreams.Select(MockEventStoreStreamStubbedForAtLeastOneCommittedEvent).ToArray();
+		}
+
+		private static IStoreEvents StubEventStoreOpenStream(params IEventStream[] eventStoreStreams)
+		{
+			var eventStore = Substitute.For<IStoreEvents>();
+			eventStore.OpenStream(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int>(), Arg.Any<int>())
+				.Returns(eventStoreStreams.First(), eventStoreStreams.Skip(1).ToArray());
+
+			return eventStore;
+		}
+
+		[Fact]
+		public void Dispose_CalledMultipleTimes_ExpectCreatedEventStoreStreamsAreNotDisposedMoreThanOnce()
+		{
+			var eventStoreStreams = MockAtLeastOneEventStoreStreamEachStubbedForAtLeastOneCommittedEvent();
+			using (var stream = new PersistedEventStreamOpener<object>(
+				StubEventStoreOpenStream(eventStoreStreams),
+				DummyBucketId(),
+				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
+				DummyEventConverter,
+				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
+			{
+				eventStoreStreams.ForEach(x => stream.Replay(DummyAggregateRootId()));
+				stream.Dispose();
+			}
+
+			eventStoreStreams.ForEach(stream => stream.Received(1).Dispose());
+		}
+
+		[Fact]
 		public void ExpectGarbageCollectableAggregateRootsAreNotArtificiallyKeptAliveByTracking()
 		{
 			using (var stream = new PersistedEventStreamOpener<object>(
@@ -450,8 +505,5 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				weakAggregateRoot.TryGetTarget(out aggregateRoot).Should().BeFalse();
 			}
 		}
-
-		// TODO: Option to allow auto-commit on Dispose ?
-		// TODO: Option to allow auto-commit after every Domain Event ?
 	}
 }

@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collect.cs" />
+    <Compile Include="PrePersistenceDomainEventTrackerTestDoubles.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IntegerEnumerableExtensions.cs" />
     <Compile Include="IntegerGenerator.cs" />
