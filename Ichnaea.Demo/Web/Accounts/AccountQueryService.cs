@@ -7,9 +7,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 	public class AccountQueryService
 	{
 		private readonly RouteLinks links;
-
 		private readonly IDocumentSession documents;
-
 		private readonly AccountRepository repository;
 
 		public AccountQueryService(RouteLinks links, IDocumentSession documents, AccountRepository repository)

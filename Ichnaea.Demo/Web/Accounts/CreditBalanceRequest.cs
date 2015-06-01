@@ -7,7 +7,9 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 	public class CreditBalanceRequest
 	{
 		public Guid Id { get; set; }
+
 		public decimal Amount { get; set; }
+
 		public string Description { get; set; }
 	}
 }

@@ -9,7 +9,9 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 	public class OpenAccountRequest
 	{
 		public string SortCode { get; set; }
+
 		public string AccountNumber { get; set; }
+
 		public string Holder { get; set; }
 	}
 }

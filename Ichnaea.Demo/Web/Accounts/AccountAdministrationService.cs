@@ -8,13 +8,9 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 	public class AccountAdministrationService
 	{
 		private readonly RouteLinks links;
-
 		private readonly IDocumentSession documents;
-
 		private readonly NEventStoreSession eventStore;
-
 		private readonly AccountFactory factory;
-
 		private readonly AccountRepository repository;
 
 		public AccountAdministrationService(
