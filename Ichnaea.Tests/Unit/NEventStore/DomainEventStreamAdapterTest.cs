@@ -26,6 +26,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			return Substitute.For<PersistedEventStreamOpener<object>>(
 				Substitute.For<IStoreEvents>(),
 				StringGenerator.AnyNonNull(),
+				new Converter<object, string>(x => StringGenerator.AnyNonNull()),
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				new Converter<object, EventMessage>(x => new EventMessage()),
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy());
@@ -89,7 +90,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		{
 			using (var streamOpener = StubPersistedEventStreamOpener())
 			{
-				var aggregateRootId = StringGenerator.AnyNonNull();
+				var aggregateRootId = new object();
 				var aggregateRoot = new object();
 				streamOpener.Replay(aggregateRootId).Returns(aggregateRoot);
 

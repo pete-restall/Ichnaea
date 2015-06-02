@@ -17,6 +17,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			Action constructor = () => new PersistedEventStreamOpener<object>(
 				null,
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy());
@@ -27,6 +28,11 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		private static string DummyBucketId()
 		{
 			return StringGenerator.AnyNonNull();
+		}
+
+		private static string DummyAggregateRootIdConverter(object aggregateRootId)
+		{
+			return aggregateRootId.ToString();
 		}
 
 		private static EventMessage DummyEventConverter(object domainEvent)
@@ -40,6 +46,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			Action constructor = () => new PersistedEventStreamOpener<object>(
 				DummyEventStore(),
 				null,
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy());
@@ -53,11 +60,26 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		public void Constructor_CalledWithNullAggregateRootIdToStringConverter_ExpectArgumentNullExceptionWithCorrectParamName()
+		{
+			Action constructor = () => new PersistedEventStreamOpener<object>(
+				DummyEventStore(),
+				DummyBucketId(),
+				null,
+				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
+				DummyEventConverter,
+				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy());
+
+			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRootIdToStringConverter");
+		}
+
+		[Fact]
 		public void Constructor_CalledWithNullPostPersistenceDomainEventTracker_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new PersistedEventStreamOpener<object>(
 				DummyEventStore(),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				null,
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy());
@@ -71,6 +93,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			Action constructor = () => new PersistedEventStreamOpener<object>(
 				DummyEventStore(),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				null,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy());
@@ -82,7 +105,12 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Constructor_CalledWithNullPersistedEventReplay_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new PersistedEventStreamOpener<object>(
-				DummyEventStore(), DummyBucketId(), PostPersistenceDomainEventTrackerTestDoubles.Dummy(), DummyEventConverter, null);
+				DummyEventStore(),
+				DummyBucketId(),
+				DummyAggregateRootIdConverter,
+				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
+				DummyEventConverter,
+				null);
 
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("persistedEventReplay");
 		}
@@ -93,6 +121,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				DummyEventStore(),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
@@ -105,20 +134,22 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Replay_Called_ExpectEventStoreStreamIsOpenedWithCorrectBucketIdAndAggregateRootIdPassedIn()
 		{
 			string bucketId = DummyBucketId();
-			string aggregateRootId = DummyAggregateRootId();
+			var aggregateRootId = new object();
+			string aggregateRootIdAsString = DummyAggregateRootId();
 			var eventStoreStreamWithCommittedEvents = StubEventStoreStreamForAtLeastOneCommittedEvent();
 			var eventStore = MockEventStore();
-			eventStore.OpenStream(bucketId, aggregateRootId, int.MinValue, int.MaxValue).Returns(eventStoreStreamWithCommittedEvents);
+			eventStore.OpenStream(bucketId, aggregateRootIdAsString, int.MinValue, int.MaxValue).Returns(eventStoreStreamWithCommittedEvents);
 
 			using (var stream = new PersistedEventStreamOpener<object>(
 				eventStore,
 				bucketId,
+				StubAggregateRootIdToStringConverter(aggregateRootId, aggregateRootIdAsString),
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
 			{
 				stream.Replay(aggregateRootId);
-				eventStore.Received(1).OpenStream(bucketId, aggregateRootId, int.MinValue, int.MaxValue);
+				eventStore.Received(1).OpenStream(bucketId, aggregateRootIdAsString, int.MinValue, int.MaxValue);
 			}
 		}
 
@@ -145,6 +176,11 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			return Substitute.For<IStoreEvents>();
 		}
 
+		private static Converter<object, string> StubAggregateRootIdToStringConverter(object aggregateRootId, string aggregateRootIdAsString)
+		{
+			return x => x == aggregateRootId ? aggregateRootIdAsString : StringGenerator.AnyNonNull();
+		}
+
 		[Fact]
 		public void Replay_Called_ExpectCommittedEventsFromOpenedEventStoreStreamAreAggregatedAndReturned()
 		{
@@ -159,6 +195,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStreamForCommittedEvents(bucketId, aggregateRootId, committedEvents),
 				bucketId,
+				StubAggregateRootIdToStringConverter(aggregateRootId),
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.StubForCommittedEventSequence(committedEvents, rootUnderConstruction)))
@@ -180,6 +217,11 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			return eventStore;
 		}
 
+		private static Converter<object, string> StubAggregateRootIdToStringConverter(string aggregateRootId)
+		{
+			return x => aggregateRootId;
+		}
+
 		[Fact]
 		public void Replay_CalledWhenFinalReplayReturnsNull_ExpectDomainEventStreamCannotBeReplayedException()
 		{
@@ -187,6 +229,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStreamForAtLeastOneCommittedEvent(),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				replayReturningNullAggregateRoot))
@@ -223,6 +266,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStreamForCommittedEvents(eventStoreCommittedEvents),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				replayUnableToHandleAllEvents))
@@ -265,6 +309,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStreamForCommittedEvents(eventStoreCommittedEvents),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
@@ -280,6 +325,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStreamForAtLeastOneCommittedEvent(),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				postPersistenceTracker,
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
@@ -301,6 +347,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStreamForAtLeastOneCommittedEvent(),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				postPersistenceTracker,
 				DummyEventConverter,
 				StubEventReplayToReturnNullAggregateRoot()))
@@ -324,6 +371,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStream(eventStoreStream),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				postPersistenceTracker,
 				StubEventConverter(domainEvents, persistedEvents),
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
@@ -355,6 +403,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStream(eventStoreStream),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
@@ -379,6 +428,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStream(eventStoreStream),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				replayUnableToHandleAllEvents))
@@ -397,6 +447,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStream(eventStoreStream),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				replayReturningNullAggregateRoot))
@@ -423,6 +474,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStream(eventStoreStream),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				postPersistenceTracker,
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
@@ -440,6 +492,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStream(eventStoreStreams),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
@@ -477,6 +530,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStream(eventStoreStreams),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
@@ -494,6 +548,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamOpener<object>(
 				StubEventStoreOpenStreamForAtLeastOneCommittedEvent(),
 				DummyBucketId(),
+				DummyAggregateRootIdConverter,
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))

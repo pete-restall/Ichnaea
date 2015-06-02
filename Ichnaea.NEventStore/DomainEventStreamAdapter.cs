@@ -19,7 +19,7 @@
 			this.persistedEventStreamCreator.CreateFrom(aggregateRoot);
 		}
 
-		public TAggregateRoot Replay(string aggregateRootId)
+		public TAggregateRoot Replay(object aggregateRootId)
 		{
 			return this.persistedEventStreamOpener.Replay(aggregateRootId);
 		}
