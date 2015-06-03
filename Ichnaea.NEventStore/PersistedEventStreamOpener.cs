@@ -32,26 +32,43 @@ namespace Restall.Ichnaea.NEventStore
 
 		public virtual TAggregateRoot Replay(TAggregateRootId aggregateRootId)
 		{
+			var streamId = this.aggregateRootIdToStringConverter(aggregateRootId);
 			var eventStoreStream = this.eventStore.OpenStream(
 				this.bucketId,
-				this.aggregateRootIdToStringConverter(aggregateRootId),
+				streamId,
 				int.MinValue,
 				int.MaxValue);
 
 			base.AddDisposable(eventStoreStream);
 
-			var aggregateRoot = eventStoreStream.CommittedEvents.Aggregate(default(TAggregateRoot), this.ReplaySinglePersistedEvent);
+			var aggregateRoot = eventStoreStream.CommittedEvents.Aggregate(
+				default(TAggregateRoot),
+				(aggregateRootUnderConstruction, persistedEvent) =>
+					this.ReplaySinglePersistedEventOrThrow(
+						aggregateRootUnderConstruction,
+						persistedEvent,
+						failedEvent => new DomainEventStreamCannotBeReplayedException(
+							"Could not replay persisted Domain Event; " +
+								"bucket=" + this.bucketId +
+								", stream=" + streamId +
+								", event=" + failedEvent.Body,
+							aggregateRootId)));
+
 			if (aggregateRoot == null)
-				throw new DomainEventStreamCannotBeReplayedException(); // TODO: ADD NICE MESSAGE (ONCE EXCEPTION IMPLEMENTED PROPERLY)
+			{
+				throw new DomainEventStreamCannotBeReplayedException(
+					"Domain Event replay resulted in null Aggregate Root; bucket=" + this.bucketId + ", stream=" + streamId,
+					aggregateRootId);
+			}
 
 			this.WriteFutureDomainEventsDirectlyToEventStore(aggregateRoot, eventStoreStream);
 			return aggregateRoot;
 		}
 
-		private TAggregateRoot ReplaySinglePersistedEvent(TAggregateRoot aggregateRoot, EventMessage persistedEvent)
+		private TAggregateRoot ReplaySinglePersistedEventOrThrow(TAggregateRoot aggregateRoot, EventMessage persistedEvent, Func<EventMessage, Exception> exception)
 		{
 			if (!this.persistedEventReplay.CanReplay(aggregateRoot, persistedEvent))
-				throw new DomainEventStreamCannotBeReplayedException(); // TODO: ADD NICE MESSAGE (ONCE EXCEPTION IMPLEMENTED PROPERLY)
+				throw exception(persistedEvent);
 
 			return this.persistedEventReplay.Replay(aggregateRoot, persistedEvent);
 		}

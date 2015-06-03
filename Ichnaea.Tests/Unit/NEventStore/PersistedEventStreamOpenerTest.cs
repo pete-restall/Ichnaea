@@ -223,7 +223,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
-		public void Replay_CalledWhenFinalReplayReturnsNull_ExpectDomainEventStreamCannotBeReplayedException()
+		public void Replay_CalledWhenFinalReplayReturnsNull_ExpectDomainEventStreamCannotBeReplayedExceptionWithSameAggregateRootId()
 		{
 			var replayReturningNullAggregateRoot = StubEventReplayToReturnNullAggregateRoot();
 			using (var stream = new PersistedEventStreamOpener<object, string>(
@@ -234,7 +234,9 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				DummyEventConverter,
 				replayReturningNullAggregateRoot))
 			{
-				stream.Invoking(x => x.Replay(DummyAggregateRootId())).ShouldThrow<DomainEventStreamCannotBeReplayedException>();
+				var aggregateRootId = DummyAggregateRootId();
+				stream.Invoking(x => x.Replay(aggregateRootId))
+					.ShouldThrow<DomainEventStreamCannotBeReplayedException>().And.AggregateRootId.Should().BeSameAs(aggregateRootId);
 			}
 		}
 
@@ -259,7 +261,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
-		public void Replay_CalledWhenAnEventCannotBeReplayed_ExpectDomainEventStreamCannotBeReplayedException()
+		public void Replay_CalledWhenAnEventCannotBeReplayed_ExpectDomainEventStreamCannotBeReplayedExceptionWithSameAggregateRootId()
 		{
 			var eventStoreCommittedEvents = CreateAtLeastOneDummyPersistedEvent();
 			var replayUnableToHandleAllEvents = StubEventReplayForOneUnhandledEvent(eventStoreCommittedEvents);
@@ -271,7 +273,9 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				DummyEventConverter,
 				replayUnableToHandleAllEvents))
 			{
-				stream.Invoking(x => x.Replay(DummyAggregateRootId())).ShouldThrow<DomainEventStreamCannotBeReplayedException>();
+				var aggregateRootId = DummyAggregateRootId();
+				stream.Invoking(x => x.Replay(aggregateRootId))
+					.ShouldThrow<DomainEventStreamCannotBeReplayedException>().And.AggregateRootId.Should().BeSameAs(aggregateRootId);
 			}
 		}
 
@@ -303,7 +307,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
-		public void Replay_CalledWhenNoEventsHaveBeenPersistedToEventStore_ExpectDomainEventStreamCannotBeReplayedException()
+		public void Replay_CalledWhenNoEventsHaveBeenPersistedToEventStore_ExpectDomainEventStreamCannotBeReplayedExceptionWithSameAggregateRootId()
 		{
 			var eventStoreCommittedEvents = new EventMessage[0];
 			using (var stream = new PersistedEventStreamOpener<object, string>(
@@ -314,7 +318,9 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
 			{
-				stream.Invoking(x => x.Replay(DummyAggregateRootId())).ShouldThrow<DomainEventStreamCannotBeReplayedException>();
+				var aggregateRootId = DummyAggregateRootId();
+				stream.Invoking(x => x.Replay(aggregateRootId))
+					.ShouldThrow<DomainEventStreamCannotBeReplayedException>().And.AggregateRootId.Should().BeSameAs(aggregateRootId);
 			}
 		}
 
