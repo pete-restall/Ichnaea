@@ -2,9 +2,9 @@
 {
 	public class AccountRepository
 	{
-		private readonly IDomainEventStream<Account> stream;
+		private readonly IDomainEventStream<Account, AccountId> stream;
 
-		public AccountRepository(IDomainEventStream<Account> stream)
+		public AccountRepository(IDomainEventStream<Account, AccountId> stream)
 		{
 			this.stream = stream;
 		}
@@ -16,7 +16,7 @@
 
 		public Account GetBySortCodeAndAccountNumber(string sortCode, string accountNumber)
 		{
-			return this.stream.Replay(new AccountId(sortCode, accountNumber).ToString());
+			return this.stream.Replay(new AccountId(sortCode, accountNumber));
 		}
 	}
 }

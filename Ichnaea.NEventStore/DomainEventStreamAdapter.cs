@@ -1,14 +1,14 @@
 ﻿namespace Restall.Ichnaea.NEventStore
 {
-	public class DomainEventStreamAdapter<TAggregateRoot>: IDomainEventStream<TAggregateRoot>
+	public class DomainEventStreamAdapter<TAggregateRoot, TAggregateRootId>: IDomainEventStream<TAggregateRoot, TAggregateRootId>
 		where TAggregateRoot: class
 	{
 		private readonly PersistedEventStreamCreator<TAggregateRoot> persistedEventStreamCreator;
-		private readonly PersistedEventStreamOpener<TAggregateRoot> persistedEventStreamOpener;
+		private readonly PersistedEventStreamOpener<TAggregateRoot, TAggregateRootId> persistedEventStreamOpener;
 
 		public DomainEventStreamAdapter(
 			PersistedEventStreamCreator<TAggregateRoot> persistedEventStreamCreator,
-			PersistedEventStreamOpener<TAggregateRoot> persistedEventStreamOpener)
+			PersistedEventStreamOpener<TAggregateRoot, TAggregateRootId> persistedEventStreamOpener)
 		{
 			this.persistedEventStreamCreator = persistedEventStreamCreator;
 			this.persistedEventStreamOpener = persistedEventStreamOpener;
@@ -19,7 +19,7 @@
 			this.persistedEventStreamCreator.CreateFrom(aggregateRoot);
 		}
 
-		public TAggregateRoot Replay(object aggregateRootId)
+		public TAggregateRoot Replay(TAggregateRootId aggregateRootId)
 		{
 			return this.persistedEventStreamOpener.Replay(aggregateRootId);
 		}

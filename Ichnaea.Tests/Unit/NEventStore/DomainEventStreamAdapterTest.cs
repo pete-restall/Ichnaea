@@ -12,21 +12,21 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void Constructor_CalledWithNullPersistedEventStreamCreator_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new DomainEventStreamAdapter<object>(null, DummyPersistedEventStreamOpener());
+			Action constructor = () => new DomainEventStreamAdapter<object, string>(null, DummyPersistedEventStreamOpener());
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("persistedEventStreamCreator");
 		}
 
-		private static PersistedEventStreamOpener<object> DummyPersistedEventStreamOpener()
+		private static PersistedEventStreamOpener<object, string> DummyPersistedEventStreamOpener()
 		{
 			return SubstitutePersistedEventStreamOpener();
 		}
 
-		private static PersistedEventStreamOpener<object> SubstitutePersistedEventStreamOpener()
+		private static PersistedEventStreamOpener<object, string> SubstitutePersistedEventStreamOpener()
 		{
-			return Substitute.For<PersistedEventStreamOpener<object>>(
+			return Substitute.For<PersistedEventStreamOpener<object, string>>(
 				Substitute.For<IStoreEvents>(),
 				StringGenerator.AnyNonNull(),
-				new Converter<object, string>(x => StringGenerator.AnyNonNull()),
+				new Converter<string, string>(x => StringGenerator.AnyNonNull()),
 				PostPersistenceDomainEventTrackerTestDoubles.Dummy(),
 				new Converter<object, EventMessage>(x => new EventMessage()),
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy());
@@ -35,7 +35,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void Constructor_CalledWithNullPersistedEventStreamOpener_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new DomainEventStreamAdapter<object>(DummyPersistedEventStreamCreator(), null);
+			Action constructor = () => new DomainEventStreamAdapter<object, string>(DummyPersistedEventStreamCreator(), null);
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("persistedEventStreamOpener");
 		}
 
@@ -57,7 +57,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void CreateFrom_CalledWithNullAggregateRoot_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			var adapter = new DomainEventStreamAdapter<object>(DummyPersistedEventStreamCreator(), DummyPersistedEventStreamOpener());
+			var adapter = new DomainEventStreamAdapter<object, string>(DummyPersistedEventStreamCreator(), DummyPersistedEventStreamOpener());
 			adapter.Invoking(x => x.CreateFrom(null)).ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRoot");
 		}
 
@@ -66,7 +66,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		{
 			using (var streamCreator = MockPersistedEventStreamCreator())
 			{
-				var adapter = new DomainEventStreamAdapter<object>(streamCreator, DummyPersistedEventStreamOpener());
+				var adapter = new DomainEventStreamAdapter<object, string>(streamCreator, DummyPersistedEventStreamOpener());
 				var aggregateRoot = new object();
 				adapter.CreateFrom(aggregateRoot);
 				streamCreator.Received(1).CreateFrom(aggregateRoot);
@@ -81,7 +81,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void Replay_CalledWithNullAggregateRootId_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			var adapter = new DomainEventStreamAdapter<object>(DummyPersistedEventStreamCreator(), DummyPersistedEventStreamOpener());
+			var adapter = new DomainEventStreamAdapter<object, string>(DummyPersistedEventStreamCreator(), DummyPersistedEventStreamOpener());
 			adapter.Invoking(x => x.Replay(null)).ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRootId");
 		}
 
@@ -90,16 +90,16 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		{
 			using (var streamOpener = StubPersistedEventStreamOpener())
 			{
-				var aggregateRootId = new object();
+				var aggregateRootId = StringGenerator.AnyNonNull();
 				var aggregateRoot = new object();
 				streamOpener.Replay(aggregateRootId).Returns(aggregateRoot);
 
-				var adapter = new DomainEventStreamAdapter<object>(DummyPersistedEventStreamCreator(), streamOpener);
+				var adapter = new DomainEventStreamAdapter<object, string>(DummyPersistedEventStreamCreator(), streamOpener);
 				adapter.Replay(aggregateRootId).Should().BeSameAs(aggregateRoot);
 			}
 		}
 
-		private static PersistedEventStreamOpener<object> StubPersistedEventStreamOpener()
+		private static PersistedEventStreamOpener<object, string> StubPersistedEventStreamOpener()
 		{
 			return SubstitutePersistedEventStreamOpener();
 		}

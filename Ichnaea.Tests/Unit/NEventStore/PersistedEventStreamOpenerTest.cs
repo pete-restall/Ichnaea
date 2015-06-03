@@ -14,7 +14,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void Constructor_CalledWithNullEventStore_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new PersistedEventStreamOpener<object>(
+			Action constructor = () => new PersistedEventStreamOpener<object, string>(
 				null,
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -30,7 +30,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			return StringGenerator.AnyNonNull();
 		}
 
-		private static string DummyAggregateRootIdConverter(object aggregateRootId)
+		private static string DummyAggregateRootIdConverter<T>(T aggregateRootId)
 		{
 			return aggregateRootId.ToString();
 		}
@@ -43,7 +43,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void Constructor_CalledWithNullBucketId_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new PersistedEventStreamOpener<object>(
+			Action constructor = () => new PersistedEventStreamOpener<object, string>(
 				DummyEventStore(),
 				null,
 				DummyAggregateRootIdConverter,
@@ -62,7 +62,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void Constructor_CalledWithNullAggregateRootIdToStringConverter_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new PersistedEventStreamOpener<object>(
+			Action constructor = () => new PersistedEventStreamOpener<object, string>(
 				DummyEventStore(),
 				DummyBucketId(),
 				null,
@@ -76,7 +76,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void Constructor_CalledWithNullPostPersistenceDomainEventTracker_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new PersistedEventStreamOpener<object>(
+			Action constructor = () => new PersistedEventStreamOpener<object, string>(
 				DummyEventStore(),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -90,7 +90,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void Constructor_CalledWithNullDomainEventToPersistedEventConverter_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new PersistedEventStreamOpener<object>(
+			Action constructor = () => new PersistedEventStreamOpener<object, string>(
 				DummyEventStore(),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -104,7 +104,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void Constructor_CalledWithNullPersistedEventReplay_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new PersistedEventStreamOpener<object>(
+			Action constructor = () => new PersistedEventStreamOpener<object, string>(
 				DummyEventStore(),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -118,7 +118,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void Replay_CalledWithNullAggregateRootId_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				DummyEventStore(),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -134,13 +134,13 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Replay_Called_ExpectEventStoreStreamIsOpenedWithCorrectBucketIdAndAggregateRootIdPassedIn()
 		{
 			string bucketId = DummyBucketId();
-			var aggregateRootId = new object();
+			var aggregateRootId = Guid.NewGuid();
 			string aggregateRootIdAsString = DummyAggregateRootId();
 			var eventStoreStreamWithCommittedEvents = StubEventStoreStreamForAtLeastOneCommittedEvent();
 			var eventStore = MockEventStore();
 			eventStore.OpenStream(bucketId, aggregateRootIdAsString, int.MinValue, int.MaxValue).Returns(eventStoreStreamWithCommittedEvents);
 
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, Guid>(
 				eventStore,
 				bucketId,
 				StubAggregateRootIdToStringConverter(aggregateRootId, aggregateRootIdAsString),
@@ -176,9 +176,9 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			return Substitute.For<IStoreEvents>();
 		}
 
-		private static Converter<object, string> StubAggregateRootIdToStringConverter(object aggregateRootId, string aggregateRootIdAsString)
+		private static Converter<T, string> StubAggregateRootIdToStringConverter<T>(T aggregateRootId, string aggregateRootIdAsString)
 		{
-			return x => x == aggregateRootId ? aggregateRootIdAsString : StringGenerator.AnyNonNull();
+			return x => x.Equals(aggregateRootId) ? aggregateRootIdAsString : StringGenerator.AnyNonNull();
 		}
 
 		[Fact]
@@ -192,7 +192,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			string bucketId = DummyBucketId();
 			string aggregateRootId = DummyAggregateRootId();
 
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStreamForCommittedEvents(bucketId, aggregateRootId, committedEvents),
 				bucketId,
 				StubAggregateRootIdToStringConverter(aggregateRootId),
@@ -217,16 +217,16 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			return eventStore;
 		}
 
-		private static Converter<object, string> StubAggregateRootIdToStringConverter(string aggregateRootId)
+		private static Converter<T, string> StubAggregateRootIdToStringConverter<T>(T aggregateRootId)
 		{
-			return x => aggregateRootId;
+			return x => aggregateRootId.ToString();
 		}
 
 		[Fact]
 		public void Replay_CalledWhenFinalReplayReturnsNull_ExpectDomainEventStreamCannotBeReplayedException()
 		{
 			var replayReturningNullAggregateRoot = StubEventReplayToReturnNullAggregateRoot();
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStreamForAtLeastOneCommittedEvent(),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -263,7 +263,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		{
 			var eventStoreCommittedEvents = CreateAtLeastOneDummyPersistedEvent();
 			var replayUnableToHandleAllEvents = StubEventReplayForOneUnhandledEvent(eventStoreCommittedEvents);
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStreamForCommittedEvents(eventStoreCommittedEvents),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -306,7 +306,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Replay_CalledWhenNoEventsHaveBeenPersistedToEventStore_ExpectDomainEventStreamCannotBeReplayedException()
 		{
 			var eventStoreCommittedEvents = new EventMessage[0];
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStreamForCommittedEvents(eventStoreCommittedEvents),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -322,7 +322,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Replay_Called_ExpectPostPersistenceTrackingIsForTheAggregateRoot()
 		{
 			var postPersistenceTracker = MockPostPersistenceTracker();
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStreamForAtLeastOneCommittedEvent(),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -344,7 +344,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Replay_CalledWhenFinalReplayReturnsNull_ExpectNoPostPersistenceTracking()
 		{
 			var postPersistenceTracker = MockPostPersistenceTracker();
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStreamForAtLeastOneCommittedEvent(),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -368,7 +368,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			postPersistenceTracker.TrackToPersistentStore(Arg.Any<object>(), Arg.Do<Source.Of<object>>(x => capturedSourceEvent = x));
 
 			var eventStoreStream = StubEventStoreStreamForAtLeastOneCommittedEvent();
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStream(eventStoreStream),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -400,7 +400,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		{
 			var eventStoreCommittedEvents = new EventMessage[0];
 			var eventStoreStream = MockEventStoreStreamStubbedForCommittedEvents(eventStoreCommittedEvents);
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStream(eventStoreStream),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -425,7 +425,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			var eventStoreCommittedEvents = CreateAtLeastOneDummyPersistedEvent();
 			var replayUnableToHandleAllEvents = StubEventReplayForOneUnhandledEvent(eventStoreCommittedEvents);
 			var eventStoreStream = MockEventStoreStreamStubbedForCommittedEvents(eventStoreCommittedEvents);
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStream(eventStoreStream),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -444,7 +444,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		{
 			var replayReturningNullAggregateRoot = StubEventReplayToReturnNullAggregateRoot();
 			var eventStoreStream = MockEventStoreStreamStubbedForAtLeastOneCommittedEvent();
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStream(eventStoreStream),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -471,7 +471,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				.Do(x => { throw new Exception(); });
 
 			var eventStoreStream = MockEventStoreStreamStubbedForAtLeastOneCommittedEvent();
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStream(eventStoreStream),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -489,7 +489,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Dispose_Called_ExpectOpenedEventStoreStreamsAreDisposed()
 		{
 			var eventStoreStreams = MockAtLeastOneEventStoreStreamEachStubbedForAtLeastOneCommittedEvent();
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStream(eventStoreStreams),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -527,7 +527,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		public void Dispose_CalledMultipleTimes_ExpectCreatedEventStoreStreamsAreNotDisposedMoreThanOnce()
 		{
 			var eventStoreStreams = MockAtLeastOneEventStoreStreamEachStubbedForAtLeastOneCommittedEvent();
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStream(eventStoreStreams),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,
@@ -545,7 +545,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		[Fact]
 		public void ExpectGarbageCollectableAggregateRootsAreNotArtificiallyKeptAliveByTracking()
 		{
-			using (var stream = new PersistedEventStreamOpener<object>(
+			using (var stream = new PersistedEventStreamOpener<object, string>(
 				StubEventStoreOpenStreamForAtLeastOneCommittedEvent(),
 				DummyBucketId(),
 				DummyAggregateRootIdConverter,

@@ -4,12 +4,12 @@ using NEventStore;
 
 namespace Restall.Ichnaea.NEventStore
 {
-	public class PersistedEventStreamOpener<TAggregateRoot>: DisposableContainer
+	public class PersistedEventStreamOpener<TAggregateRoot, TAggregateRootId>: DisposableContainer
 		where TAggregateRoot: class
 	{
 		private readonly IStoreEvents eventStore;
 		private readonly string bucketId;
-		private readonly Converter<object, string> aggregateRootIdToStringConverter;
+		private readonly Converter<TAggregateRootId, string> aggregateRootIdToStringConverter;
 		private readonly IPostPersistenceDomainEventTracker<TAggregateRoot> postPersistenceDomainEventTracker;
 		private readonly Converter<object, EventMessage> domainEventToPersistedEventConverter;
 		private readonly PersistedEventToDomainEventReplayAdapter<TAggregateRoot> persistedEventReplay;
@@ -17,7 +17,7 @@ namespace Restall.Ichnaea.NEventStore
 		public PersistedEventStreamOpener(
 			IStoreEvents eventStore,
 			string bucketId,
-			Converter<object, string> aggregateRootIdToStringConverter,
+			Converter<TAggregateRootId, string> aggregateRootIdToStringConverter,
 			IPostPersistenceDomainEventTracker<TAggregateRoot> postPersistenceDomainEventTracker,
 			Converter<object, EventMessage> domainEventToPersistedEventConverter,
 			PersistedEventToDomainEventReplayAdapter<TAggregateRoot> persistedEventReplay)
@@ -30,7 +30,7 @@ namespace Restall.Ichnaea.NEventStore
 			this.persistedEventReplay = persistedEventReplay;
 		}
 
-		public virtual TAggregateRoot Replay(object aggregateRootId)
+		public virtual TAggregateRoot Replay(TAggregateRootId aggregateRootId)
 		{
 			var eventStoreStream = this.eventStore.OpenStream(
 				this.bucketId,

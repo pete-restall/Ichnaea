@@ -1,8 +1,8 @@
 ﻿namespace Restall.Ichnaea
 {
-	public interface IDomainEventStream<TAggregateRoot> where TAggregateRoot: class
+	public interface IDomainEventStream<TAggregateRoot, in TAggregateRootId> where TAggregateRoot: class
 	{
 		void CreateFrom(TAggregateRoot aggregateRoot);
-		TAggregateRoot Replay(object aggregateRootId);
+		TAggregateRoot Replay(TAggregateRootId aggregateRootId);
 	}
 }
