@@ -27,6 +27,7 @@ namespace Restall.Ichnaea.Demo.Web
 			base.ConfigureRequestContainer(container, context);
 			container.Register((ctx, args) => context);
 			DatabaseBootstrapper.RegisterRequestScopeDatabaseDependenciesInto(container);
+			IchnaeaBootstrapper.RegisterRequestScopeIchnaeaDependenciesInto(container);
 		}
 
 		protected override void ConfigureConventions(NancyConventions nancyConventions)

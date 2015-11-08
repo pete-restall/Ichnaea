@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collect.cs" />
+    <Compile Include="Info.cs" />
     <Compile Include="PrePersistenceDomainEventTrackerTestDoubles.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IntegerEnumerableExtensions.cs" />
@@ -78,11 +79,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringGenerator.cs" />
     <Compile Include="Unit\AggregateRootAlreadyBeingTrackedExceptionTest.cs" />
+    <Compile Include="Unit\AggregateRootIdPropertyNotFoundExceptionTest.cs" />
+    <Compile Include="Unit\ExceptionTest.cs" />
     <Compile Include="Unit\DomainEventFunnelTest.cs" />
     <Compile Include="Unit\DomainEventStreamCannotBeReplayedExceptionTest.cs" />
-    <Compile Include="Unit\ExceptionTest.cs" />
+    <Compile Include="Unit\ExceptionMessage.cs" />
+    <Compile Include="Unit\BestPracticesExceptionTest.cs" />
     <Compile Include="Unit\InMemoryDomainEventTrackerTest.cs" />
     <Compile Include="Unit\EnumerableExtensionsTest.cs" />
+    <Compile Include="Unit\NamedPropertyAggregateRootIdGetterTest.cs" />
     <Compile Include="Unit\NEventStore\NEventStoreSessionStreamTest.cs" />
     <Compile Include="Unit\NEventStore\NEventStoreSessionTest.cs" />
     <Compile Include="Unit\NEventStore\DisposableContainerTest.cs" />

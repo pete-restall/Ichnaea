@@ -6,22 +6,20 @@ using Xunit;
 
 namespace Restall.Ichnaea.Tests.Unit
 {
-	public class DomainEventStreamCannotBeReplayedExceptionTest
+	using ExceptionTest = ExceptionTest<DomainEventStreamCannotBeReplayedException, DomainEventStreamCannotBeReplayedExceptionTest.DefaultExceptionProperties>;
+
+	public class DomainEventStreamCannotBeReplayedExceptionTest: ExceptionTest
 	{
-		private class ExceptionProperties
+		public new class ExceptionProperties: ExceptionTest.ExceptionProperties
 		{
-			public string Message { get; set; }
-
-			public Exception InnerException { get; set; }
-
 			public object AggregateRootId { get; set; }
 		}
 
-		private class DefaultExceptionProperties: ExceptionProperties
+		public class DefaultExceptionProperties: ExceptionProperties
 		{
 			public DefaultExceptionProperties()
 			{
-				this.Message = "Exception of type '" + typeof(DomainEventStreamCannotBeReplayedException) + "' was thrown.";
+				this.Message = ExceptionMessage.Default<DomainEventStreamCannotBeReplayedException>();
 			}
 		}
 
@@ -33,71 +31,6 @@ namespace Restall.Ichnaea.Tests.Unit
 			{
 				return this.toString;
 			}
-		}
-
-		[Fact]
-		public void Constructor_CalledAsDefaultOverload_ExpectDefaultPropertyValues()
-		{
-			new DomainEventStreamCannotBeReplayedException().ShouldBeEquivalentTo(
-				new DefaultExceptionProperties(),
-				options => options.ExcludingMissingMembers());
-		}
-
-		[Fact]
-		public void Constructor_CalledWithMessage_ExpectSameMessageWithOtherPropertyValuesAsDefaults()
-		{
-			var expectedProperties = new DefaultExceptionProperties
-				{
-					Message = StringGenerator.AnyNonNull()
-				};
-
-			new DomainEventStreamCannotBeReplayedException(expectedProperties.Message).ShouldBeEquivalentTo(
-				expectedProperties,
-				options => options.ExcludingMissingMembers());
-		}
-
-		[Fact]
-		public void Constructor_CalledWithNullMessage_ExpectDefaultPropertyValues()
-		{
-			new DomainEventStreamCannotBeReplayedException(null).ShouldBeEquivalentTo(
-				new DefaultExceptionProperties(),
-				options => options.ExcludingMissingMembers());
-		}
-
-		[Fact]
-		public void Constructor_CalledWithMessageAndNullInnerException_ExpectSameMessageAndInnerExceptionWithOtherPropertyValuesAsDefaults()
-		{
-			var expectedProperties = new DefaultExceptionProperties
-				{
-					Message = StringGenerator.AnyNonNull(),
-					InnerException = null
-				};
-
-			new DomainEventStreamCannotBeReplayedException(expectedProperties.Message, null).ShouldBeEquivalentTo(
-				expectedProperties,
-				options => options.ExcludingMissingMembers());
-		}
-
-		[Fact]
-		public void Constructor_CalledWithNullMessageAndNullInnerException_ExpectDefaultPropertyValues()
-		{
-			new DomainEventStreamCannotBeReplayedException(null, (Exception) null).ShouldBeEquivalentTo(
-				new DefaultExceptionProperties(),
-				options => options.ExcludingMissingMembers());
-		}
-
-		[Fact]
-		public void Constructor_CalledWithMessageAndInnerException_ExpectSameMessageAndInnerExceptionWithOtherPropertyValuesAsDefaults()
-		{
-			var expectedProperties = new DefaultExceptionProperties
-				{
-					Message = StringGenerator.AnyNonNull(),
-					InnerException = new Exception()
-				};
-
-			new DomainEventStreamCannotBeReplayedException(expectedProperties.Message, expectedProperties.InnerException).ShouldBeEquivalentTo(
-				expectedProperties,
-				options => options.ExcludingMissingMembers());
 		}
 
 		[Fact]

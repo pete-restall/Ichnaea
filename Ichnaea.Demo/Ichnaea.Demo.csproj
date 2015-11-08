@@ -196,6 +196,7 @@
     <Compile Include="Web\Home\HomeService.cs" />
     <Compile Include="Web\Home\IndexRequest.cs" />
     <Compile Include="Web\Home\IndexResponse.cs" />
+    <Compile Include="Web\IchnaeaBootstrapper.cs" />
     <Compile Include="Web\RouteLinks.cs" />
     <Compile Include="Web\ServiceModule.cs" />
   </ItemGroup>

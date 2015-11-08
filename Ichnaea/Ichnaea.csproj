@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AggregateRootAlreadyBeingTrackedException.cs" />
     <Compile Include="AggregateRootAttribute.cs" />
+    <Compile Include="AggregateRootIdPropertyNotFoundException.cs" />
     <Compile Include="IPostPersistenceDomainEventTracker.cs" />
     <Compile Include="DomainEventStreamCannotBeReplayedException.cs" />
     <Compile Include="IPrePersistenceDomainEventTracker.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="IDomainEventStream.cs" />
     <Compile Include="IDomainEventTracker.cs" />
     <Compile Include="IReplayDomainEvents.cs" />
+    <Compile Include="NamedPropertyAggregateRootIdGetter.cs" />
     <Compile Include="ObjectBinarySerialisableExtensions.cs" />
     <Compile Include="SerializationInfoExtensions.cs" />
     <Compile Include="Source.cs" />
