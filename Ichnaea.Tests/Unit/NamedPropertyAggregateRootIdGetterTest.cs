@@ -1,6 +1,5 @@
 ﻿using System;
 using FluentAssertions;
-using FluentAssertions.Specialized;
 using Xunit;
 
 namespace Restall.Ichnaea.Tests.Unit
@@ -9,7 +8,7 @@ namespace Restall.Ichnaea.Tests.Unit
 	{
 		private class AggregateRoot
 		{
-			public static object StaticObjectProperty { get; set; }
+			public static object StaticObjectProperty { get; }
 
 			public string StringProperty { get; set; }
 
@@ -18,50 +17,50 @@ namespace Restall.Ichnaea.Tests.Unit
 
 		private class AggregateRootWithPrivateId
 		{
-			public static readonly string PropertyName = Info.OfProperty<AggregateRootWithPrivateId>(x => x.Id).Name;
+			public const string PropertyName = nameof(Id);
 
 			public AggregateRootWithPrivateId(string id)
 			{
 				this.Id = id;
 			}
 
-			private string Id { get; set; }
+			private string Id { get; }
 		}
 
 		private class AggregateRootWithProtectedId
 		{
-			public static readonly string PropertyName = Info.OfProperty<AggregateRootWithProtectedId>(x => x.Id).Name;
+			public const string PropertyName = nameof(Id);
 
 			public AggregateRootWithProtectedId(string id)
 			{
 				this.Id = id;
 			}
 
-			protected string Id { get; private set; }
+			protected string Id { get; }
 		}
 
 		private class AggregateRootWithProtectedInternalId
 		{
-			public static readonly string PropertyName = Info.OfProperty<AggregateRootWithProtectedInternalId>(x => x.Id).Name;
+			public const string PropertyName = nameof(Id);
 
 			public AggregateRootWithProtectedInternalId(string id)
 			{
 				this.Id = id;
 			}
 
-			protected internal string Id { get; private set; }
+			protected internal string Id { get; }
 		}
 
 		private class AggregateRootWithInternalId
 		{
-			public static readonly string PropertyName = Info.OfProperty<AggregateRootWithInternalId>(x => x.Id).Name;
+			public const string PropertyName = nameof(Id);
 
 			public AggregateRootWithInternalId(string id)
 			{
 				this.Id = id;
 			}
 
-			internal string Id { get; private set; }
+			internal string Id { get; }
 		}
 
 		private class AggregateRootWithShadowedIdBase
@@ -71,19 +70,19 @@ namespace Restall.Ichnaea.Tests.Unit
 				this.Id = id;
 			}
 
-			public string Id { get; private set; }
+			public string Id { get; }
 		}
 
 		private class AggregateRootWithShadowedId : AggregateRootWithShadowedIdBase
 		{
-			public static readonly string PropertyName = Info.OfProperty<AggregateRootWithShadowedId>(x => x.Id).Name;
+			public const string PropertyName = nameof(Id);
 
 			public AggregateRootWithShadowedId(string baseId, string derivedId) : base(baseId)
 			{
 				this.Id = derivedId;
 			}
 
-			public new string Id { get; private set; }
+			public new string Id { get; }
 		}
 
 		[Fact]
@@ -203,18 +202,6 @@ namespace Restall.Ichnaea.Tests.Unit
 
 		// TODO: TryConstruct() METHOD - ALLOWS AN AggregateRootIdGetterChain / Strategy TO BE CREATED TO ALLOW SENSIBLE DEFAULTS (IE. ALLOWS MULTIPLE PROPERTY NAMES TO BE TRIED, ETC.) WITHOUT HAVING TO CONFIGURE ID RESOLUTION MANUALLY FOR EVERY AGGREGATE ROOT
 		// TODO: ALSO ADD A TypedPropertyAggregateRootIdGetter CLASS, TOO
-	}
-
-	public static class AggregateRootIdPropertyNotFoundExceptionAssertionExtensions
-	{
-		public static ExceptionAssertions<AggregateRootIdPropertyNotFoundException> ShouldThrowAggregateRootIdPropertyNotFoundExceptionFor<TAggregateRoot, TAggregateRootId>(
-			this Action action, string propertyName, string because = "", params object[] reasonArgs)
-		{
-				return action.ShouldThrow<AggregateRootIdPropertyNotFoundException>(because, reasonArgs)
-					.Where(ex =>
-						ex.PropertyName == propertyName &&
-						ex.AggregateRootType == typeof(TAggregateRoot) &&
-						ex.AggregateRootIdType == typeof(TAggregateRootId));
-		}
+		// TODO: ALSO ADD AN IdAttributeAggregateRootIdGetter CLASS, TOO
 	}
 }

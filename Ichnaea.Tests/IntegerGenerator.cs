@@ -14,7 +14,7 @@ namespace Restall.Ichnaea.Tests
 
 		private static Random Generator => generator ?? (generator = new Random());
 
-	    public static int Any()
+		public static int Any()
 		{
 			return Generator.Next();
 		}

@@ -79,6 +79,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringGenerator.cs" />
     <Compile Include="Unit\AggregateRootAlreadyBeingTrackedExceptionTest.cs" />
+    <Compile Include="Unit\AggregateRootIdPropertyNotFoundExceptionAssertionExtensions.cs" />
     <Compile Include="Unit\AggregateRootIdPropertyNotFoundExceptionTest.cs" />
     <Compile Include="Unit\ExceptionTest.cs" />
     <Compile Include="Unit\DomainEventFunnelTest.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Unit\NEventStore\PersistedEventToDomainEventReplayAdapterTest.cs" />
     <Compile Include="Unit\NEventStore\DomainEventStreamAdapterTest.cs" />
     <Compile Include="Unit\SourceTest.cs" />
+    <Compile Include="Unit\TypedPropertyAggregateRootIdGetterTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

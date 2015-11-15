@@ -47,10 +47,10 @@ namespace Restall.Ichnaea
 			this.PropertyName = propertyName;
 		}
 
-		public Type AggregateRootType { get; private set; }
+		public Type AggregateRootType { get; }
 
-		public Type AggregateRootIdType { get; private set; }
+		public Type AggregateRootIdType { get; }
 
-		public string PropertyName { get; private set; }
+		public string PropertyName { get; }
 	}
 }

@@ -11,10 +11,10 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 			this.AccountNumber = accountNumber;
 		}
 
-		public Guid SurrogateId { get; private set; }
+		public Guid SurrogateId { get; }
 
-		public string SortCode { get; private set; }
+		public string SortCode { get; }
 
-		public string AccountNumber { get; private set; }
+		public string AccountNumber { get; }
 	}
 }

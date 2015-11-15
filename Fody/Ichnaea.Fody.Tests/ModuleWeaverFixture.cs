@@ -46,7 +46,7 @@ namespace Restall.Ichnaea.Fody.Tests
 			Assembly = Assembly.LoadFile(WovenAssemblyFilename);
 		}
 
-		public static AggregateRootFactory AggregateRootFactory { get; private set; }
+		public static AggregateRootFactory AggregateRootFactory { get; }
 
 		public static string OriginalAssemblyFilename { get; private set; }
 

@@ -7,6 +7,6 @@ namespace Restall.Ichnaea.Demo.Accounts
 			this.Amount = amount;
 		}
 
-		public decimal Amount { get; private set; }
+		public decimal Amount { get; }
 	}
 }

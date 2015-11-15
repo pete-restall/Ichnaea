@@ -9,10 +9,10 @@
 			this.Holder = holder;
 		}
 
-		public string SortCode { get; private set; }
+		public string SortCode { get; }
 
-		public string AccountNumber { get; private set; }
+		public string AccountNumber { get; }
 
-		public string Holder { get; private set; }
+		public string Holder { get; }
 	}
 }

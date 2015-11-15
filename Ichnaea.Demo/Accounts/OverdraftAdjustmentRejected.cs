@@ -8,8 +8,8 @@ namespace Restall.Ichnaea.Demo.Accounts
 			this.Reason = reason;
 		}
 
-		public decimal Amount { get; private set; }
+		public decimal Amount { get; }
 
-		public string Reason { get; private set; }
+		public string Reason { get; }
 	}
 }

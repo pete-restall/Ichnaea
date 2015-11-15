@@ -11,13 +11,13 @@ namespace Restall.Ichnaea.Tests.Unit
 		{
 			protected static void SourceEvent<T>(Source.Of<T> eventDelegate, object sender, T args)
 			{
-			    eventDelegate?.Invoke(sender, args);
+				eventDelegate?.Invoke(sender, args);
 			}
 
-		    protected static void RaiseEvent<T>(EventHandler<T> eventDelegate, object sender, T args)
-		    {
-		        eventDelegate?.Invoke(sender, args);
-		    }
+			protected static void RaiseEvent<T>(EventHandler<T> eventDelegate, object sender, T args)
+			{
+				eventDelegate?.Invoke(sender, args);
+			}
 		}
 
 		private class ObservableWithOneDomainEvent: HasEventConvenienceMethods

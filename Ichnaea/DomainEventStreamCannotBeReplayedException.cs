@@ -39,6 +39,6 @@ namespace Restall.Ichnaea
 			info.AddOrDefault("AggregateRootId", this.AggregateRootId, x => x?.ToString());
 		}
 
-		public object AggregateRootId { get; private set; }
+		public object AggregateRootId { get; }
 	}
 }

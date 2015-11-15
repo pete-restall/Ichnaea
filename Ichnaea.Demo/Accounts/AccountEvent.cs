@@ -9,6 +9,6 @@ namespace Restall.Ichnaea.Demo.Accounts
 			this.Timestamp = DateTime.Now;
 		}
 
-		public DateTime Timestamp { get; private set; }
+		public DateTime Timestamp { get; }
 	}
 }

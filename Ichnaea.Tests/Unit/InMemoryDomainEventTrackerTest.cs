@@ -17,10 +17,10 @@ namespace Restall.Ichnaea.Tests.Unit
 
 			private void SourceEvent(Source.Of<object> eventField, object domainEvent)
 			{
-			    eventField?.Invoke(this, domainEvent);
+				eventField?.Invoke(this, domainEvent);
 			}
 
-		    public void SourceBothDomainEvents(object firstDomainEvent, object secondDomainEvent)
+			public void SourceBothDomainEvents(object firstDomainEvent, object secondDomainEvent)
 			{
 				this.SourceEvent(this.FirstEvent, firstDomainEvent);
 				this.SourceEvent(this.SecondEvent, secondDomainEvent);

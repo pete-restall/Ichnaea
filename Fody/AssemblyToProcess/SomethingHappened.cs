@@ -9,6 +9,6 @@ namespace Restall.Ichnaea.Fody.AssemblyToProcess
 			this.Token = token;
 		}
 
-		public Guid Token { get; private set; }
+		public Guid Token { get; }
 	}
 }

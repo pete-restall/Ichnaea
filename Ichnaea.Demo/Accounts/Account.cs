@@ -59,9 +59,9 @@ namespace Restall.Ichnaea.Demo.Accounts
 			Source.Event.Of(new OverdraftAdjusted(amount));
 		}
 
-		public AccountId Id { get; private set; }
+		public AccountId Id { get; }
 
-		public string Holder { get; private set; }
+		public string Holder { get; }
 
 		public decimal Balance { get; private set; }
 
