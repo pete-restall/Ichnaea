@@ -50,6 +50,7 @@
     <Compile Include="AggregateRootAlreadyBeingTrackedException.cs" />
     <Compile Include="AggregateRootAttribute.cs" />
     <Compile Include="AggregateRootIdPropertyNotFoundException.cs" />
+    <Compile Include="IAggregateRootIdGetter.cs" />
     <Compile Include="IPostPersistenceDomainEventTracker.cs" />
     <Compile Include="DomainEventStreamCannotBeReplayedException.cs" />
     <Compile Include="IPrePersistenceDomainEventTracker.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="SerializationInfoExtensions.cs" />
     <Compile Include="Source.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypedPropertyAggregateRootIdGetter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />

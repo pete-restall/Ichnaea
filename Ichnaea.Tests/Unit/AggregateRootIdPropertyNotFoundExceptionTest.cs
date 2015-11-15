@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
@@ -9,6 +10,7 @@ namespace Restall.Ichnaea.Tests.Unit
 
 	public class AggregateRootIdPropertyNotFoundExceptionTest: ExceptionTest
 	{
+		[SuppressMessage("ReSharper", "UnusedMember.Global")]
 		public new class ExceptionProperties: ExceptionTest.ExceptionProperties
 		{
 			public string PropertyName { get; set; }

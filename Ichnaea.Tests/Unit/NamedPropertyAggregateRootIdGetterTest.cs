@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentAssertions;
+using Restall.Ichnaea.Tests.Unit.Stubs;
 using Xunit;
 
 namespace Restall.Ichnaea.Tests.Unit
@@ -8,81 +9,11 @@ namespace Restall.Ichnaea.Tests.Unit
 	{
 		private class AggregateRoot
 		{
-			public static object StaticObjectProperty { get; }
+			public static object StaticObjectProperty { get; set; }
 
 			public string StringProperty { get; set; }
 
 			public object ObjectProperty { get; set; }
-		}
-
-		private class AggregateRootWithPrivateId
-		{
-			public const string PropertyName = nameof(Id);
-
-			public AggregateRootWithPrivateId(string id)
-			{
-				this.Id = id;
-			}
-
-			private string Id { get; }
-		}
-
-		private class AggregateRootWithProtectedId
-		{
-			public const string PropertyName = nameof(Id);
-
-			public AggregateRootWithProtectedId(string id)
-			{
-				this.Id = id;
-			}
-
-			protected string Id { get; }
-		}
-
-		private class AggregateRootWithProtectedInternalId
-		{
-			public const string PropertyName = nameof(Id);
-
-			public AggregateRootWithProtectedInternalId(string id)
-			{
-				this.Id = id;
-			}
-
-			protected internal string Id { get; }
-		}
-
-		private class AggregateRootWithInternalId
-		{
-			public const string PropertyName = nameof(Id);
-
-			public AggregateRootWithInternalId(string id)
-			{
-				this.Id = id;
-			}
-
-			internal string Id { get; }
-		}
-
-		private class AggregateRootWithShadowedIdBase
-		{
-			protected AggregateRootWithShadowedIdBase(string id)
-			{
-				this.Id = id;
-			}
-
-			public string Id { get; }
-		}
-
-		private class AggregateRootWithShadowedId : AggregateRootWithShadowedIdBase
-		{
-			public const string PropertyName = nameof(Id);
-
-			public AggregateRootWithShadowedId(string baseId, string derivedId) : base(baseId)
-			{
-				this.Id = derivedId;
-			}
-
-			public new string Id { get; }
 		}
 
 		[Fact]
@@ -201,7 +132,6 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		// TODO: TryConstruct() METHOD - ALLOWS AN AggregateRootIdGetterChain / Strategy TO BE CREATED TO ALLOW SENSIBLE DEFAULTS (IE. ALLOWS MULTIPLE PROPERTY NAMES TO BE TRIED, ETC.) WITHOUT HAVING TO CONFIGURE ID RESOLUTION MANUALLY FOR EVERY AGGREGATE ROOT
-		// TODO: ALSO ADD A TypedPropertyAggregateRootIdGetter CLASS, TOO
 		// TODO: ALSO ADD AN IdAttributeAggregateRootIdGetter CLASS, TOO
 	}
 }

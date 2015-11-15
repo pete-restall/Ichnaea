@@ -2,7 +2,8 @@
 
 namespace Restall.Ichnaea
 {
-	public class NamedPropertyAggregateRootIdGetter<TAggregateRoot, TAggregateRootId> where TAggregateRoot: class
+	public class NamedPropertyAggregateRootIdGetter<TAggregateRoot, TAggregateRootId>: IAggregateRootIdGetter<TAggregateRoot, TAggregateRootId>
+		where TAggregateRoot: class
 	{
 		private readonly PropertyInfo property;
 

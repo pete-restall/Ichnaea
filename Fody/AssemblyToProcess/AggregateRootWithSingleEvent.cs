@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace Restall.Ichnaea.Fody.AssemblyToProcess
 {
 	[AggregateRoot]
+	[SuppressMessage("ReSharper", "UnusedMember.Global")]
 	public class AggregateRootWithSingleEvent
 	{
 		public void DoSomething(Guid token)
@@ -33,6 +35,7 @@ namespace Restall.Ichnaea.Fody.AssemblyToProcess
 			return somethingToCauseManipulation;
 		}
 
+		[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global")]
 		public event Source.Of<SomethingHappened> EventSource;
 	}
 }

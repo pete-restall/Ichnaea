@@ -97,6 +97,12 @@
     <Compile Include="Unit\NEventStore\PersistedEventToDomainEventReplayAdapterTest.cs" />
     <Compile Include="Unit\NEventStore\DomainEventStreamAdapterTest.cs" />
     <Compile Include="Unit\SourceTest.cs" />
+    <Compile Include="Unit\Stubs\AggregateRootWithInternalId.cs" />
+    <Compile Include="Unit\Stubs\AggregateRootWithPrivateId.cs" />
+    <Compile Include="Unit\Stubs\AggregateRootWithProtectedId.cs" />
+    <Compile Include="Unit\Stubs\AggregateRootWithProtectedInternalId.cs" />
+    <Compile Include="Unit\Stubs\AggregateRootWithShadowedId.cs" />
+    <Compile Include="Unit\Stubs\AggregateRootWithShadowedIdBase.cs" />
     <Compile Include="Unit\TypedPropertyAggregateRootIdGetterTest.cs" />
   </ItemGroup>
   <ItemGroup>
