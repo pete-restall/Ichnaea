@@ -40,20 +40,20 @@ namespace Restall.Ichnaea.NEventStore
 			this.eventStream.ClearChanges();
 		}
 
-		public string BucketId { get { return this.eventStream.BucketId; } }
+		public string BucketId => this.eventStream.BucketId;
 
-		public string StreamId { get { return this.eventStream.StreamId; } }
+	    public string StreamId => this.eventStream.StreamId;
 
-		public int StreamRevision { get { return this.eventStream.StreamRevision; } }
+	    public int StreamRevision => this.eventStream.StreamRevision;
 
-		public int CommitSequence { get { return this.eventStream.CommitSequence; } }
+	    public int CommitSequence => this.eventStream.CommitSequence;
 
-		public ICollection<EventMessage> CommittedEvents { get { return this.eventStream.CommittedEvents; } }
+	    public ICollection<EventMessage> CommittedEvents => this.eventStream.CommittedEvents;
 
-		public IDictionary<string, object> CommittedHeaders { get { return this.eventStream.CommittedHeaders; } }
+	    public IDictionary<string, object> CommittedHeaders => this.eventStream.CommittedHeaders;
 
-		public ICollection<EventMessage> UncommittedEvents { get { return this.eventStream.UncommittedEvents; } }
+	    public ICollection<EventMessage> UncommittedEvents => this.eventStream.UncommittedEvents;
 
-		public IDictionary<string, object> UncommittedHeaders { get { return this.eventStream.UncommittedHeaders; } }
+	    public IDictionary<string, object> UncommittedHeaders => this.eventStream.UncommittedHeaders;
 	}
 }

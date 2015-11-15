@@ -17,11 +17,10 @@ namespace Restall.Ichnaea.Tests.Unit
 
 			private void SourceEvent(Source.Of<object> eventField, object domainEvent)
 			{
-				if (eventField != null)
-					eventField(this, domainEvent);
+			    eventField?.Invoke(this, domainEvent);
 			}
 
-			public void SourceBothDomainEvents(object firstDomainEvent, object secondDomainEvent)
+		    public void SourceBothDomainEvents(object firstDomainEvent, object secondDomainEvent)
 			{
 				this.SourceEvent(this.FirstEvent, firstDomainEvent);
 				this.SourceEvent(this.SecondEvent, secondDomainEvent);
@@ -122,7 +121,7 @@ namespace Restall.Ichnaea.Tests.Unit
 				var firstEvent = new object();
 				var secondEvent = new object();
 				aggregateRoot.SourceBothDomainEvents(firstEvent, secondEvent);
-				tracker.GetSourcedDomainEventsFor(aggregateRoot).Should().Equal(new[] {creationEvent, firstEvent, secondEvent});
+				tracker.GetSourcedDomainEventsFor(aggregateRoot).Should().Equal(creationEvent, firstEvent, secondEvent);
 			}
 		}
 
@@ -156,13 +155,19 @@ namespace Restall.Ichnaea.Tests.Unit
 		{
 			using (var tracker = new InMemoryDomainEventTracker<object>())
 			{
-				object aggregateRoot = new object();
-				tracker.AggregateRootCreated(aggregateRoot, new object());
-				var weakAggregateRoot = new WeakReference<object>(aggregateRoot);
-				aggregateRoot = null;
+				var weakAggregateRoot = WeakAggregateRootFromCreatedEvent(tracker);
 				Collect.Garbage();
+
+				object aggregateRoot;
 				weakAggregateRoot.TryGetTarget(out aggregateRoot).Should().BeFalse();
 			}
+		}
+
+		private static WeakReference<object> WeakAggregateRootFromCreatedEvent(InMemoryDomainEventTracker<object> tracker)
+		{
+			object aggregateRoot = new object();
+			tracker.AggregateRootCreated(aggregateRoot, new object());
+			return new WeakReference<object>(aggregateRoot);
 		}
 	}
 }

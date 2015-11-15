@@ -7,10 +7,15 @@ namespace Restall.Ichnaea.Tests
 		public static void Garbage()
 		{
 			GC.WaitForFullGCComplete();
+			ForceBlockingCollection();
+			ForceBlockingCollection();
+		}
+
+		private static void ForceBlockingCollection()
+		{
 			GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true);
 			GC.WaitForFullGCComplete();
 			GC.WaitForPendingFinalizers();
-			GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true);
 		}
 	}
 }

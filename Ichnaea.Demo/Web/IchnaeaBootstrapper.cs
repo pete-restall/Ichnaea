@@ -1,5 +1,4 @@
-﻿using NEventStore;
-using Nancy.TinyIoc;
+﻿using Nancy.TinyIoc;
 using Restall.Ichnaea.NEventStore;
 
 namespace Restall.Ichnaea.Demo.Web

@@ -66,7 +66,7 @@ namespace Restall.Ichnaea.Fody
 			var eventDefinition = type.Events[0];
 			var eventField = type.Fields.Single(x => x.FullName == eventDefinition.FullName);
 			var domainEventType = ((GenericInstanceType) eventField.FieldType).GenericArguments[0];
-			var eventDelegate = this.ModuleDefinition.Import(eventField.FieldType.Resolve().Methods.Single(x => x.Name == "Invoke").MakeGenericMethod(domainEventType));
+			var eventDelegate = this.ModuleDefinition.ImportReference(eventField.FieldType.Resolve().Methods.Single(x => x.Name == "Invoke").MakeGenericMethod(domainEventType));
 
 			var noReturnValue = this.ModuleDefinition.TypeSystem.Void;
 			var eventSourcingMethod = new MethodDefinition("<Ichnaea>SourceEvent", MethodAttributes.Public, noReturnValue);

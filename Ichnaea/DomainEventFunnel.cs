@@ -40,7 +40,7 @@ namespace Restall.Ichnaea
 			if (!this.observable.TryGetTarget(out strongReference))
 				return;
 
-			GetDomainEventRemoveMethodsFrom(strongReference).ForEach(e => e.Invoke(strongReference, new object[] {observer}));
+			GetDomainEventRemoveMethodsFrom(strongReference).ForEach(e => e.Invoke(strongReference, new object[] {this.observer}));
 		}
 
 		private static IEnumerable<MethodInfo> GetDomainEventRemoveMethodsFrom(object observable)

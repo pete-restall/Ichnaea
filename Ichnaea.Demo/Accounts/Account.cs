@@ -8,7 +8,7 @@ namespace Restall.Ichnaea.Demo.Accounts
 		public Account(AccountId id, string holder)
 		{
 			if (holder.Trim().Length == 0)
-				throw new ArgumentException("Account Holder names cannot be empty", "holder");
+				throw new ArgumentException("Account Holder names cannot be empty", nameof(holder));
 
 			this.Id = id;
 			this.Holder = holder;
@@ -25,7 +25,7 @@ namespace Restall.Ichnaea.Demo.Accounts
 		private static void EnsureAmountIsPositiveOrZero(decimal amount)
 		{
 			if (amount < 0)
-				throw new ArgumentOutOfRangeException("amount", amount, "Monetary amounts must be positive");
+				throw new ArgumentOutOfRangeException(nameof(amount), amount, "Monetary amounts must be positive");
 		}
 
 		public void Debit(decimal amount, string description)
@@ -46,7 +46,7 @@ namespace Restall.Ichnaea.Demo.Accounts
 		public void AdjustOverdraft(decimal amount)
 		{
 			if (this.Overdraft + amount < 0)
-				throw new ArgumentOutOfRangeException("amount", amount, "Adjustment would cause a negative overdraft");
+				throw new ArgumentOutOfRangeException(nameof(amount), amount, "Adjustment would cause a negative overdraft");
 
 			decimal newOverdraft = this.Overdraft + amount;
 			if (this.Balance < -newOverdraft)

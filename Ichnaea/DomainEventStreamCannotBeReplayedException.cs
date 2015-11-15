@@ -36,7 +36,7 @@ namespace Restall.Ichnaea
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			base.GetObjectData(info, context);
-			info.AddOrDefault("AggregateRootId", this.AggregateRootId, x => x != null ? x.ToString() : null);
+			info.AddOrDefault("AggregateRootId", this.AggregateRootId, x => x?.ToString());
 		}
 
 		public object AggregateRootId { get; private set; }

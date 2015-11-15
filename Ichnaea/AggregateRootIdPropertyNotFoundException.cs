@@ -34,13 +34,13 @@ namespace Restall.Ichnaea
 				", propertyName=" + propertyName)
 		{
 			if (aggregateRootType == null)
-				throw new ArgumentNullException("aggregateRootType");
+				throw new ArgumentNullException(nameof(aggregateRootType));
 
 			if (aggregateRootIdType == null)
-				throw new ArgumentNullException("aggregateRootIdType");
+				throw new ArgumentNullException(nameof(aggregateRootIdType));
 
 			if (propertyName == null)
-				throw new ArgumentNullException("propertyName");
+				throw new ArgumentNullException(nameof(propertyName));
 
 			this.AggregateRootType = aggregateRootType;
 			this.AggregateRootIdType = aggregateRootIdType;

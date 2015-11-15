@@ -358,14 +358,19 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				DummyAggregateRootIdGetter,
 				DummyEventConverter))
 			{
-				var aggregateRoot = new object();
-				var weakAggregateRoot = new WeakReference<object>(aggregateRoot);
-				stream.CreateFrom(aggregateRoot);
-				aggregateRoot = null;
+				var weakAggregateRoot = WeakAggregateRootFromCreate(stream);
 				Collect.Garbage();
 
+				object aggregateRoot;
 				weakAggregateRoot.TryGetTarget(out aggregateRoot).Should().BeFalse();
 			}
+		}
+
+		private static WeakReference<object> WeakAggregateRootFromCreate(PersistedEventStreamCreator<object> stream)
+		{
+			var aggregateRoot = new object();
+			stream.CreateFrom(aggregateRoot);
+			return new WeakReference<object>(aggregateRoot);
 		}
 	}
 }

@@ -56,6 +56,6 @@ namespace Restall.Ichnaea.NEventStore
 			this.eventStreams.ForEach(stream => stream.Value.ClearChanges());
 		}
 
-		public IPersistStreams Advanced { get { return this.eventStore.Advanced; } }
+		public IPersistStreams Advanced => this.eventStore.Advanced;
 	}
 }

@@ -29,7 +29,7 @@ namespace Restall.Ichnaea.NEventStore
 		public virtual void CreateFrom(TAggregateRoot aggregateRoot)
 		{
 			var eventStoreStream = this.eventStore.CreateStream(this.bucketId, this.aggregateRootIdGetter(aggregateRoot));
-			base.AddDisposable(eventStoreStream);
+			this.AddDisposable(eventStoreStream);
 			this.WriteFutureDomainEventsDirectlyToEventStore(aggregateRoot, eventStoreStream);
 		}
 

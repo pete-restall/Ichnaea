@@ -12,12 +12,9 @@ namespace Restall.Ichnaea.Tests
 			return Generator.Next(min, halfOpenMax);
 		}
 
-		private static Random Generator
-		{
-			get { return generator ?? (generator = new Random()); }
-		}
+		private static Random Generator => generator ?? (generator = new Random());
 
-		public static int Any()
+	    public static int Any()
 		{
 			return Generator.Next();
 		}

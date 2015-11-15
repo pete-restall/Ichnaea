@@ -11,15 +11,13 @@ namespace Restall.Ichnaea.Tests.Unit
 		{
 			protected static void SourceEvent<T>(Source.Of<T> eventDelegate, object sender, T args)
 			{
-				if (eventDelegate != null)
-					eventDelegate(sender, args);
+			    eventDelegate?.Invoke(sender, args);
 			}
 
-			protected static void RaiseEvent<T>(EventHandler<T> eventDelegate, object sender, T args)
-			{
-				if (eventDelegate != null)
-					eventDelegate(sender, args);
-			}
+		    protected static void RaiseEvent<T>(EventHandler<T> eventDelegate, object sender, T args)
+		    {
+		        eventDelegate?.Invoke(sender, args);
+		    }
 		}
 
 		private class ObservableWithOneDomainEvent: HasEventConvenienceMethods
@@ -260,14 +258,20 @@ namespace Restall.Ichnaea.Tests.Unit
 		[Fact]
 		public void Dispose_CalledWhenObservableHasBeenGarbageCollected_ExpectNoException()
 		{
-			var observable = new ObservableWithOneDomainEvent();
-			var funnel = new DomainEventFunnel(observable, Substitute.For<Source.Of<object>>());
-			var weakObservable = new WeakReference<ObservableWithOneDomainEvent>(observable);
-			observable = null;
+			WeakReference<ObservableWithOneDomainEvent> weakObservable;
+			var funnel = CreateDomainEventFunnelWithWeakObservable(out weakObservable);
 			Collect.Garbage();
 
-			weakObservable.TryGetTarget(out observable).Should().BeFalse("because the observable should have been garbage collected.");
+			ObservableWithOneDomainEvent observable;
+			weakObservable.TryGetTarget(out observable).Should().BeFalse("because the observable should have been garbage collected");
 			funnel.Invoking(x => x.Dispose()).ShouldNotThrow();
+		}
+
+		private static DomainEventFunnel CreateDomainEventFunnelWithWeakObservable(out WeakReference<ObservableWithOneDomainEvent> weakObservable)
+		{
+			var observable = new ObservableWithOneDomainEvent();
+			weakObservable = new WeakReference<ObservableWithOneDomainEvent>(observable);
+			return new DomainEventFunnel(observable, Substitute.For<Source.Of<object>>());
 		}
 
 		[Fact]

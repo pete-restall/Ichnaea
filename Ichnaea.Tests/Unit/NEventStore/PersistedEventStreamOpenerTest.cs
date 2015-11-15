@@ -559,12 +559,17 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 				DummyEventConverter,
 				PersistedEventToDomainEventReplayAdapterTestDoubles.Dummy()))
 			{
-				var weakAggregateRoot = new WeakReference<object>(stream.Replay(DummyAggregateRootId()));
+				var weakAggregateRoot = WeakAggregateRootFromReplay(stream);
 				Collect.Garbage();
 
 				object aggregateRoot;
 				weakAggregateRoot.TryGetTarget(out aggregateRoot).Should().BeFalse();
 			}
+		}
+
+		private static WeakReference<object> WeakAggregateRootFromReplay(PersistedEventStreamOpener<object, string> stream)
+		{
+			return new WeakReference<object>(stream.Replay(DummyAggregateRootId()));
 		}
 	}
 }

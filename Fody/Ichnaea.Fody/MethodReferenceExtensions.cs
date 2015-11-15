@@ -30,7 +30,7 @@ namespace Restall.Ichnaea.Fody
 			{
 				throw new ArgumentException(
 					"Expected " + genericType.GenericParameters.Count + " type arguments for type " + genericType.FullName,
-					"arguments");
+					nameof(arguments));
 			}
 
 			var instanceType = new GenericInstanceType(genericType);

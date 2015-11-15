@@ -24,7 +24,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 			account.Credit(request.Amount, request.Description);
 			this.eventStore.Commit();
 
-			return new TransactionResponse { };
+			return new TransactionResponse();
 		}
 	}
 }

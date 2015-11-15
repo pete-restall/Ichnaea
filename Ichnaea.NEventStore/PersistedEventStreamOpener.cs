@@ -39,7 +39,7 @@ namespace Restall.Ichnaea.NEventStore
 				int.MinValue,
 				int.MaxValue);
 
-			base.AddDisposable(eventStoreStream);
+			this.AddDisposable(eventStoreStream);
 
 			var aggregateRoot = eventStoreStream.CommittedEvents.Aggregate(
 				default(TAggregateRoot),
