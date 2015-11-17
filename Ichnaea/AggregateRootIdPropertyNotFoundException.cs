@@ -24,6 +24,7 @@ namespace Restall.Ichnaea
 		protected AggregateRootIdPropertyNotFoundException(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
+			this.PropertyName = info.GetOrDefault<string>(nameof(this.PropertyName), null);
 		}
 
 		public AggregateRootIdPropertyNotFoundException(Type aggregateRootType, Type aggregateRootIdType, string propertyName)
@@ -45,6 +46,12 @@ namespace Restall.Ichnaea
 			this.AggregateRootType = aggregateRootType;
 			this.AggregateRootIdType = aggregateRootIdType;
 			this.PropertyName = propertyName;
+		}
+
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			base.GetObjectData(info, context);
+			info.AddOrDefault(nameof(this.PropertyName), PropertyName, _ => null);
 		}
 
 		public string PropertyName { get; }

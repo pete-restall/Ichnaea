@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
-using NSubstitute;
 using Xunit;
 
 namespace Restall.Ichnaea.Tests.Unit
@@ -37,7 +36,7 @@ namespace Restall.Ichnaea.Tests.Unit
 
 		private static Type DummyType()
 		{
-			return Substitute.For<object>().GetType();
+			return TypeGenerator.AnyReflectable();
 		}
 
 		private static string DummyPropertyName()
@@ -93,6 +92,51 @@ namespace Restall.Ichnaea.Tests.Unit
 				.Should().Contain(aggregateRootType.FullName)
 				.And.Subject.Should().Contain(aggregateRootIdType.FullName)
 				.And.Subject.Should().Contain(propertyName);
+		}
+
+		[Fact]
+		public void ExpectAggregateRootTypeCanBeSerialised()
+		{
+			var aggregateRootType = DummyType();
+			var deserialised = SerialiseAndDeserialise(new AggregateRootIdPropertyNotFoundException(aggregateRootType, DummyType(), DummyPropertyName()));
+			deserialised.AggregateRootType.Should().Be(aggregateRootType);
+		}
+
+		[Fact]
+		public void ExpectNullAggregateRootTypeIsSerialisedAsNull()
+		{
+			var deserialised = SerialiseAndDeserialise(new AggregateRootIdPropertyNotFoundException());
+			deserialised.AggregateRootType.Should().BeNull();
+		}
+
+		[Fact]
+		public void ExpectAggregateRootIdTypeCanBeSerialised()
+		{
+			var aggregateRootIdType = DummyType();
+			var deserialised = SerialiseAndDeserialise(new AggregateRootIdPropertyNotFoundException(DummyType(), aggregateRootIdType, DummyPropertyName()));
+			deserialised.AggregateRootIdType.Should().Be(aggregateRootIdType);
+		}
+
+		[Fact]
+		public void ExpectNullAggregateRootIdTypeIsSerialisedAsNull()
+		{
+			var deserialised = SerialiseAndDeserialise(new AggregateRootIdPropertyNotFoundException());
+			deserialised.AggregateRootIdType.Should().BeNull();
+		}
+
+		[Fact]
+		public void ExpectPropertyNameCanBeSerialised()
+		{
+			var propertyName = DummyPropertyName();
+			var deserialised = SerialiseAndDeserialise(new AggregateRootIdPropertyNotFoundException(DummyType(), DummyType(), propertyName));
+			deserialised.PropertyName.Should().Be(propertyName);
+		}
+
+		[Fact]
+		public void ExpectNullPropertyNameIsSerialisedAsNull()
+		{
+			var deserialised = SerialiseAndDeserialise(new AggregateRootIdPropertyNotFoundException());
+			deserialised.PropertyName.Should().BeNull();
 		}
 	}
 }

@@ -63,18 +63,6 @@ namespace Restall.Ichnaea.Tests.Unit
 			deserialised.AggregateRootId.Should().Be(aggregateRootId);
 		}
 
-		private static T SerialiseAndDeserialise<T>(T exception)
-		{
-			using (var stream = new MemoryStream())
-			{
-				var serialiser = new BinaryFormatter();
-				serialiser.Serialize(stream, exception);
-
-				stream.Position = 0;
-				return (T) serialiser.Deserialize(stream);
-			}
-		}
-
 		[Fact]
 		public void ExpectNonSerialisableAggregateRootIdIsSerialisedAsToStringValue()
 		{

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
-using NSubstitute;
 using Xunit;
 
 namespace Restall.Ichnaea.Tests.Unit
@@ -35,7 +34,7 @@ namespace Restall.Ichnaea.Tests.Unit
 
 		private static Type DummyType()
 		{
-			return Substitute.For<object>().GetType();
+			return TypeGenerator.AnyReflectable();
 		}
 
 		[Fact]
@@ -69,6 +68,36 @@ namespace Restall.Ichnaea.Tests.Unit
 			new AggregateRootIdNotFoundException(aggregateRootType, aggregateRootIdType).Message
 				.Should().Contain(aggregateRootType.FullName)
 				.And.Subject.Should().Contain(aggregateRootIdType.FullName);
+		}
+
+		[Fact]
+		public void ExpectAggregateRootTypeCanBeSerialised()
+		{
+			var aggregateRootType = DummyType();
+			var deserialised = SerialiseAndDeserialise(new AggregateRootIdNotFoundException(aggregateRootType, DummyType()));
+			deserialised.AggregateRootType.Should().Be(aggregateRootType);
+		}
+
+		[Fact]
+		public void ExpectNullAggregateRootTypeIsSerialisedAsNull()
+		{
+			var deserialised = SerialiseAndDeserialise(new AggregateRootIdNotFoundException());
+			deserialised.AggregateRootType.Should().BeNull();
+		}
+
+		[Fact]
+		public void ExpectAggregateRootIdTypeCanBeSerialised()
+		{
+			var aggregateRootIdType = DummyType();
+			var deserialised = SerialiseAndDeserialise(new AggregateRootIdNotFoundException(DummyType(), aggregateRootIdType));
+			deserialised.AggregateRootIdType.Should().Be(aggregateRootIdType);
+		}
+
+		[Fact]
+		public void ExpectNullAggregateRootIdTypeIsSerialisedAsNull()
+		{
+			var deserialised = SerialiseAndDeserialise(new AggregateRootIdNotFoundException());
+			deserialised.AggregateRootIdType.Should().BeNull();
 		}
 	}
 }

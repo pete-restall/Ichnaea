@@ -24,7 +24,7 @@ namespace Restall.Ichnaea
 		protected DomainEventStreamCannotBeReplayedException(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
-			this.AggregateRootId = info.GetOrDefault<object>("AggregateRootId", null);
+			this.AggregateRootId = info.GetOrDefault<object>(nameof(this.AggregateRootId), null);
 		}
 
 		public DomainEventStreamCannotBeReplayedException(string message, object aggregateRootId)
@@ -36,7 +36,7 @@ namespace Restall.Ichnaea
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			base.GetObjectData(info, context);
-			info.AddOrDefault("AggregateRootId", this.AggregateRootId, x => x?.ToString());
+			info.AddOrDefault(nameof(this.AggregateRootId), this.AggregateRootId, x => x?.ToString());
 		}
 
 		public object AggregateRootId { get; }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using FluentAssertions;
 using Xunit;
 
@@ -95,6 +97,18 @@ namespace Restall.Ichnaea.Tests.Unit
 			Constructor(expectedProperties.Message, expectedProperties.InnerException).ShouldBeEquivalentTo(
 				expectedProperties,
 				options => options.ExcludingMissingMembers());
+		}
+
+		protected static T SerialiseAndDeserialise<T>(T exception) where T: Exception
+		{
+			using (var stream = new MemoryStream())
+			{
+				var serialiser = new BinaryFormatter();
+				serialiser.Serialize(stream, exception);
+
+				stream.Position = 0;
+				return (T) serialiser.Deserialize(stream);
+			}
 		}
 	}
 }

@@ -24,6 +24,8 @@ namespace Restall.Ichnaea
 		protected AggregateRootIdNotFoundException(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
+			this.AggregateRootType = info.GetOrDefault<Type>(nameof(this.AggregateRootType), null);
+			this.AggregateRootIdType = info.GetOrDefault<Type>(nameof(this.AggregateRootIdType), null);
 		}
 
 		public AggregateRootIdNotFoundException(Type aggregateRootType, Type aggregateRootIdType)
@@ -40,6 +42,13 @@ namespace Restall.Ichnaea
 
 			this.AggregateRootType = aggregateRootType;
 			this.AggregateRootIdType = aggregateRootIdType;
+		}
+
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			base.GetObjectData(info, context);
+			info.AddOrDefault(nameof(this.AggregateRootType), this.AggregateRootType, _ => null);
+			info.AddOrDefault(nameof(this.AggregateRootIdType), this.AggregateRootIdType, _ => null);
 		}
 
 		public Type AggregateRootType { get; protected set; }
