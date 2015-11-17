@@ -7,7 +7,12 @@ namespace Restall.Ichnaea.Tests
 	{
 		public static T AnyItem<T>(this IEnumerable<T> source)
 		{
-			return source.OrderBy(x => IntegerGenerator.Any()).First();
+			return source.Shuffle().First();
+		}
+
+		public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source)
+		{
+			return source.OrderBy(x => IntegerGenerator.Any());
 		}
 	}
 }

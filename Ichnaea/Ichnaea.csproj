@@ -47,9 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregateRootNotBeingTrackedException.cs" />
     <Compile Include="AggregateRootAlreadyBeingTrackedException.cs" />
     <Compile Include="AggregateRootAttribute.cs" />
     <Compile Include="AggregateRootIdPropertyNotFoundException.cs" />
+    <Compile Include="DisposableContainer.cs" />
     <Compile Include="IAggregateRootIdGetter.cs" />
     <Compile Include="IPostPersistenceDomainEventTracker.cs" />
     <Compile Include="DomainEventStreamCannotBeReplayedException.cs" />

@@ -78,9 +78,11 @@
     <Compile Include="PostPersistenceDomainEventTrackerTestDoubles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringGenerator.cs" />
+    <Compile Include="Unit\AggregateRootNotBeingTrackedExceptionTest.cs" />
     <Compile Include="Unit\AggregateRootAlreadyBeingTrackedExceptionTest.cs" />
     <Compile Include="Unit\AggregateRootIdPropertyNotFoundExceptionAssertionExtensions.cs" />
     <Compile Include="Unit\AggregateRootIdPropertyNotFoundExceptionTest.cs" />
+    <Compile Include="Unit\DisposableContainerTest.cs" />
     <Compile Include="Unit\ExceptionTest.cs" />
     <Compile Include="Unit\DomainEventFunnelTest.cs" />
     <Compile Include="Unit\DomainEventStreamCannotBeReplayedExceptionTest.cs" />
@@ -91,7 +93,6 @@
     <Compile Include="Unit\NamedPropertyAggregateRootIdGetterTest.cs" />
     <Compile Include="Unit\NEventStore\NEventStoreSessionStreamTest.cs" />
     <Compile Include="Unit\NEventStore\NEventStoreSessionTest.cs" />
-    <Compile Include="Unit\NEventStore\DisposableContainerTest.cs" />
     <Compile Include="Unit\NEventStore\PersistedEventStreamOpenerTest.cs" />
     <Compile Include="Unit\NEventStore\PersistedEventStreamCreatorTest.cs" />
     <Compile Include="Unit\NEventStore\PersistedEventToDomainEventReplayAdapterTest.cs" />

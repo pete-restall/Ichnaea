@@ -54,7 +54,6 @@
     <Compile Include="AggregateRootIdGetter.cs" />
     <Compile Include="NEventStoreSession.cs" />
     <Compile Include="NEventStoreSessionStream.cs" />
-    <Compile Include="DisposableContainer.cs" />
     <Compile Include="PersistedEventStreamOpener.cs" />
     <Compile Include="PersistedEventStreamCreator.cs" />
     <Compile Include="PersistedEventToDomainEventReplayAdapter.cs" />

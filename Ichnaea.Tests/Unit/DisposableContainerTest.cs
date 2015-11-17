@@ -3,15 +3,20 @@ using System.Linq;
 using NSubstitute;
 using Xunit;
 
-namespace Restall.Ichnaea.Tests.Unit.NEventStore
+namespace Restall.Ichnaea.Tests.Unit
 {
 	public class DisposableContainerTest
 	{
-		private class DisposableContainer: Ichnaea.NEventStore.DisposableContainer
+		private class DisposableContainer: Ichnaea.DisposableContainer
 		{
 			public new void AddDisposable(IDisposable disposable)
 			{
 				base.AddDisposable(disposable);
+			}
+
+			public new void RemoveDisposable(IDisposable disposable)
+			{
+				base.RemoveDisposable(disposable);
 			}
 		}
 
@@ -49,6 +54,27 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			}
 
 			disposables.ForEach(disposable => disposable.Received(1).Dispose());
+		}
+
+		[Fact]
+		public void Dispose_CalledWhenSomeDisposablesHaveBeenRemoved_ExpectOnlyRemainingDisposablesAreDisposed()
+		{
+			var remainingDisposables = MockAnyNumberOfDisposables();
+			var removedDisposables = MockAtLeastOneDisposable();
+			var allDisposables = remainingDisposables.Concat(removedDisposables).Shuffle();
+			using (var container = new DisposableContainer())
+			{
+				allDisposables.ForEach(disposable => container.AddDisposable(disposable));
+				removedDisposables.ForEach(disposable => container.RemoveDisposable(disposable));
+			}
+
+			remainingDisposables.ForEach(disposable => disposable.Received(1).Dispose());
+			removedDisposables.ForEach(disposable => disposable.Received(0).Dispose());
+		}
+
+		private static IDisposable[] MockAnyNumberOfDisposables()
+		{
+			return SubstituteNumberOfDisposablesWithinExclusiveRange(0, 10);
 		}
 	}
 }

@@ -1,34 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Restall.Ichnaea
 {
-	public class InMemoryDomainEventTracker<TAggregateRoot>: IDomainEventTracker<TAggregateRoot>, IPrePersistenceDomainEventTracker<TAggregateRoot>, IDisposable
+	public class InMemoryDomainEventTracker<TAggregateRoot>: DisposableContainer, IDomainEventTracker<TAggregateRoot>, IPrePersistenceDomainEventTracker<TAggregateRoot>
 		where TAggregateRoot: class
 	{
-		private readonly List<DomainEventFunnel> funnels = new List<DomainEventFunnel>();
+		private class TrackingInfo
+		{
+			public TrackingInfo(List<object> domainEvents, DomainEventFunnel funnel)
+			{
+				this.DomainEvents = domainEvents;
+				this.Funnel = funnel;
+			}
 
-		// TODO: PROBABLY A TABLE OF Queue<object> ONCE THE PrePersistence INTERFACE IS IMPLEMENTED
-		private ConditionalWeakTable<TAggregateRoot, List<object>> aggregateToDomainEventsMap =
-			new ConditionalWeakTable<TAggregateRoot, List<object>>();
+			public List<object> DomainEvents { get; }
+
+			public DomainEventFunnel Funnel { get; }
+		}
+
+		private readonly IPostPersistenceDomainEventTracker<TAggregateRoot> postPersistenceDomainEventTracker;
+
+		private ConditionalWeakTable<TAggregateRoot, TrackingInfo> aggregateToDomainEventsMap =
+			new ConditionalWeakTable<TAggregateRoot, TrackingInfo>();
+
+		public InMemoryDomainEventTracker(IPostPersistenceDomainEventTracker<TAggregateRoot> postPersistenceDomainEventTracker)
+		{
+			this.postPersistenceDomainEventTracker = postPersistenceDomainEventTracker;
+		}
 
 		public void AggregateRootCreated(TAggregateRoot aggregateRoot, object domainEvent)
 		{
-			List<object> domainEvents;
-			if (this.aggregateToDomainEventsMap.TryGetValue(aggregateRoot, out domainEvents))
+			TrackingInfo trackingInfo;
+			if (this.aggregateToDomainEventsMap.TryGetValue(aggregateRoot, out trackingInfo))
 				throw new AggregateRootAlreadyBeingTrackedException();
 
-			domainEvents = new List<object> {domainEvent};
-			this.funnels.Add(new DomainEventFunnel(aggregateRoot, (sender, args) => domainEvents.Add(args)));
-			this.aggregateToDomainEventsMap.Add(aggregateRoot, domainEvents);
+			var domainEvents = new List<object> {domainEvent};
+			var funnel = this.NewFunnelFor(aggregateRoot, (sender, args) => domainEvents.Add(args));
+			this.aggregateToDomainEventsMap.Add(aggregateRoot, new TrackingInfo(domainEvents, funnel));
+		}
+
+		private DomainEventFunnel NewFunnelFor(TAggregateRoot aggregateRoot, Source.Of<object> observer)
+		{
+			var funnel = new DomainEventFunnel(aggregateRoot, observer);
+			this.AddDisposable(funnel);
+			return funnel;
 		}
 
 		public IEnumerable<object> GetSourcedDomainEventsFor(TAggregateRoot aggregateRoot)
 		{
-			List<object> domainEvents;
-			if (this.aggregateToDomainEventsMap.TryGetValue(aggregateRoot, out domainEvents))
-				return domainEvents;
+			TrackingInfo trackingInfo;
+			if (this.aggregateToDomainEventsMap.TryGetValue(aggregateRoot, out trackingInfo))
+				return trackingInfo.DomainEvents;
 
 			return new object[0];
 		}
@@ -36,15 +59,25 @@ namespace Restall.Ichnaea
 		void IPrePersistenceDomainEventTracker<TAggregateRoot>.SwitchTrackingToPersistentStore(
 			TAggregateRoot aggregateRoot, Source.Of<object> persistentObserver)
 		{
-			// TODO: Method needs writing
-			throw new NotImplementedException();
+			TrackingInfo trackingInfo;
+			if (!this.aggregateToDomainEventsMap.TryGetValue(aggregateRoot, out trackingInfo))
+				throw new AggregateRootNotBeingTrackedException();
+
+			trackingInfo.DomainEvents.ForEach(domainEvent => persistentObserver(aggregateRoot, domainEvent));
+			this.aggregateToDomainEventsMap.Remove(aggregateRoot);
+			this.RemoveDisposable(trackingInfo.Funnel);
+			trackingInfo.Funnel.Dispose();
+
+			this.postPersistenceDomainEventTracker.TrackToPersistentStore(aggregateRoot, persistentObserver);
 		}
 
-		public void Dispose()
+		protected override void Dispose(bool disposing)
 		{
-			this.funnels.ForEach(x => x.Dispose());
-			this.funnels.Clear();
-			this.aggregateToDomainEventsMap = new ConditionalWeakTable<TAggregateRoot, List<object>>();
+			if (!disposing)
+				return;
+
+			this.aggregateToDomainEventsMap = new ConditionalWeakTable<TAggregateRoot, TrackingInfo>();
+			base.Dispose(true);
 		}
 	}
 }

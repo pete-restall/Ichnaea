@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
+using NSubstitute;
 using Xunit;
 
 namespace Restall.Ichnaea.Tests.Unit
 {
 	public class InMemoryDomainEventTrackerTest
 	{
+		[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Local")]
 		private class StubAggregateRoot
 		{
 			public void SourceFirstDomainEvent(object domainEvent)
@@ -31,19 +34,31 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		public void Constructor_CalledWithNullPostPersistenceDomainEventTracker_ExpectArgumentNullExceptionWithCorrectParamName()
+		{
+			Action constructor = () => new InMemoryDomainEventTracker<object>(null);
+			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("postPersistenceDomainEventTracker");
+		}
+
+		[Fact]
 		public void AggregateRootCreated_CalledWithNullAggregateRoot_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			using (var tracker = new InMemoryDomainEventTracker<object>())
+			using (var tracker = CreateTrackerWithDummyDependencies<object>())
 			{
 				tracker.Invoking(x => x.AggregateRootCreated(null, new object()))
 					.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRoot");
 			}
 		}
 
+		private static InMemoryDomainEventTracker<TAggregateRoot> CreateTrackerWithDummyDependencies<TAggregateRoot>() where TAggregateRoot: class
+		{
+			return new InMemoryDomainEventTracker<TAggregateRoot>(PostPersistenceDomainEventTrackerTestDoubles.Dummy());
+		}
+
 		[Fact]
 		public void AggregateRootCreated_CalledWithNullDomainEvent_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			using (var tracker = new InMemoryDomainEventTracker<object>())
+			using (var tracker = CreateTrackerWithDummyDependencies<object>())
 			{
 				tracker.Invoking(x => x.AggregateRootCreated(new object(), null))
 					.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("domainEvent");
@@ -53,18 +68,24 @@ namespace Restall.Ichnaea.Tests.Unit
 		[Fact]
 		public void AggregateRootCreated_CalledWithAggregateRootAlreadyBeingTracked_ExpectAggregateRootAlreadyBeingTrackedException()
 		{
-			using (var tracker = new InMemoryDomainEventTracker<StubAggregateRoot>())
+			using (var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>())
 			{
-				var aggregateRoot = new StubAggregateRoot();
-				tracker.AggregateRootCreated(aggregateRoot, new object());
+				var aggregateRoot = CreateAggregateRootTrackedBy(tracker);
 				tracker.Invoking(x => x.AggregateRootCreated(aggregateRoot, new object())).ShouldThrow<AggregateRootAlreadyBeingTrackedException>();
 			}
+		}
+
+		private static StubAggregateRoot CreateAggregateRootTrackedBy(IDomainEventTracker<StubAggregateRoot> tracker)
+		{
+			var aggregateRoot = new StubAggregateRoot();
+			tracker.AggregateRootCreated(aggregateRoot, new object());
+			return aggregateRoot;
 		}
 
 		[Fact]
 		public void GetSourcedDomainEventsFor_CalledWithNullAggregateRoot_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			using (var tracker = new InMemoryDomainEventTracker<object>())
+			using (var tracker = CreateTrackerWithDummyDependencies<object>())
 			{
 				tracker.Invoking(x => x.GetSourcedDomainEventsFor(null))
 					.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRoot");
@@ -74,7 +95,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		[Fact]
 		public void GetSourcedDomainEventsFor_CalledWithNewlyCreatedAggregateRoot_ExpectCreationDomainEventIsReturned()
 		{
-			using (var tracker = new InMemoryDomainEventTracker<StubAggregateRoot>())
+			using (var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>())
 			{
 				var newlyCreated = new StubAggregateRoot();
 				var creationEvent = new object();
@@ -86,7 +107,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		[Fact]
 		public void GetSourcedDomainEventsFor_CalledWithUntrackedAggregateRoot_ExpectEmptyEnumerableIsReturned()
 		{
-			using (var tracker = new InMemoryDomainEventTracker<StubAggregateRoot>())
+			using (var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>())
 			{
 				var untracked = new StubAggregateRoot();
 				tracker.GetSourcedDomainEventsFor(untracked).Should().BeEmpty();
@@ -96,7 +117,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		[Fact]
 		public void GetSourcedDomainEventsFor_CalledWithOneOfSeveralTrackedAggregateRoots_ExpectCorrespondingCreationDomainEventIsReturned()
 		{
-			using (var tracker = new InMemoryDomainEventTracker<StubAggregateRoot>())
+			using (var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>())
 			{
 				int numberOfTracked = IntegerGenerator.WithinExclusiveRange(1, 10);
 				var tracked = numberOfTracked.Select(() => new StubAggregateRoot()).ToArray();
@@ -112,7 +133,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		[Fact]
 		public void GetSourcedDomainEventsFor_CalledWhenTrackedAggregateRootSourcesDomainEvents_ExpectAllSourcedDomainEventsAreReturnedInOrder()
 		{
-			using (var tracker = new InMemoryDomainEventTracker<StubAggregateRoot>())
+			using (var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>())
 			{
 				var aggregateRoot = new StubAggregateRoot();
 				var creationEvent = new object();
@@ -128,20 +149,117 @@ namespace Restall.Ichnaea.Tests.Unit
 		[Fact]
 		public void GetSourcedDomainEventsFor_CalledAfterDisposeWithPreviouslyTrackedAggregateRoot_ExpectEmptyEnumerableIsReturned()
 		{
-			var tracked = new StubAggregateRoot();
-			var tracker = new InMemoryDomainEventTracker<StubAggregateRoot>();
-			tracker.AggregateRootCreated(tracked, new object());
+			var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>();
+			var aggregateRoot = CreateAggregateRootTrackedBy(tracker);
 			tracker.Dispose();
-			tracker.GetSourcedDomainEventsFor(tracked).Should().BeEmpty();
+			tracker.GetSourcedDomainEventsFor(aggregateRoot).Should().BeEmpty();
+		}
+
+		[Fact]
+		public void SwitchTrackingToPersistentStore_CalledWithNullAggregateRoot_ExpectArgumentNullExceptionWithCorrectParamName()
+		{
+			using (var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>())
+			{
+				((IPrePersistenceDomainEventTracker<StubAggregateRoot>) tracker)
+					.Invoking(x => x.SwitchTrackingToPersistentStore(null, DummyPersistentObserver))
+					.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRoot");
+			}
+		}
+
+		private static void DummyPersistentObserver(object aggregateRoot, object domainEvent)
+		{
+		}
+
+		[Fact]
+		public void SwitchTrackingToPersistentStore_CalledWithNullPersistentObserver_ExpectArgumentNullExceptionWithCorrectParamName()
+		{
+			using (var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>())
+			{
+				((IPrePersistenceDomainEventTracker<StubAggregateRoot>) tracker)
+					.Invoking(x => x.SwitchTrackingToPersistentStore(new StubAggregateRoot(), null))
+					.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("persistentObserver");
+			}
+		}
+
+		[Fact]
+		public void SwitchTrackingToPersistentStore_CalledWithUntrackedAggregateRoot_ExpectAggregateRootNotBeingTrackedException()
+		{
+			using (var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>())
+			{
+				((IPrePersistenceDomainEventTracker<StubAggregateRoot>) tracker)
+					.Invoking(x => x.SwitchTrackingToPersistentStore(new StubAggregateRoot(), DummyPersistentObserver))
+					.ShouldThrow<AggregateRootNotBeingTrackedException>();
+			}
+		}
+
+		[Fact]
+		public void SwitchTrackingToPersistentStore_CalledTwiceWithAggregateRoot_ExpectAggregateRootNotBeingTrackedException()
+		{
+			using (var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>())
+			{
+				var aggregateRoot = CreateAggregateRootTrackedBy(tracker);
+				var prePersistenceTracker = ((IPrePersistenceDomainEventTracker<StubAggregateRoot>) tracker);
+				prePersistenceTracker.SwitchTrackingToPersistentStore(aggregateRoot, DummyPersistentObserver);
+
+				prePersistenceTracker
+					.Invoking(x => x.SwitchTrackingToPersistentStore(aggregateRoot, DummyPersistentObserver))
+					.ShouldThrow<AggregateRootNotBeingTrackedException>();
+			}
+		}
+
+		[Fact]
+		public void SwitchTrackingToPersistentStore_Called_ExpectNewlySourcedDomainEventsAreNotTrackedInMemory()
+		{
+			using (var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>())
+			{
+				var aggregateRoot = CreateAggregateRootTrackedBy(tracker);
+				var inMemoryDomainEvents = tracker.GetSourcedDomainEventsFor(aggregateRoot);
+				((IPrePersistenceDomainEventTracker<StubAggregateRoot>) tracker).SwitchTrackingToPersistentStore(aggregateRoot, DummyPersistentObserver);
+
+				var newlySourcedDomainEvent = new object();
+				aggregateRoot.SourceFirstDomainEvent(newlySourcedDomainEvent);
+				inMemoryDomainEvents.Should().NotContain(newlySourcedDomainEvent);
+			}
+		}
+
+		[Fact]
+		public void SwitchTrackingToPersistentStore_Called_ExpectPersistentObserverIsCalledWithPreviouslySourcedDomainEventsInOrder()
+		{
+			using (var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>())
+			{
+				var aggregateRoot = CreateAggregateRootTrackedBy(tracker);
+				int numberOfDomainEvents = IntegerGenerator.WithinExclusiveRange(0, 10);
+				numberOfDomainEvents.Repeat(() => aggregateRoot.SourceFirstDomainEvent(new object()));
+
+				var persistentObserver = Substitute.For<Source.Of<object>>();
+				var previouslySourcedDomainEvents = tracker.GetSourcedDomainEventsFor(aggregateRoot).ToArray();
+				((IPrePersistenceDomainEventTracker<StubAggregateRoot>) tracker).SwitchTrackingToPersistentStore(aggregateRoot, persistentObserver);
+
+				Received.InOrder(() =>
+					previouslySourcedDomainEvents.ForEach(domainEvent => persistentObserver.Received(1)(aggregateRoot, domainEvent)));
+			}
+		}
+
+		[Fact]
+		public void SwitchTrackingToPersistentStore_Called_ExpectPostPersistenceDomainEventTrackerIsGivenTheAggregateRootAndObservable()
+		{
+			var postPersistenceDomainEventTracker = Substitute.For<IPostPersistenceDomainEventTracker<object>>();
+			using (var tracker = new InMemoryDomainEventTracker<StubAggregateRoot>(postPersistenceDomainEventTracker))
+			{
+				var aggregateRoot = CreateAggregateRootTrackedBy(tracker);
+				Source.Of<object> persistentObserver = DummyPersistentObserver;
+				((IPrePersistenceDomainEventTracker<StubAggregateRoot>) tracker).SwitchTrackingToPersistentStore(aggregateRoot, persistentObserver);
+
+				postPersistenceDomainEventTracker.Received(1).TrackToPersistentStore(aggregateRoot, persistentObserver);
+			}
 		}
 
 		[Fact]
 		public void Dispose_Called_ExpectPreviouslyTrackedAggregateRootsAreNotBeingSilentlyTrackedToPreviousDomainEventCollection()
 		{
-			using (var tracker = new InMemoryDomainEventTracker<StubAggregateRoot>())
+			using (var tracker = CreateTrackerWithDummyDependencies<StubAggregateRoot>())
 			{
-				var aggregateRoot = new StubAggregateRoot();
-				tracker.AggregateRootCreated(aggregateRoot, new object());
+				var aggregateRoot = CreateAggregateRootTrackedBy(tracker);
 				var domainEvents = (ICollection<object>) tracker.GetSourcedDomainEventsFor(aggregateRoot);
 				int countOfDomainEventsPriorToDispose = domainEvents.Count;
 				tracker.Dispose();
@@ -153,9 +271,14 @@ namespace Restall.Ichnaea.Tests.Unit
 		[Fact]
 		public void ExpectGarbageCollectableAggregateRootsAreNotArtificiallyKeptAliveByTracking()
 		{
-			using (var tracker = new InMemoryDomainEventTracker<object>())
+			ExpectGarbageCollectableAggregateRootsAreNotArtificiallyKeptAliveBy(WeakAggregateRootFromCreatedEvent);
+		}
+
+		private static void ExpectGarbageCollectableAggregateRootsAreNotArtificiallyKeptAliveBy(Func<InMemoryDomainEventTracker<object>, WeakReference<object>> action)
+		{
+			using (var tracker = CreateTrackerWithDummyDependencies<object>())
 			{
-				var weakAggregateRoot = WeakAggregateRootFromCreatedEvent(tracker);
+				var weakAggregateRoot = action(tracker);
 				Collect.Garbage();
 
 				object aggregateRoot;
@@ -163,10 +286,21 @@ namespace Restall.Ichnaea.Tests.Unit
 			}
 		}
 
-		private static WeakReference<object> WeakAggregateRootFromCreatedEvent(InMemoryDomainEventTracker<object> tracker)
+		private static WeakReference<object> WeakAggregateRootFromCreatedEvent(IDomainEventTracker<object> tracker)
 		{
-			object aggregateRoot = new object();
-			tracker.AggregateRootCreated(aggregateRoot, new object());
+			return new WeakReference<object>(CreateAggregateRootTrackedBy(tracker));
+		}
+
+		[Fact]
+		public void ExpectGarbageCollectableAggregateRootsAreNotArtificiallyKeptAliveAfterSwitchingToPersistentStore()
+		{
+			ExpectGarbageCollectableAggregateRootsAreNotArtificiallyKeptAliveBy(WeakAggregateRootFromSwitchToPersistentStore);
+		}
+
+		private static WeakReference<object> WeakAggregateRootFromSwitchToPersistentStore(InMemoryDomainEventTracker<object> tracker)
+		{
+			var aggregateRoot = CreateAggregateRootTrackedBy(tracker);
+			((IPrePersistenceDomainEventTracker<object>) tracker).SwitchTrackingToPersistentStore(aggregateRoot, DummyPersistentObserver);
 			return new WeakReference<object>(aggregateRoot);
 		}
 	}
