@@ -70,7 +70,9 @@ namespace Restall.Ichnaea.Tests.Unit
 
 		private static TException Constructor(string message, Exception innerException)
 		{
-			return (TException) Activator.CreateInstance(typeof(TException), message, innerException);
+			var constructor = typeof(TException).GetConstructor(new[] {typeof(string), typeof(Exception)});
+			constructor.Should().NotBeNull("because .ctor(string, Exception) is a standard Exception constructor");
+			return (TException) constructor?.Invoke(new object[] {message, innerException});
 		}
 
 		[Fact]

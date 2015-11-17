@@ -16,7 +16,7 @@ namespace Restall.Ichnaea
 				.ToArray();
 
 			if (properties.Length != 1)
-				throw new AggregateRootIdPropertyNotFoundException(typeof(TAggregateRoot), typeof(TAggregateRootId), string.Empty);
+				throw new AggregateRootIdNotFoundException(typeof(TAggregateRoot), typeof(TAggregateRootId));
 
 			this.idProperty = properties.First();
 		}

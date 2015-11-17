@@ -6,7 +6,7 @@ namespace Restall.Ichnaea
 {
 	[Serializable]
 	[NullGuard(ValidationFlags.None)]
-	public class AggregateRootIdPropertyNotFoundException: Exception
+	public class AggregateRootIdPropertyNotFoundException: AggregateRootIdNotFoundException
 	{
 		public AggregateRootIdPropertyNotFoundException()
 		{
@@ -46,10 +46,6 @@ namespace Restall.Ichnaea
 			this.AggregateRootIdType = aggregateRootIdType;
 			this.PropertyName = propertyName;
 		}
-
-		public Type AggregateRootType { get; }
-
-		public Type AggregateRootIdType { get; }
 
 		public string PropertyName { get; }
 	}

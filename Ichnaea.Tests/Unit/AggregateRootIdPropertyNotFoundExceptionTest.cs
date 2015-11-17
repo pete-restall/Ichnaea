@@ -29,11 +29,10 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
-		public void AggregateRootType_Get_ExpectSameValueAsPassedToConstructor()
+		public void Constructor_CalledWithNullAggregateRootType_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			var aggregateRootType = DummyType();
-			new AggregateRootIdPropertyNotFoundException(aggregateRootType, DummyType(), DummyPropertyName())
-				.AggregateRootType.Should().BeSameAs(aggregateRootType);
+			Action constructor = () => new AggregateRootIdPropertyNotFoundException(null, DummyType(), DummyPropertyName());
+			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRootType");
 		}
 
 		private static Type DummyType()
@@ -44,13 +43,6 @@ namespace Restall.Ichnaea.Tests.Unit
 		private static string DummyPropertyName()
 		{
 			return StringGenerator.AnyNonNull();
-		}
-
-		[Fact]
-		public void Constructor_CalledWithNullAggregateRootType_ExpectArgumentNullExceptionWithCorrectParamName()
-		{
-			Action constructor = () => new AggregateRootIdPropertyNotFoundException(null, DummyType(), DummyPropertyName());
-			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("aggregateRootType");
 		}
 
 		[Fact]
@@ -65,6 +57,14 @@ namespace Restall.Ichnaea.Tests.Unit
 		{
 			Action constructor = () => new AggregateRootIdPropertyNotFoundException(DummyType(), DummyType(), null);
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("propertyName");
+		}
+
+		[Fact]
+		public void AggregateRootType_Get_ExpectSameValueAsPassedToConstructor()
+		{
+			var aggregateRootType = DummyType();
+			new AggregateRootIdPropertyNotFoundException(aggregateRootType, DummyType(), DummyPropertyName())
+				.AggregateRootType.Should().BeSameAs(aggregateRootType);
 		}
 
 		[Fact]

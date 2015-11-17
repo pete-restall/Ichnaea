@@ -33,31 +33,31 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
-		public void Constructor_CalledWhenAggregateRootTypeDoesNotHavePropertyWithIdType_ExpectAggregateRootIdPropertyNotFoundExceptionWithCorrectTypesAndEmptyPropertyName()
+		public void Constructor_CalledWhenAggregateRootTypeDoesNotHavePropertyWithIdType_ExpectAggregateRootIdNotFoundExceptionWithCorrectTypes()
 		{
 			Action constructor = () => new TypedPropertyAggregateRootIdGetter<AggregateRoot, int>();
-			constructor.ShouldThrowAggregateRootIdPropertyNotFoundExceptionFor<AggregateRoot, int>(string.Empty);
+			constructor.ShouldThrowAggregateRootIdNotFoundExceptionFor<AggregateRoot, int>();
 		}
 
 		[Fact]
-		public void Constructor_CalledWhenPropertyIsStatic_ExpectAggregateRootIdPropertyNotFoundExceptionWithCorrectTypesAndEmptyPropertyName()
+		public void Constructor_CalledWhenPropertyIsStatic_ExpectAggregateRootIdNotFoundExceptionWithCorrectTypes()
 		{
 			Action constructor = () => new TypedPropertyAggregateRootIdGetter<AggregateRoot, decimal>();
-			constructor.ShouldThrowAggregateRootIdPropertyNotFoundExceptionFor<AggregateRoot, decimal>(string.Empty);
+			constructor.ShouldThrowAggregateRootIdNotFoundExceptionFor<AggregateRoot, decimal>();
 		}
 
 		[Fact]
-		public void Constructor_CalledWhenMultiplePropertiesOfCorrectTypeAndSameVisibility_ExpectAggregateRootIdPropertyNotFoundExceptionWithCorrectTypesAndEmptyPropertyName()
+		public void Constructor_CalledWhenMultiplePropertiesOfCorrectTypeAndSameVisibility_ExpectAggregateRootIdNotFoundExceptionWithCorrectTypes()
 		{
 			Action constructor = () => new TypedPropertyAggregateRootIdGetter<AggregateRootWithSameIdTypesAndVisibility, decimal>();
-			constructor.ShouldThrowAggregateRootIdPropertyNotFoundExceptionFor<AggregateRootWithSameIdTypesAndVisibility, decimal>(string.Empty);
+			constructor.ShouldThrowAggregateRootIdNotFoundExceptionFor<AggregateRootWithSameIdTypesAndVisibility, decimal>();
 		}
 
 		[Fact]
-		public void Constructor_CalledWhenMultiplePropertiesOfCorrectTypeAndDifferentVisibility_ExpectAggregateRootIdPropertyNotFoundExceptionWithCorrectTypesAndEmptyPropertyName()
+		public void Constructor_CalledWhenMultiplePropertiesOfCorrectTypeAndDifferentVisibility_ExpectAggregateRootIdNotFoundExceptionWithCorrectTypes()
 		{
 			Action constructor = () => new TypedPropertyAggregateRootIdGetter<AggregateRootWithSameIdTypesAndDifferentVisibility, Guid>();
-			constructor.ShouldThrowAggregateRootIdPropertyNotFoundExceptionFor<AggregateRootWithSameIdTypesAndDifferentVisibility, Guid>(string.Empty);
+			constructor.ShouldThrowAggregateRootIdNotFoundExceptionFor<AggregateRootWithSameIdTypesAndDifferentVisibility, Guid>();
 		}
 
 		[Fact]
