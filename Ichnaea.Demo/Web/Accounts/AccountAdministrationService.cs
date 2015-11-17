@@ -39,7 +39,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 			this.eventStore.Commit();
 
 			var surrogateId = new AccountIdSurrogate(Guid.NewGuid(), request.SortCode, request.AccountNumber);
-			this.documents.Store(surrogateId, surrogateId.SurrogateId);
+			this.documents.Store(surrogateId, surrogateId.SurrogateId.ToString()); // TODO: ToString() WORKS, BUT IT'D BE BETTER TO USE THE GUID AS THE ETAG, TOO...
 			this.documents.SaveChanges();
 
 			return new OpenAccountResponse { Id = surrogateId.SurrogateId };

@@ -15,7 +15,7 @@ namespace Restall.Ichnaea.Demo.Web
 
 		private static void RegisterAggregateRoot<TAggregateRoot, TAggregateRootId>(
 			this TinyIoCContainer container, IAggregateRootIdGetter<TAggregateRoot, TAggregateRootId> idGetter)
-			where TAggregateRoot : class
+			where TAggregateRoot: class
 		{
 			var postPersistenceDomainEventTracker = new LambdaPostPersistenceDomainEventTracker<TAggregateRoot>();
 			var prePersistenceDomainEventTracker = new InMemoryDomainEventTracker<TAggregateRoot>(postPersistenceDomainEventTracker);
@@ -45,7 +45,7 @@ namespace Restall.Ichnaea.Demo.Web
 					domainEvent => new EventMessage { Body = domainEvent },
 					new PersistedEventToDomainEventReplayAdapter<TAggregateRoot>(
 						storedDomainEvent => storedDomainEvent.Body,
-						new DummyDomainEventReplay<TAggregateRoot>() // TODO: CREATE A CHAIN OF RESPONSIBILITY THE IN Ichnaea ASSEMBLY, TAKING AN IEnumerable<>
+						new DummyDomainEventReplay<TAggregateRoot>() // TODO: CREATE A CHAIN OF RESPONSIBILITY IN THE Ichnaea ASSEMBLY, TAKING AN IEnumerable<>
 					)));
 		}
 
