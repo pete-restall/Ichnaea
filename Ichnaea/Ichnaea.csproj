@@ -63,6 +63,7 @@
     <Compile Include="IDomainEventStream.cs" />
     <Compile Include="IDomainEventTracker.cs" />
     <Compile Include="IReplayDomainEvents.cs" />
+    <Compile Include="LambdaPostPersistenceDomainEventTracker.cs" />
     <Compile Include="NamedPropertyAggregateRootIdGetter.cs" />
     <Compile Include="ObjectBinarySerialisableExtensions.cs" />
     <Compile Include="SerializationInfoExtensions.cs" />

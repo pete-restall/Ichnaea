@@ -92,6 +92,7 @@
     <Compile Include="Unit\BestPracticesExceptionTest.cs" />
     <Compile Include="Unit\InMemoryDomainEventTrackerTest.cs" />
     <Compile Include="Unit\EnumerableExtensionsTest.cs" />
+    <Compile Include="Unit\LambdaPostPersistenceDomainEventTrackerTest.cs" />
     <Compile Include="Unit\NamedPropertyAggregateRootIdGetterTest.cs" />
     <Compile Include="Unit\NEventStore\NEventStoreSessionStreamTest.cs" />
     <Compile Include="Unit\NEventStore\NEventStoreSessionTest.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Unit\Stubs\AggregateRootWithProtectedInternalId.cs" />
     <Compile Include="Unit\Stubs\AggregateRootWithShadowedId.cs" />
     <Compile Include="Unit\Stubs\AggregateRootWithShadowedIdBase.cs" />
+    <Compile Include="Unit\Stubs\AggregateRootWithTwoDomainEvents.cs" />
     <Compile Include="Unit\TypedPropertyAggregateRootIdGetterTest.cs" />
   </ItemGroup>
   <ItemGroup>

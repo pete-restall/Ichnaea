@@ -21,7 +21,7 @@ namespace Restall.Ichnaea
 
 		private readonly IPostPersistenceDomainEventTracker<TAggregateRoot> postPersistenceDomainEventTracker;
 
-		private ConditionalWeakTable<TAggregateRoot, TrackingInfo> aggregateToDomainEventsMap =
+		private ConditionalWeakTable<TAggregateRoot, TrackingInfo> trackedAggregateRoots =
 			new ConditionalWeakTable<TAggregateRoot, TrackingInfo>();
 
 		public InMemoryDomainEventTracker(IPostPersistenceDomainEventTracker<TAggregateRoot> postPersistenceDomainEventTracker)
@@ -32,12 +32,12 @@ namespace Restall.Ichnaea
 		public void AggregateRootCreated(TAggregateRoot aggregateRoot, object domainEvent)
 		{
 			TrackingInfo trackingInfo;
-			if (this.aggregateToDomainEventsMap.TryGetValue(aggregateRoot, out trackingInfo))
+			if (this.trackedAggregateRoots.TryGetValue(aggregateRoot, out trackingInfo))
 				throw new AggregateRootAlreadyBeingTrackedException();
 
 			var domainEvents = new List<object> {domainEvent};
 			var funnel = this.NewFunnelFor(aggregateRoot, (sender, args) => domainEvents.Add(args));
-			this.aggregateToDomainEventsMap.Add(aggregateRoot, new TrackingInfo(domainEvents, funnel));
+			this.trackedAggregateRoots.Add(aggregateRoot, new TrackingInfo(domainEvents, funnel));
 		}
 
 		private DomainEventFunnel NewFunnelFor(TAggregateRoot aggregateRoot, Source.Of<object> observer)
@@ -50,7 +50,7 @@ namespace Restall.Ichnaea
 		public IEnumerable<object> GetSourcedDomainEventsFor(TAggregateRoot aggregateRoot)
 		{
 			TrackingInfo trackingInfo;
-			if (this.aggregateToDomainEventsMap.TryGetValue(aggregateRoot, out trackingInfo))
+			if (this.trackedAggregateRoots.TryGetValue(aggregateRoot, out trackingInfo))
 				return trackingInfo.DomainEvents;
 
 			return new object[0];
@@ -60,11 +60,11 @@ namespace Restall.Ichnaea
 			TAggregateRoot aggregateRoot, Source.Of<object> persistentObserver)
 		{
 			TrackingInfo trackingInfo;
-			if (!this.aggregateToDomainEventsMap.TryGetValue(aggregateRoot, out trackingInfo))
+			if (!this.trackedAggregateRoots.TryGetValue(aggregateRoot, out trackingInfo))
 				throw new AggregateRootNotBeingTrackedException();
 
 			trackingInfo.DomainEvents.ForEach(domainEvent => persistentObserver(aggregateRoot, domainEvent));
-			this.aggregateToDomainEventsMap.Remove(aggregateRoot);
+			this.trackedAggregateRoots.Remove(aggregateRoot);
 			this.RemoveDisposable(trackingInfo.Funnel);
 			trackingInfo.Funnel.Dispose();
 
@@ -73,10 +73,9 @@ namespace Restall.Ichnaea
 
 		protected override void Dispose(bool disposing)
 		{
-			if (!disposing)
-				return;
+			if (disposing)
+				this.trackedAggregateRoots = new ConditionalWeakTable<TAggregateRoot, TrackingInfo>();
 
-			this.aggregateToDomainEventsMap = new ConditionalWeakTable<TAggregateRoot, TrackingInfo>();
 			base.Dispose(true);
 		}
 	}
