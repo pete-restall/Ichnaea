@@ -6,6 +6,15 @@
 	</head>
 
 	<body>
-		To be implemented...
+		<table>
+			<thead>
+				<tr><td>Sort Code</td><td>Account Number</td><td>Holder</td></tr>
+			</thead>
+			<tbody>
+				<tr><td>@Model.SortCode</td><td>@Model.AccountNumber</td><td>@Model.Holder</td></tr>
+			</tbody>
+		</table>
 	</body>
+
+	<p>Current Balance: @Model.Balance</p>
 </html>

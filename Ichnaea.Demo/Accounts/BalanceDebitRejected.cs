@@ -13,6 +13,6 @@ namespace Restall.Ichnaea.Demo.Accounts
 		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "JSON Serialisation")]
 		private BalanceDebitRejected() { }
 
-		public string Reason { get; }
+		public string Reason { get; private set; }
 	}
 }

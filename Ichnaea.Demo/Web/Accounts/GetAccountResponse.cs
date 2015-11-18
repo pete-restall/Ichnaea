@@ -6,7 +6,9 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 	{
 		public Guid Id { get; set; }
 
-		public string Name { get; set; }
+		public string SortCode { get; set; }
+
+		public string AccountNumber { get; set; }
 
 		public string Holder { get; set; }
 

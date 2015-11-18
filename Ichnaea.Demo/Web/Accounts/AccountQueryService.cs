@@ -37,7 +37,8 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 			return new GetAccountResponse
 				{
 					Id = request.Id,
-					Name = account.Id.ToString(),
+					SortCode = account.Id.SortCode,
+					AccountNumber = account.Id.AccountNumber,
 					Holder = account.Holder,
 					Balance = account.Balance
 				};

@@ -9,16 +9,21 @@
 		<h2>All Accounts</h2>
 		<table>
 			<thead>
-				<tr><td>Sort Code / Account</td><td>Account Holder</td></tr>
+				<tr><td>Sort Code</td><td>Account Number</td><td>Holder</td></tr>
 			</thead>
 			<tbody>
 				@foreach (var account in @Model.Accounts)
 				{
-					<tr><td><a href="@account.GetDetailsUri">@account.SortCode / @account.AccountNumber</a></td><td>@account.Holder</td></tr>
+					<tr>
+						<td><a href="@account.GetDetailsUri">@account.SortCode</a></td>
+						<td><a href="@account.GetDetailsUri">@account.AccountNumber</a></td>
+						<td>@account.Holder</td>
+					</tr>
 				}
 			</tbody>
 		</table>
-
-		<a href="@Model.OpenAccountUri">Open Account</a>
+		<p>
+			<a href="@Model.OpenAccountUri">Open Account</a>
+		</p>
 	</body>
 </html>

@@ -1,6 +1,7 @@
 ﻿using Nancy.TinyIoc;
 using NEventStore;
 using Restall.Ichnaea.Demo.Accounts;
+using Restall.Ichnaea.Demo.Accounts.Replay;
 using Restall.Ichnaea.NEventStore;
 
 namespace Restall.Ichnaea.Demo.Web
@@ -10,16 +11,24 @@ namespace Restall.Ichnaea.Demo.Web
 		public static void RegisterRequestScopeIchnaeaDependenciesInto(TinyIoCContainer container)
 		{
 			// TODO: PROPER FLUENT / CONVENTION-BASED CONFIGURATION
-			container.RegisterAggregateRoot(new NamedPropertyAggregateRootIdGetter<Account, AccountId>("Id"));
+			// TODO: CREATE A CHAIN OF RESPONSIBILITY IN THE Ichnaea ASSEMBLY, TAKING AN IEnumerable<>
+			// TODO: CREATE AN IdAttribute AND AN IdAttributeAggregateRootIdGetter CLASS
+			container.RegisterAggregateRoot(new NamedPropertyAggregateRootIdGetter<Account, AccountId>("Id"), new AccountOpenedReplay());
 		}
 
 		private static void RegisterAggregateRoot<TAggregateRoot, TAggregateRootId>(
-			this TinyIoCContainer container, IAggregateRootIdGetter<TAggregateRoot, TAggregateRootId> idGetter)
+			this TinyIoCContainer container, IAggregateRootIdGetter<TAggregateRoot, TAggregateRootId> idGetter, IReplayDomainEvents<TAggregateRoot> domainEventReplay)
 			where TAggregateRoot: class
 		{
 			var postPersistenceDomainEventTracker = new LambdaPostPersistenceDomainEventTracker<TAggregateRoot>();
 			var prePersistenceDomainEventTracker = new InMemoryDomainEventTracker<TAggregateRoot>(postPersistenceDomainEventTracker);
-			container.Register((ctx, _) => CreateDomainEventStream(ctx.Resolve<NEventStoreSession>(), idGetter, prePersistenceDomainEventTracker, postPersistenceDomainEventTracker));
+			container.Register((ctx, _) => CreateDomainEventStream(
+				ctx.Resolve<NEventStoreSession>(),
+				idGetter,
+				prePersistenceDomainEventTracker,
+				postPersistenceDomainEventTracker,
+				domainEventReplay));
+
 			container.Register<IDomainEventTracker<TAggregateRoot>>(prePersistenceDomainEventTracker);
 		}
 
@@ -27,7 +36,8 @@ namespace Restall.Ichnaea.Demo.Web
 			IStoreEvents session,
 			IAggregateRootIdGetter<TAggregateRoot, TAggregateRootId> idGetter,
 			IPrePersistenceDomainEventTracker<TAggregateRoot> prePersistenceDomainEventTracker,
-			IPostPersistenceDomainEventTracker<TAggregateRoot> postPersistenceDomainEventTracker)
+			IPostPersistenceDomainEventTracker<TAggregateRoot> postPersistenceDomainEventTracker,
+			IReplayDomainEvents<TAggregateRoot> domainEventReplay)
 			where TAggregateRoot: class
 		{
 			string bucketId = typeof(TAggregateRoot).Name.Pluralise();
@@ -45,7 +55,7 @@ namespace Restall.Ichnaea.Demo.Web
 					domainEvent => new EventMessage { Body = domainEvent },
 					new PersistedEventToDomainEventReplayAdapter<TAggregateRoot>(
 						storedDomainEvent => storedDomainEvent.Body,
-						new DummyDomainEventReplay<TAggregateRoot>() // TODO: CREATE A CHAIN OF RESPONSIBILITY IN THE Ichnaea ASSEMBLY, TAKING AN IEnumerable<>
+						domainEventReplay
 					)));
 		}
 

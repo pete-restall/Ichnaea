@@ -13,8 +13,8 @@ namespace Restall.Ichnaea.Demo.Accounts
 		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "JSON Serialisation")]
 		private OverdraftAdjustmentRejected() { }
 
-		public decimal Amount { get; }
+		public decimal Amount { get; private set; }
 
-		public string Reason { get; }
+		public string Reason { get; private set; }
 	}
 }

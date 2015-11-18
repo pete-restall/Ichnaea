@@ -14,10 +14,10 @@ namespace Restall.Ichnaea.Demo.Accounts
 		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "JSON Serialisation")]
 		private AccountOpened() { }
 
-		public string SortCode { get; }
+		public string SortCode { get; private set; }
 
-		public string AccountNumber { get; }
+		public string AccountNumber { get; private set; }
 
-		public string Holder { get; }
+		public string Holder { get; private set; }
 	}
 }
