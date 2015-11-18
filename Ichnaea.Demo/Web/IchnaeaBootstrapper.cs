@@ -30,7 +30,7 @@ namespace Restall.Ichnaea.Demo.Web
 			IPostPersistenceDomainEventTracker<TAggregateRoot> postPersistenceDomainEventTracker)
 			where TAggregateRoot: class
 		{
-			string bucketId = typeof(TAggregateRoot).Name;
+			string bucketId = typeof(TAggregateRoot).Name.Pluralise();
 			return new DomainEventStreamAdapter<TAggregateRoot, TAggregateRootId>(
 				new PersistedEventStreamCreator<TAggregateRoot>(
 					session,

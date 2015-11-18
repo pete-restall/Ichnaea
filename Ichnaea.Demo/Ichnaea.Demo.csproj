@@ -208,6 +208,7 @@
     <Compile Include="Web\RouteLinks.cs" />
     <Compile Include="Web\ServiceModule.cs" />
     <Compile Include="Web\StringHtmlEncodingExtensions.cs" />
+    <Compile Include="Web\StringPluralisationExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

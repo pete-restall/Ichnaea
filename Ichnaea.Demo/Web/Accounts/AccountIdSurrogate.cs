@@ -4,14 +4,14 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 {
 	public class AccountIdSurrogate
 	{
-		public AccountIdSurrogate(Guid id, string sortCode, string accountNumber)
+		public AccountIdSurrogate(Guid surrogateId, string sortCode, string accountNumber)
 		{
-			this.Id = id;
+			this.SurrogateId = surrogateId;
 			this.SortCode = sortCode;
 			this.AccountNumber = accountNumber;
 		}
 
-		public Guid Id { get; }
+		public Guid SurrogateId { get; }
 
 		public string SortCode { get; }
 

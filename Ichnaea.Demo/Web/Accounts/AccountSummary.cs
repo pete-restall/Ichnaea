@@ -1,7 +1,9 @@
 using System;
+using NullGuard;
 
 namespace Restall.Ichnaea.Demo.Web.Accounts
 {
+	[NullGuard(ValidationFlags.None)]
 	public class AccountSummary
 	{
 		public Guid Id { get; set; }

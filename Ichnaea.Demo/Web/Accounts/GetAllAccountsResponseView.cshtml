@@ -14,7 +14,7 @@
 			<tbody>
 				@foreach (var account in @Model.Accounts)
 				{
-					<tr><td><a href="@account.GetDetailsUri">@account.SortCode / @account.AccountNumber</a></td><td>account.Holder</td></tr>
+					<tr><td><a href="@account.GetDetailsUri">@account.SortCode / @account.AccountNumber</a></td><td>@account.Holder</td></tr>
 				}
 			</tbody>
 		</table>

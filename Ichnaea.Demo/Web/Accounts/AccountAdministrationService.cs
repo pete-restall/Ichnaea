@@ -38,14 +38,14 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 			}
 			catch (ConcurrencyException)
 			{
-				return IncompleteOpenAccountResponse(request, "Account Already Exists.");
+				return IncompleteOpenAccountResponse(request, "Account already exists.");
 			}
 
 			var surrogateId = new AccountIdSurrogate(Guid.NewGuid(), request.SortCode, request.AccountNumber);
-			this.documents.Store(surrogateId);
+			this.documents.Store(surrogateId, "AccountIdSurrogates/" + surrogateId.SurrogateId);
 			this.documents.SaveChanges();
 
-			return new OpenAccountResponse { Id = surrogateId.Id };
+			return new OpenAccountResponse { Id = surrogateId.SurrogateId };
 		}
 
 		private object IncompleteOpenAccountResponse(OpenAccountRequest request, string message)
