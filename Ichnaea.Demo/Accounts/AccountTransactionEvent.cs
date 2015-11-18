@@ -8,6 +8,8 @@ namespace Restall.Ichnaea.Demo.Accounts
 			this.Description = description;
 		}
 
+		protected AccountTransactionEvent() { }
+
 		public decimal Amount { get; }
 
 		public string Description { get; }

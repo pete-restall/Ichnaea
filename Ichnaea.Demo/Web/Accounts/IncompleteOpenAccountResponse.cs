@@ -7,5 +7,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 		public OpenAccountRequest Request { get; set; }
 
 		public Uri OpenAccountUri { get; set; }
+
+		public string Message { get; set; }
 	}
 }

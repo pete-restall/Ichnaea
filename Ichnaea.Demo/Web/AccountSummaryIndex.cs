@@ -17,11 +17,11 @@ namespace Restall.Ichnaea.Demo.Web
 				let surrogate = this.LoadDocument<AccountIdSurrogate>(commit.StreamId)
 				select new
 					{
-						Id = surrogate.SurrogateId,
+						Id = surrogate.Id,
 						surrogate.SortCode,
 						surrogate.AccountNumber,
 						((AccountOpened) commit.Payload.First().Body).Holder,
-						GetDetailsUri = new Uri("/accounts/" + surrogate.SurrogateId, UriKind.Relative)
+						GetDetailsUri = new Uri("/accounts/" + surrogate.Id, UriKind.Relative)
 					};
 		}
 	}

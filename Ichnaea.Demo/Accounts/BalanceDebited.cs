@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Restall.Ichnaea.Demo.Accounts
 {
 	public class BalanceDebited: AccountTransactionEvent
@@ -6,5 +8,8 @@ namespace Restall.Ichnaea.Demo.Accounts
 			base(amount, description)
 		{
 		}
+
+		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "JSON Serialisation")]
+		private BalanceDebited() { }
 	}
 }

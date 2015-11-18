@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Restall.Ichnaea.Demo.Accounts
 {
 	public class BalanceDebitRejected: AccountTransactionEvent
@@ -7,6 +9,9 @@ namespace Restall.Ichnaea.Demo.Accounts
 		{
 			this.Reason = reason;
 		}
+
+		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "JSON Serialisation")]
+		private BalanceDebitRejected() { }
 
 		public string Reason { get; }
 	}

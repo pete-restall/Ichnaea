@@ -44,6 +44,7 @@ namespace Restall.Ichnaea.Demo.Web
 
 			return Wireup.Init()
 				.With<IPersistStreams>(persistence)
+				.UsingSynchronousDispatchScheduler()
 				.Build();
 		}
 

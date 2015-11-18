@@ -207,6 +207,7 @@
     <Compile Include="Web\IchnaeaBootstrapper.cs" />
     <Compile Include="Web\RouteLinks.cs" />
     <Compile Include="Web\ServiceModule.cs" />
+    <Compile Include="Web\StringHtmlEncodingExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

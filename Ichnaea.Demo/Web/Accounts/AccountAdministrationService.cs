@@ -1,4 +1,5 @@
 using System;
+using NEventStore;
 using Raven.Client;
 using Restall.Ichnaea.Demo.Accounts;
 using Restall.Ichnaea.NEventStore;
@@ -26,23 +27,35 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 		public object OpenAccount(OpenAccountRequest request)
 		{
 			if (request.SortCode == null || request.AccountNumber == null || request.Holder == null)
-			{
-				return new IncompleteOpenAccountResponse
-					{
-						Request = request,
-						OpenAccountUri = this.links.Relative("OpenAccount")
-					};
-			}
+				return IncompleteOpenAccountResponse(request, "Enter all Account details.");
 
 			var account = this.factory.Create(request.SortCode, request.AccountNumber, request.Holder);
 			this.repository.Add(account);
-			this.eventStore.Commit();
+
+			try
+			{
+				this.eventStore.Commit();
+			}
+			catch (ConcurrencyException)
+			{
+				return IncompleteOpenAccountResponse(request, "Account Already Exists.");
+			}
 
 			var surrogateId = new AccountIdSurrogate(Guid.NewGuid(), request.SortCode, request.AccountNumber);
-			this.documents.Store(surrogateId, surrogateId.SurrogateId.ToString()); // TODO: ToString() WORKS, BUT IT'D BE BETTER TO USE THE GUID AS THE ETAG, TOO...
+			this.documents.Store(surrogateId);
 			this.documents.SaveChanges();
 
-			return new OpenAccountResponse { Id = surrogateId.SurrogateId };
+			return new OpenAccountResponse { Id = surrogateId.Id };
+		}
+
+		private object IncompleteOpenAccountResponse(OpenAccountRequest request, string message)
+		{
+			return new IncompleteOpenAccountResponse
+				{
+					Request = request,
+					OpenAccountUri = this.links.Relative("OpenAccount"),
+					Message = message
+				};
 		}
 	}
 }

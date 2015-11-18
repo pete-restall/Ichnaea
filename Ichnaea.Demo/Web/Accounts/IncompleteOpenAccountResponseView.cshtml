@@ -6,20 +6,21 @@
 	</head>
 
 	<body>
+		<p>@Model.Message</p>
 		<form method="POST" action="@Model.OpenAccountUri">
 			<fieldset>
 				<legend>Bank Account Details</legend>
 				<div>
 					<label for="SortCode">Sort Code:</label>
-					<input type="text" maxlength="8" required="" name="SortCode" />
+					<input type="text" maxlength="8" required="" name="SortCode" value="@Model.Request.SortCode.InHtmlAttribute()" />
 				</div>
 				<div>
 					<label for="AccountNumber">Account Number:</label>
-					<input type="text" maxlength="8" required="" name="AccountNumber" />
+					<input type="text" maxlength="8" required="" name="AccountNumber" value="@Model.Request.AccountNumber.InHtmlAttribute()" />
 				</div>
 				<div>
 					<label for="Holder">Name of Account Holder:</label>
-					<input type="text" maxlength="8" required="" name="Holder" />
+					<input type="text" maxlength="32" required="" name="Holder" value="@Model.Request.Holder.InHtmlAttribute()" />
 				</div>
 			</fieldset>
 			<button type="submit">Open Account</button>

@@ -1,4 +1,6 @@
-﻿namespace Restall.Ichnaea.Demo.Accounts
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Restall.Ichnaea.Demo.Accounts
 {
 	public class AccountOpened: AccountEvent
 	{
@@ -8,6 +10,9 @@
 			this.AccountNumber = id.AccountNumber;
 			this.Holder = holder;
 		}
+
+		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "JSON Serialisation")]
+		private AccountOpened() { }
 
 		public string SortCode { get; }
 
