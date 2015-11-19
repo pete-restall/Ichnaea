@@ -1,7 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using FluentAssertions;
+using Restall.Ichnaea.Tests.Unit.Stubs;
 using Xunit;
 
 namespace Restall.Ichnaea.Tests.Unit
@@ -20,16 +19,6 @@ namespace Restall.Ichnaea.Tests.Unit
 			public DefaultExceptionProperties()
 			{
 				this.Message = ExceptionMessage.Default<DomainEventStreamCannotBeReplayedException>();
-			}
-		}
-
-		private class NonSerialisableTypeWithRandomToString
-		{
-			private readonly string toString = StringGenerator.AnyNonNull();
-
-			public override string ToString()
-			{
-				return this.toString;
 			}
 		}
 

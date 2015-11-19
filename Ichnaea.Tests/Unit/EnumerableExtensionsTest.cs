@@ -25,7 +25,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		[Fact]
 		public void ForEach_CalledWithAnyNumberOfItems_ExpectActionIsAppliedToEachItemInOrder()
 		{
-			var items = new object[new Random().Next(0, 10)];
+			var items = new object[IntegerGenerator.WithinExclusiveRange(0, 10)];
 			for (int i = 0; i < items.Length; i++)
 				items[i] = new object();
 

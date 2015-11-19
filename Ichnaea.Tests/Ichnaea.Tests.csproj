@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collect.cs" />
+    <Compile Include="EnumerableTestDoubles.cs" />
     <Compile Include="Info.cs" />
     <Compile Include="PrePersistenceDomainEventTrackerTestDoubles.cs" />
     <Compile Include="EnumerableExtensions.cs" />
@@ -86,6 +87,8 @@
     <Compile Include="Unit\AggregateRootIdPropertyNotFoundExceptionAssertionExtensions.cs" />
     <Compile Include="Unit\AggregateRootIdPropertyNotFoundExceptionTest.cs" />
     <Compile Include="Unit\DisposableContainerTest.cs" />
+    <Compile Include="Unit\DomainEventReplayChainTest.cs" />
+    <Compile Include="Unit\DomainEventCannotBeReplayedExceptionTest.cs" />
     <Compile Include="Unit\ExceptionTest.cs" />
     <Compile Include="Unit\DomainEventFunnelTest.cs" />
     <Compile Include="Unit\DomainEventStreamCannotBeReplayedExceptionTest.cs" />
@@ -109,6 +112,7 @@
     <Compile Include="Unit\Stubs\AggregateRootWithShadowedId.cs" />
     <Compile Include="Unit\Stubs\AggregateRootWithShadowedIdBase.cs" />
     <Compile Include="Unit\Stubs\AggregateRootWithTwoDomainEvents.cs" />
+    <Compile Include="Unit\Stubs\NonSerialisableTypeWithRandomToString.cs" />
     <Compile Include="Unit\TypedPropertyAggregateRootIdGetterTest.cs" />
   </ItemGroup>
   <ItemGroup>
