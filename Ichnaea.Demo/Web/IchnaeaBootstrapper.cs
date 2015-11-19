@@ -11,9 +11,12 @@ namespace Restall.Ichnaea.Demo.Web
 		public static void RegisterRequestScopeIchnaeaDependenciesInto(TinyIoCContainer container)
 		{
 			// TODO: PROPER FLUENT / CONVENTION-BASED CONFIGURATION
-			// TODO: CREATE A CHAIN OF RESPONSIBILITY IN THE Ichnaea ASSEMBLY, TAKING AN IEnumerable<>
 			// TODO: CREATE AN IdAttribute AND AN IdAttributeAggregateRootIdGetter CLASS
-			container.RegisterAggregateRoot(new NamedPropertyAggregateRootIdGetter<Account, AccountId>("Id"), new AccountOpenedReplay());
+			container.RegisterAggregateRoot(
+				new NamedPropertyAggregateRootIdGetter<Account, AccountId>("Id"),
+				new DomainEventReplayChain<Account>(
+					new AccountOpenedReplay(),
+					new BalanceCreditedReplay()));
 		}
 
 		private static void RegisterAggregateRoot<TAggregateRoot, TAggregateRootId>(
