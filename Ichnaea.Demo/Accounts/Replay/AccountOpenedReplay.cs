@@ -1,22 +1,14 @@
-﻿using System;
-using NullGuard;
-
-namespace Restall.Ichnaea.Demo.Accounts.Replay
+﻿namespace Restall.Ichnaea.Demo.Accounts.Replay
 {
-	public class AccountOpenedReplay: IReplayDomainEvents<Account>
+	public class AccountOpenedReplay: TypedDomainEventReplay<Account, AccountOpened>
 	{
-		public bool CanReplay([AllowNull] Account aggregateRoot, object domainEvent)
+		public AccountOpenedReplay(): base(false)
 		{
-			return aggregateRoot == null && domainEvent is AccountOpened;
 		}
 
-		public Account Replay([AllowNull] Account aggregateRoot, object domainEvent)
+		protected override Account Replay(Account aggregateRoot, AccountOpened domainEvent)
 		{
-			if (!this.CanReplay(aggregateRoot, domainEvent))
-				throw new ArgumentException("Cannot replay Domain Event of type " + domainEvent.GetType(), nameof(domainEvent));
-
-			var accountOpened = (AccountOpened) domainEvent;
-			return new Account(new AccountId(accountOpened.SortCode, accountOpened.AccountNumber), accountOpened.Holder);
+			return new Account(new AccountId(domainEvent.SortCode, domainEvent.AccountNumber), domainEvent.Holder);
 		}
 	}
 }

@@ -1,23 +1,10 @@
-﻿using System;
-using NullGuard;
-
-namespace Restall.Ichnaea.Demo.Accounts.Replay
+﻿namespace Restall.Ichnaea.Demo.Accounts.Replay
 {
-	// TODO: CREATE ABSTRACT BASE CLASS (IN ICHNAEA ASSEMBLY) FOR STRONGLY TYPED DOMAIN EVENTS
-	public class BalanceCreditedReplay: IReplayDomainEvents<Account>
+	public class BalanceCreditedReplay: TypedDomainEventReplay<Account, BalanceCredited>
 	{
-		public bool CanReplay([AllowNull] Account aggregateRoot, object domainEvent)
+		protected override Account Replay(Account aggregateRoot, BalanceCredited domainEvent)
 		{
-			return aggregateRoot != null && domainEvent is BalanceCreditedReplay;
-		}
-
-		public Account Replay([AllowNull] Account aggregateRoot, object domainEvent)
-		{
-			if (!this.CanReplay(aggregateRoot, domainEvent))
-				throw new ArgumentException("Cannot replay Domain Event of type " + domainEvent.GetType(), nameof(domainEvent));
-
-			var balanceCredited = (BalanceCredited) domainEvent;
-			aggregateRoot.Credit(balanceCredited.Amount, balanceCredited.Description);
+			aggregateRoot.Credit(domainEvent.Amount, domainEvent.Description);
 			return aggregateRoot;
 		}
 	}

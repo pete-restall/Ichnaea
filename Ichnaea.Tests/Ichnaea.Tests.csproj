@@ -113,6 +113,7 @@
     <Compile Include="Unit\Stubs\AggregateRootWithShadowedIdBase.cs" />
     <Compile Include="Unit\Stubs\AggregateRootWithTwoDomainEvents.cs" />
     <Compile Include="Unit\Stubs\NonSerialisableTypeWithRandomToString.cs" />
+    <Compile Include="Unit\TypedDomainEventReplayTest.cs" />
     <Compile Include="Unit\TypedPropertyAggregateRootIdGetterTest.cs" />
   </ItemGroup>
   <ItemGroup>

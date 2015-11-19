@@ -71,6 +71,7 @@
     <Compile Include="SerializationInfoExtensions.cs" />
     <Compile Include="Source.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypedDomainEventReplay.cs" />
     <Compile Include="TypedPropertyAggregateRootIdGetter.cs" />
   </ItemGroup>
   <ItemGroup>

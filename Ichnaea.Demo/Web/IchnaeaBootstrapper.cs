@@ -12,11 +12,15 @@ namespace Restall.Ichnaea.Demo.Web
 		{
 			// TODO: PROPER FLUENT / CONVENTION-BASED CONFIGURATION
 			// TODO: CREATE AN IdAttribute AND AN IdAttributeAggregateRootIdGetter CLASS
+			// TODO: ADD AN IgnoredDomainEventReplay<TDomainEventType>, FOR HANDLING SUCH CASES AS OverdraftAdjustmentRejected
 			container.RegisterAggregateRoot(
 				new NamedPropertyAggregateRootIdGetter<Account, AccountId>("Id"),
 				new DomainEventReplayChain<Account>(
 					new AccountOpenedReplay(),
-					new BalanceCreditedReplay()));
+					new BalanceCreditedReplay(),
+					new BalanceCreditedReplay(),
+					new BalanceDebitedReplay(),
+					new OverdraftAdjustedReplay()));
 		}
 
 		private static void RegisterAggregateRoot<TAggregateRoot, TAggregateRootId>(

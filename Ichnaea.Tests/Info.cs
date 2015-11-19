@@ -20,5 +20,9 @@ namespace Restall.Ichnaea.Tests
 		{
 			return PropertyInfo(accessor.Body);
 		}
+		public static MethodInfo OfMethod<T>(Expression<Action<T>> accessor)
+		{
+			return ((MethodCallExpression) accessor.Body).Method;
+		}
 	}
 }

@@ -183,6 +183,8 @@
     <Compile Include="Accounts\AccountFactory.cs" />
     <Compile Include="Accounts\OverdraftAdjusted.cs" />
     <Compile Include="Accounts\OverdraftAdjustmentRejected.cs" />
+    <Compile Include="Accounts\Replay\OverdraftAdjustedReplay.cs" />
+    <Compile Include="Accounts\Replay\BalanceDebitedReplay.cs" />
     <Compile Include="Accounts\Replay\BalanceCreditedReplay.cs" />
     <Compile Include="Accounts\Replay\AccountOpenedReplay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
