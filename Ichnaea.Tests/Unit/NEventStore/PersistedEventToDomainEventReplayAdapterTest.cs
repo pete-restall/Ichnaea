@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using NEventStore;
 using NSubstitute;
@@ -11,6 +12,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 	public class PersistedEventToDomainEventReplayAdapterTest
 	{
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullPersistedEventToDomainEventConverter_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new PersistedEventToDomainEventReplayAdapter<object>(null, DummyEventReplay());
@@ -23,6 +25,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullDomainEventReplay_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new PersistedEventToDomainEventReplayAdapter<object>(DummyEventConverter, null);

@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeAnalysisJustification.cs" />
     <Compile Include="Collect.cs" />
     <Compile Include="EnumerableTestDoubles.cs" />
     <Compile Include="Info.cs" />

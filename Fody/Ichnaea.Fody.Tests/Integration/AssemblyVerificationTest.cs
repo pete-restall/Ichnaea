@@ -44,6 +44,9 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 						CreateNoWindow = true
 					});
 
+			if (process == null)
+				throw new InvalidOperationException("Process.Start() returned null !");
+
 			process.WaitForExit(ReasonablePeVerifyTimeoutMilliseconds).Should().BeTrue("because PEVerify.exe shouldn't have taken so long");
 			return process;
 		}

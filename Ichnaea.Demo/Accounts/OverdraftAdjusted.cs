@@ -9,7 +9,7 @@ namespace Restall.Ichnaea.Demo.Accounts
 			this.Amount = amount;
 		}
 
-		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "JSON Serialisation")]
+		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = CodeAnalysisJustification.JsonSerialisation)]
 		private OverdraftAdjusted() { }
 
 		public decimal Amount { get; private set; }

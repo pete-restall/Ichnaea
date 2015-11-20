@@ -96,6 +96,6 @@ namespace Restall.Ichnaea.Fody
 			return eventSourcingMethod;
 		}
 
-		public ModuleDefinition ModuleDefinition { get; set; }
+		public ModuleDefinition ModuleDefinition { private get; set; }
 	}
 }

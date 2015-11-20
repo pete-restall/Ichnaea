@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
 using NEventStore;
@@ -13,6 +14,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 	public class NEventStoreSessionTest
 	{
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullEventStore_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new NEventStoreSession(null);

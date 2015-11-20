@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using NEventStore;
 using NSubstitute;
@@ -10,6 +11,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 	public class DomainEventStreamAdapterTest
 	{
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullPersistedEventStreamCreator_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventStreamAdapter<object, string>(null, DummyPersistedEventStreamOpener());
@@ -33,6 +35,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullPersistedEventStreamOpener_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventStreamAdapter<object, string>(DummyPersistedEventStreamCreator(), null);

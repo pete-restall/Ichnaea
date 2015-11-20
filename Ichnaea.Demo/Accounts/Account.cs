@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Restall.Ichnaea.Demo.Accounts
 {
@@ -67,6 +68,7 @@ namespace Restall.Ichnaea.Demo.Accounts
 
 		public decimal Overdraft { get; private set; }
 
+		[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global", Justification = CodeAnalysisJustification.IchnaeaSubscribes)]
 		public event Source.Of<AccountEvent> EventSource;
 	}
 }

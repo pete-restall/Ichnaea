@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Xunit;
 
@@ -8,6 +9,7 @@ namespace Restall.Ichnaea.Tests.Unit
 	public class EnumerableExtensionsTest
 	{
 		[Fact]
+		[SuppressMessage("ReSharper", "ExpressionIsAlwaysNull", Justification = CodeAnalysisJustification.TestingNullBehaviour)]
 		public void ForEach_CalledWithNullSource_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			IEnumerable<object> nullEnumerable = null;

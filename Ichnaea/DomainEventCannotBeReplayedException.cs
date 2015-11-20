@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using NullGuard;
 
@@ -8,14 +9,17 @@ namespace Restall.Ichnaea
 	[NullGuard(ValidationFlags.None)]
 	public class DomainEventCannotBeReplayedException: Exception
 	{
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.ExceptionPola)]
 		public DomainEventCannotBeReplayedException()
 		{
 		}
 
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.ExceptionPola)]
 		public DomainEventCannotBeReplayedException(string message): base(message)
 		{
 		}
 
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.ExceptionPola)]
 		public DomainEventCannotBeReplayedException(string message, Exception innerException)
 			: base(message, innerException)
 		{

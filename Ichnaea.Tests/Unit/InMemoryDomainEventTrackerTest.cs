@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
 using NSubstitute;
@@ -11,6 +12,7 @@ namespace Restall.Ichnaea.Tests.Unit
 	public class InMemoryDomainEventTrackerTest
 	{
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullPostPersistenceDomainEventTracker_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new InMemoryDomainEventTracker<object>(null);

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using NSubstitute;
 using Restall.Ichnaea.Tests.Unit.Stubs;
@@ -7,15 +8,19 @@ using Xunit.Extensions;
 
 namespace Restall.Ichnaea.Tests.Unit
 {
+	[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = CodeAnalysisJustification.DynamicProxyRequiresPublicTypes)]
 	public class TypedDomainEventReplayTest
 	{
 		public class DomainEvent
 		{
 		}
+
 		public class DerivedDomainEvent: DomainEvent
 		{
 		}
 
+		[SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global", Justification = CodeAnalysisJustification.ParticipatesInPartialMocking)]
+		[SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = CodeAnalysisJustification.ParticipatesInPartialMocking)]
 		public class ConcreteTypedDomainEventReplay: TypedDomainEventReplay<AggregateRootWithPrivateId, DomainEvent>
 		{
 			public ConcreteTypedDomainEventReplay()

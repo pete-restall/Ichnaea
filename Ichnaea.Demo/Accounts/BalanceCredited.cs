@@ -9,7 +9,7 @@ namespace Restall.Ichnaea.Demo.Accounts
 		{
 		}
 
-		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "JSON Serialisation")]
+		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = CodeAnalysisJustification.JsonSerialisation)]
 		private BalanceCredited() { }
 	}
 }

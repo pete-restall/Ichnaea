@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AggregateRootWithSingleEvent.cs" />
+    <Compile Include="CodeAnalysisJustification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SomethingHappened.cs" />
   </ItemGroup>

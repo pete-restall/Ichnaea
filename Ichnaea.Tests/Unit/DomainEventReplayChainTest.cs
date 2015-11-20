@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using FluentAssertions;
@@ -45,6 +46,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullEnumerableReplayChain_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventReplayChain<object>((IEnumerable<IReplayDomainEvents<object>>) null);
@@ -52,9 +54,11 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
+		[SuppressMessage("ReSharper", "RedundantCast", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullParamsReplayChain_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new DomainEventReplayChain<object>((IReplayDomainEvents<object>[]) null);
+			Action constructor = () => new DomainEventReplayChain<object>(null as IReplayDomainEvents<object>[]);
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("replayChain");
 		}
 

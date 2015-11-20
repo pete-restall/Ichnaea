@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Restall.Ichnaea.Tests.Unit.Stubs
 {
 	public class AggregateRootWithProtectedId
@@ -9,6 +11,7 @@ namespace Restall.Ichnaea.Tests.Unit.Stubs
 			this.Id = id;
 		}
 
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = CodeAnalysisJustification.StubForTesting)]
 		protected string Id { get; }
 	}
 }

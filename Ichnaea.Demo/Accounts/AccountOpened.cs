@@ -11,7 +11,7 @@ namespace Restall.Ichnaea.Demo.Accounts
 			this.Holder = holder;
 		}
 
-		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = "JSON Serialisation")]
+		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = CodeAnalysisJustification.JsonSerialisation)]
 		private AccountOpened() { }
 
 		public string SortCode { get; private set; }

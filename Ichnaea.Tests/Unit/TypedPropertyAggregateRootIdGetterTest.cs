@@ -6,18 +6,20 @@ using Xunit;
 
 namespace Restall.Ichnaea.Tests.Unit
 {
-	[SuppressMessage("ReSharper", "UnusedMember.Local")]
 	public class TypedPropertyAggregateRootIdGetterTest
 	{
+		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 		private class AggregateRoot
 		{
 			public static decimal StaticDecimalProperty { get; set; }
 
+			[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 			public object ObjectProperty { get; set; }
 
 			public string StringProperty { get; set; }
 		}
 
+		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 		private class AggregateRootWithSameIdTypesAndVisibility
 		{
 			public decimal DecimalProperty1 { get; set; }
@@ -25,6 +27,7 @@ namespace Restall.Ichnaea.Tests.Unit
 			public decimal DecimalProperty2 { get; set; }
 		}
 
+		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 		private class AggregateRootWithSameIdTypesAndDifferentVisibility
 		{
 			public Guid PublicGuidProperty { get; set; }
@@ -33,6 +36,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWhenAggregateRootTypeDoesNotHavePropertyWithIdType_ExpectAggregateRootIdNotFoundExceptionWithCorrectTypes()
 		{
 			Action constructor = () => new TypedPropertyAggregateRootIdGetter<AggregateRoot, int>();
@@ -40,6 +44,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWhenPropertyIsStatic_ExpectAggregateRootIdNotFoundExceptionWithCorrectTypes()
 		{
 			Action constructor = () => new TypedPropertyAggregateRootIdGetter<AggregateRoot, decimal>();
@@ -47,6 +52,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWhenMultiplePropertiesOfCorrectTypeAndSameVisibility_ExpectAggregateRootIdNotFoundExceptionWithCorrectTypes()
 		{
 			Action constructor = () => new TypedPropertyAggregateRootIdGetter<AggregateRootWithSameIdTypesAndVisibility, decimal>();
@@ -54,6 +60,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWhenMultiplePropertiesOfCorrectTypeAndDifferentVisibility_ExpectAggregateRootIdNotFoundExceptionWithCorrectTypes()
 		{
 			Action constructor = () => new TypedPropertyAggregateRootIdGetter<AggregateRootWithSameIdTypesAndDifferentVisibility, Guid>();

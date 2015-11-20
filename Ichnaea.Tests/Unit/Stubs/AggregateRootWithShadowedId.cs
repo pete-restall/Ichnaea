@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Restall.Ichnaea.Tests.Unit.Stubs
 {
 	public class AggregateRootWithShadowedId: AggregateRootWithShadowedIdBase
@@ -9,6 +11,7 @@ namespace Restall.Ichnaea.Tests.Unit.Stubs
 			this.Id = derivedId;
 		}
 
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = CodeAnalysisJustification.StubForTesting)]
 		public new string Id { get; }
 	}
 }

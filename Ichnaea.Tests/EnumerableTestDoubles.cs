@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using NSubstitute;
 
 namespace Restall.Ichnaea.Tests
@@ -10,6 +11,7 @@ namespace Restall.Ichnaea.Tests
 			return Mock(new T[0]);
 		}
 
+		[SuppressMessage("ReSharper", "PossibleMultipleEnumeration", Justification = CodeAnalysisJustification.TestingMultipleEnumerations)]
 		public static IEnumerable<T> Mock<T>(params T[] enumerable)
 		{
 			var mock = Substitute.For<IEnumerable<T>>();

@@ -52,6 +52,7 @@
     <Compile Include="AggregateRootAlreadyBeingTrackedException.cs" />
     <Compile Include="AggregateRootAttribute.cs" />
     <Compile Include="AggregateRootIdPropertyNotFoundException.cs" />
+    <Compile Include="CodeAnalysisJustification.cs" />
     <Compile Include="DisposableContainer.cs" />
     <Compile Include="DomainEventReplayChain.cs" />
     <Compile Include="DomainEventCannotBeReplayedException.cs" />

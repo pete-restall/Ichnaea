@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
 using NEventStore;
@@ -13,6 +14,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 	public class NEventStoreSessionStreamTest
 	{
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullEventStreamsInSession_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new NEventStoreSessionStream(null, DummyEventStream());
@@ -25,6 +27,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullEventStream_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new NEventStoreSessionStream(DummyEventStreamsInSession(), null);

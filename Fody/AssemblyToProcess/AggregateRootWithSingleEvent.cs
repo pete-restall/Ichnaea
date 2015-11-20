@@ -5,7 +5,7 @@ using System.Threading;
 namespace Restall.Ichnaea.Fody.AssemblyToProcess
 {
 	[AggregateRoot]
-	[SuppressMessage("ReSharper", "UnusedMember.Global")]
+	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.StubForTesting)]
 	public class AggregateRootWithSingleEvent
 	{
 		public void DoSomething(Guid token)
@@ -35,7 +35,7 @@ namespace Restall.Ichnaea.Fody.AssemblyToProcess
 			return somethingToCauseManipulation;
 		}
 
-		[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global")]
+		[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global", Justification = CodeAnalysisJustification.IchnaeaSubscribes)]
 		public event Source.Of<SomethingHappened> EventSource;
 	}
 }

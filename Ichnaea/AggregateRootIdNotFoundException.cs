@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using NullGuard;
 
@@ -12,10 +13,12 @@ namespace Restall.Ichnaea
 		{
 		}
 
+		[SuppressMessage("ReSharper", "MemberCanBeProtected.Global", Justification = CodeAnalysisJustification.ExceptionPola)]
 		public AggregateRootIdNotFoundException(string message): base(message)
 		{
 		}
 
+		[SuppressMessage("ReSharper", "MemberCanBeProtected.Global", Justification = CodeAnalysisJustification.ExceptionPola)]
 		public AggregateRootIdNotFoundException(string message, Exception innerException)
 			: base(message, innerException)
 		{

@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Restall.Ichnaea.Tests.Unit.Stubs
 {
-	[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global")]
+	[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global", Justification = Ichnaea.CodeAnalysisJustification.IchnaeaSubscribes)]
 	public class AggregateRootWithTwoDomainEvents
 	{
 		public void SourceFirstDomainEvent(object domainEvent)

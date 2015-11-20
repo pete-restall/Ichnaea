@@ -8,7 +8,7 @@ namespace Restall.Ichnaea.Fody.Tests
 {
 	public static class EventRecorderAssertionExtensions
 	{
-		public static IEventRecorder WithDomainEvent<T>(
+		public static void WithDomainEvent<T>(
 			this IEventRecorder eventRecorder,
 			object aggregate,
 			Expression<Func<T, bool>> predicate,
@@ -24,8 +24,6 @@ namespace Restall.Ichnaea.Fody.Tests
 				.ForCondition(events.Select(x => x.Args[1]).OfType<T>().Any(matchingPredicate))
 				.BecauseOf(because, reasonArgs)
 				.FailWith("Expected Domain Event of type {0} matching {1}{reason}", typeof(T), predicate);
-
-			return eventRecorder;
 		}
 	}
 }

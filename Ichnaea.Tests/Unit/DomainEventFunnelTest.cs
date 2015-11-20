@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
@@ -92,6 +93,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullObservable_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventFunnel(null, (sender, args) => { });
@@ -99,6 +101,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullObserver_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new DomainEventFunnel(new object(), null);

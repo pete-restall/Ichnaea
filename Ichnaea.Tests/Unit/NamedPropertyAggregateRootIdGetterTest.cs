@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Restall.Ichnaea.Tests.Unit.Stubs;
 using Xunit;
@@ -17,6 +18,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullPropertyName_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new NamedPropertyAggregateRootIdGetter<AggregateRoot, object>(null);
@@ -24,6 +26,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWhenPropertyDoesNotExist_ExpectAggregateRootIdPropertyNotFoundExceptionWithCorrectPropertyNameAndTypes()
 		{
 			var propertyName = DummyPropertyName();
@@ -37,6 +40,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWhenPropertyIsDifferentButCastableType_ExpectAggregateRootIdPropertyNotFoundExceptionWithCorrectPropertyNameAndTypes()
 		{
 			var propertyName = Info.OfProperty<AggregateRoot>(x => x.StringProperty).Name;
@@ -45,6 +49,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWhenPropertyIsStatic_ExpectAggregateRootIdPropertyNotFoundExceptionWithCorrectPropertyNameAndTypes()
 		{
 			var propertyName = Info.OfProperty(() => AggregateRoot.StaticObjectProperty).Name;

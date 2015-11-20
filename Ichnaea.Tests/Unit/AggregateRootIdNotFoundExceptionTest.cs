@@ -9,7 +9,7 @@ namespace Restall.Ichnaea.Tests.Unit
 
 	public class AggregateRootIdNotFoundExceptionTest: ExceptionTest
 	{
-		[SuppressMessage("ReSharper", "UnusedMember.Global")]
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.ReflectivePropertyComparison)]
 		public new class ExceptionProperties: ExceptionTest.ExceptionProperties
 		{
 			public Type AggregateRootType { get; set; }
@@ -26,6 +26,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullAggregateRootType_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new AggregateRootIdNotFoundException(null, DummyType());
@@ -38,6 +39,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullAggregateRootIdType_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new AggregateRootIdNotFoundException(DummyType(), null);
