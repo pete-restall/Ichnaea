@@ -7,7 +7,7 @@ namespace Restall.Ichnaea.Tests
 	{
 		public static IEnumerable<T> Mock<T>()
 		{
-			return Mock<T>(new T[0]);
+			return Mock(new T[0]);
 		}
 
 		public static IEnumerable<T> Mock<T>(params T[] enumerable)

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using NEventStore;
 using NEventStore.Persistence.RavenDB;
 using Raven.Abstractions.Indexing;
-using Raven.Client.Connection;
-using Raven.Client.Document;
 using Raven.Client.Indexes;
 using Restall.Ichnaea.Demo.Accounts;
 using Restall.Ichnaea.Demo.Web.Accounts;

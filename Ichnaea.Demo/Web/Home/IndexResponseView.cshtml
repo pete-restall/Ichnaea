@@ -6,11 +6,69 @@
 	</head>
 
 	<body>
-		<p>
-			An example of using Ichnaea to track Aggregates in a Domain Driven Design application.
-		</p>
-		<p>
-			Click <a href="@Model.GetAllAccountsUri">here</a> to list all Accounts.
-		</p>
+		<section>
+			<h1>Ichnaea.Demo</h1>
+			<p>
+				<em>An understanding of Domain Driven Design and Event Sourcing is presumed.</em>
+			</p>
+			<p>
+				This application is an example of how Ichnaea can be used to track Aggregate Roots in a Domain Driven Design application.
+			</p>
+			<p>
+				Ichnaea is an unobtrusive Aggregate Root tracking library for DDD applications.  It is expressly intended to allow clean implementations
+				of often abused DDD patterns such as Repositories, which are typically implemented in a CRUD-based manner.  CRUD Repositories are
+				contrary to the pattern, which emphasises a Repository's collection-like semantics over its persistence semantics; ie. there is no
+				'Insert' or 'Create'.  Ichnaea uses Event Sourcing, via native .NET Events, to provide this implicit tracking and persistence.
+			</p>
+			<p>
+				The Accounts Domain used in this application is not intended to be realistic model but is supposed to be a stripped-back and overly simplified
+				example to illustrate the key elements of using Ichnaea.
+			</p>
+		</section>
+		<section>
+			<h1>Project Structure</h1>
+			<p>
+				The .NET Ichnaea.Demo Project has the following structure (some items excluded for brevity):
+				<ul>
+					<li>
+						Ichnaea.Demo
+						<ul>
+							<li>
+								Accounts - The Domain Model
+								<ul>
+									<li>
+										Replay - Services to allow Domain Events to be replayed when constructing Aggregate Roots from persistent storage
+										<ul>
+											<li>AccountOpenedReplay - Applies an AccountOpened Domain Event</li>
+										</ul>
+									</li>
+									<li>Account - The Aggregate Root</li>
+									<li>AccountRepository - Accounts can be added to or retrieved from persistent storage</li>
+									<li>AccountFactory - New Accounts are created and given to Ichnaea to track</li>
+									<li>AccountOpened - A Domain Event; note the past tense naming and that it is serialisable</li>
+								</ul>
+							</li>
+							<li>
+								Web - This web-based front-end and application infrastructure
+								<ul>
+									<li>Accounts - Web Services, Views and DTOs that interact with the Domain Model</li>
+									<li>Home - The site's landing page (ie. this page)</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</p>
+			<p>
+				The application is built on Nancy (with Nancy.ServiceRouting for clean convention-based routing), so see Bootstrapper.cs for the global wire-up.  IchnaeaBootstrapper.cs contains the Ichnaea-specific wire-up.
+				NEventStore (using RavenDB) is the persistent store, and is wired up in the DatabaseBootstrapper.cs file.
+			</p>
+		</section>
+		<section>
+			<h1>Get Started !</h1>
+			<p>
+				Click <a href="@Model.GetAllAccountsUri">here</a> to list all Accounts.
+			</p>
+		</section>
 	</body>
 </html>
