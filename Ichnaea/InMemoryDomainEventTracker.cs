@@ -76,7 +76,7 @@ namespace Restall.Ichnaea
 			if (disposing)
 				this.trackedAggregateRoots = new ConditionalWeakTable<TAggregateRoot, TrackingInfo>();
 
-			base.Dispose(true);
+			base.Dispose(disposing);
 		}
 	}
 }

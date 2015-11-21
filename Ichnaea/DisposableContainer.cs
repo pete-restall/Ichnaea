@@ -19,7 +19,6 @@ namespace Restall.Ichnaea
 
 			this.disposables.ForEach(disposable => disposable.Dispose());
 			this.disposables.Clear();
-			GC.SuppressFinalize(this);
 		}
 
 		protected void AddDisposable(IDisposable disposable)
@@ -35,6 +34,7 @@ namespace Restall.Ichnaea
 		public void Dispose()
 		{
 			this.Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 	}
 }
