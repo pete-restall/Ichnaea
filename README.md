@@ -56,4 +56,4 @@ edge-case implementation.  However, there is enough here to be of some use
 to those who are interested, which is why I decided to share.
 
 # Builds
-[![Main CI](https://ci.appveyor.com/api/projects/status/ad199gnwd4lyc6wm)](https://ci.appveyor.com/project/pete-restall/ichnaea)
+[![Main CI](https://ci.appveyor.com/api/projects/status/22147m70ih66dw8i)](https://ci.appveyor.com/project/pete-restall/ichnaea)

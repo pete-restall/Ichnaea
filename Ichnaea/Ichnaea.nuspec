@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>$id$</id>
+		<version>$version$</version>
+		<title>$title$</title>
+		<authors>Pete Restall</authors>
+		<owners>Pete Restall</owners>
+		<licenseUrl>https://github.com/pete-restall/Ichnaea/tree/master/LICENSE</licenseUrl>
+		<projectUrl>https://github.com/pete-restall/Ichnaea/</projectUrl>
+		<iconUrl>http://www.gravatar.com/avatar/833ed0920ea3273180f77ba8cee9bdc6.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>$description$</description>
+		<releaseNotes>Development Release.</releaseNotes>
+		<copyright>Copyright Pete Restall 2015</copyright>
+		<tags>
+			ichnaea
+			aggregate
+			root
+			entity
+			domain
+			driven
+			design
+			ddd
+			model
+			event
+			events
+			source
+			sourcing
+			sourceing
+			track
+			tracking
+			persistent
+			persistence
+			persistant
+			persistance
+			store
+			storing
+			storeing
+			storage
+			storeage
+			eventstore
+			database
+			cqrs
+		</tags>
+	</metadata>
+</package>
