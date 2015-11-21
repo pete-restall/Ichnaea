@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using Raven.Client;
 using Restall.Ichnaea.Demo.Accounts;
 using Restall.Ichnaea.NEventStore;
 
 namespace Restall.Ichnaea.Demo.Web.Accounts
 {
+	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.ReflectedByNancyServiceRouting)]
 	public class AccountTransactionService
 	{
 		private readonly IDocumentSession documents;

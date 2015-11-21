@@ -20,6 +20,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = CodeAnalysisJustification.StubForTesting)]
+		[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 		private class AggregateRootWithSameIdTypesAndVisibility
 		{
 			public decimal DecimalProperty1 { get; set; }
@@ -28,6 +29,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = CodeAnalysisJustification.StubForTesting)]
+		[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 		private class AggregateRootWithSameIdTypesAndDifferentVisibility
 		{
 			public Guid PublicGuidProperty { get; set; }

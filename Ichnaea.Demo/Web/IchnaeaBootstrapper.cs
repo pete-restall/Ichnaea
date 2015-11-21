@@ -65,18 +65,5 @@ namespace Restall.Ichnaea.Demo.Web
 						domainEventReplay
 					)));
 		}
-
-		private class DummyDomainEventReplay<TAggregateRoot>: IReplayDomainEvents<TAggregateRoot> where TAggregateRoot: class
-		{
-			public bool CanReplay(TAggregateRoot aggregateRoot, object domainEvent)
-			{
-				return false;
-			}
-
-			public TAggregateRoot Replay(TAggregateRoot aggregateRoot, object domainEvent)
-			{
-				return null;
-			}
-		}
 	}
 }

@@ -1,4 +1,5 @@
-@inherits NancyRazorViewBase<IncompleteOpenAccountResponse>
+@using Restall.Ichnaea.Demo.Web
+@inherits NancyRazorViewBase<Restall.Ichnaea.Demo.Web.Accounts.IncompleteOpenAccountResponse>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -14,15 +15,15 @@
 					<legend>Bank Account Details</legend>
 					<div>
 						<label for="SortCode">Sort Code:</label>
-						<input type="text" maxlength="8" required="" name="SortCode" value="@Model.Request.SortCode.InHtmlAttribute()" />
+						<input type="text" maxlength="8" required="" id="SortCode" name="SortCode" value="@Model.Request.SortCode.InHtmlAttribute()" />
 					</div>
 					<div>
 						<label for="AccountNumber">Account Number:</label>
-						<input type="text" maxlength="8" required="" name="AccountNumber" value="@Model.Request.AccountNumber.InHtmlAttribute()" />
+						<input type="text" maxlength="8" required="" id="AccountNumber" name="AccountNumber" value="@Model.Request.AccountNumber.InHtmlAttribute()" />
 					</div>
 					<div>
 						<label for="Holder">Name of Account Holder:</label>
-						<input type="text" maxlength="32" required="" name="Holder" value="@Model.Request.Holder.InHtmlAttribute()" />
+						<input type="text" maxlength="32" required="" id="Holder" name="Holder" value="@Model.Request.Holder.InHtmlAttribute()" />
 					</div>
 				</fieldset>
 				<button type="submit">Open Account</button>

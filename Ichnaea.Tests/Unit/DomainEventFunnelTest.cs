@@ -28,6 +28,7 @@ namespace Restall.Ichnaea.Tests.Unit
 				SourceEvent(this.FirstEvent, sender, args);
 			}
 
+			[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 			public event Source.Of<object> FirstEvent;
 		}
 
@@ -38,6 +39,7 @@ namespace Restall.Ichnaea.Tests.Unit
 				SourceEvent(this.SecondEvent, sender, args);
 			}
 
+			[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 			public event Source.Of<object> SecondEvent;
 		}
 
@@ -48,6 +50,7 @@ namespace Restall.Ichnaea.Tests.Unit
 				SourceEvent(this.PrivateEvent, sender, args);
 			}
 
+			[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 			private event Source.Of<object> PrivateEvent;
 
 			public void SourceProtectedEvent(object sender, object args)
@@ -55,6 +58,7 @@ namespace Restall.Ichnaea.Tests.Unit
 				SourceEvent(this.ProtectedEvent, sender, args);
 			}
 
+			[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 			protected event Source.Of<object> ProtectedEvent;
 
 			public void SourceInternalEvent(object sender, object args)
@@ -62,6 +66,7 @@ namespace Restall.Ichnaea.Tests.Unit
 				SourceEvent(this.InternalEvent, sender, args);
 			}
 
+			[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 			internal event Source.Of<object> InternalEvent;
 
 			public void SourceProtectedInternalEvent(object sender, object args)
@@ -69,6 +74,7 @@ namespace Restall.Ichnaea.Tests.Unit
 				SourceEvent(this.ProtectedInternalEvent, sender, args);
 			}
 
+			[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 			protected internal event Source.Of<object> ProtectedInternalEvent;
 		}
 
@@ -79,6 +85,7 @@ namespace Restall.Ichnaea.Tests.Unit
 				RaiseEvent(this.FirstEvent, sender, args);
 			}
 
+			[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 			public event EventHandler<EventArgs> FirstEvent;
 		}
 
@@ -89,6 +96,7 @@ namespace Restall.Ichnaea.Tests.Unit
 				SourceEvent(FirstEvent, sender, args);
 			}
 
+			[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 			public static event Source.Of<object> FirstEvent;
 		}
 

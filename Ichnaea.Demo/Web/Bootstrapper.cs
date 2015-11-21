@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Nancy;
 using Nancy.Conventions;
@@ -8,6 +9,7 @@ using Restall.Nancy.ServiceRouting;
 
 namespace Restall.Ichnaea.Demo.Web
 {
+	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.ReflectedByNancy)]
 	public class Bootstrapper: DefaultNancyBootstrapper
 	{
 		protected override IEnumerable<Func<Assembly, bool>> AutoRegisterIgnoredAssemblies

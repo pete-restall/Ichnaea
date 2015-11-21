@@ -278,6 +278,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void CreateFrom_CalledWithMultipleAggregateRoots_ExpectDomainEventsAreSentToCorrespondingStreams()
 		{
 			int numberOfAggregateRoots = IntegerGenerator.WithinExclusiveRange(2, 10);
@@ -309,6 +310,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Dispose_Called_ExpectCreatedEventStoreStreamsAreDisposed()
 		{
 			var eventStoreStreams = MockAtLeastOneEventStoreStream();
@@ -337,6 +339,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Dispose_CalledMultipleTimes_ExpectCreatedEventStoreStreamsAreNotDisposedMoreThanOnce()
 		{
 			var eventStoreStreams = MockAtLeastOneEventStoreStream();

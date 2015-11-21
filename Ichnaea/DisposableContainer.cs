@@ -9,7 +9,7 @@ namespace Restall.Ichnaea
 
 		~DisposableContainer()
 		{
-			Dispose(false);
+			this.Dispose(false);
 		}
 
 		protected virtual void Dispose(bool disposing)
@@ -34,7 +34,7 @@ namespace Restall.Ichnaea
 
 		public void Dispose()
 		{
-			Dispose(true);
+			this.Dispose(true);
 		}
 	}
 }

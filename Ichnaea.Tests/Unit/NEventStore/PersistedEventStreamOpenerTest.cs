@@ -499,6 +499,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Dispose_Called_ExpectOpenedEventStoreStreamsAreDisposed()
 		{
 			var eventStoreStreams = MockAtLeastOneEventStoreStreamEachStubbedForAtLeastOneCommittedEvent();
@@ -537,6 +538,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Dispose_CalledMultipleTimes_ExpectCreatedEventStoreStreamsAreNotDisposedMoreThanOnce()
 		{
 			var eventStoreStreams = MockAtLeastOneEventStoreStreamEachStubbedForAtLeastOneCommittedEvent();

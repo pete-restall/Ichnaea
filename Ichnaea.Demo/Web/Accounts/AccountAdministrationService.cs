@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using NEventStore;
 using Raven.Client;
 using Restall.Ichnaea.Demo.Accounts;
@@ -6,6 +7,7 @@ using Restall.Ichnaea.NEventStore;
 
 namespace Restall.Ichnaea.Demo.Web.Accounts
 {
+	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.ReflectedByNancyServiceRouting)]
 	public class AccountAdministrationService
 	{
 		private readonly RouteLinks links;

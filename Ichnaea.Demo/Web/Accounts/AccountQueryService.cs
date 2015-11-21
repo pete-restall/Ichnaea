@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Raven.Client;
 using Restall.Ichnaea.Demo.Accounts;
 
 namespace Restall.Ichnaea.Demo.Web.Accounts
 {
+	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.ReflectedByNancyServiceRouting)]
 	public class AccountQueryService
 	{
 		private readonly RouteLinks links;
@@ -17,11 +19,12 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 			this.repository = repository;
 		}
 
+		[SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = CodeAnalysisJustification.ReflectedByNancyServiceRouting)]
 		public GetAllAccountsResponse GetAllAccounts(GetAllAccountsRequest request)
 		{
 			return new GetAllAccountsResponse
 				{
-					Accounts = documents
+					Accounts = this.documents
 						.Query<AccountSummary, AccountSummaryIndex>()
 						.AsProjection<AccountSummary>()
 						.ToArray(),

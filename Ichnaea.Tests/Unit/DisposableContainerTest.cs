@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NSubstitute;
 using Xunit;
@@ -32,6 +33,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Dispose_Called_ExpectAllDisposablesAreDisposed()
 		{
 			var disposables = MockAtLeastOneDisposable();
@@ -44,6 +46,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Dispose_CalledMultipleTimes_ExpectDisposablesAreNotDisposedMoreThanOnce()
 		{
 			var disposables = MockAtLeastOneDisposable();
@@ -57,6 +60,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Dispose_CalledWhenSomeDisposablesHaveBeenRemoved_ExpectOnlyRemainingDisposablesAreDisposed()
 		{
 			var remainingDisposables = MockAnyNumberOfDisposables();

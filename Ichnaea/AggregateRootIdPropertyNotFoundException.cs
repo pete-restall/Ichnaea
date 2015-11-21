@@ -54,7 +54,7 @@ namespace Restall.Ichnaea
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			base.GetObjectData(info, context);
-			info.AddOrDefault(nameof(this.PropertyName), PropertyName, _ => null);
+			info.AddOrDefault(nameof(this.PropertyName), this.PropertyName, _ => null);
 		}
 
 		public string PropertyName { get; }

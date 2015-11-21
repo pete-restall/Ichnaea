@@ -94,6 +94,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void GetSourcedDomainEventsFor_CalledWithOneOfSeveralTrackedAggregateRoots_ExpectCorrespondingCreationDomainEventIsReturned()
 		{
 			using (var tracker = CreateTrackerWithDummyDependencies<AggregateRootWithTwoDomainEvents>())
@@ -177,7 +178,7 @@ namespace Restall.Ichnaea.Tests.Unit
 			using (var tracker = CreateTrackerWithDummyDependencies<AggregateRootWithTwoDomainEvents>())
 			{
 				var aggregateRoot = CreateAggregateRootTrackedBy(tracker);
-				var prePersistenceTracker = ((IPrePersistenceDomainEventTracker<AggregateRootWithTwoDomainEvents>) tracker);
+				var prePersistenceTracker = (IPrePersistenceDomainEventTracker<AggregateRootWithTwoDomainEvents>) tracker;
 				prePersistenceTracker.SwitchTrackingToPersistentStore(aggregateRoot, DummyPersistentObserver);
 
 				prePersistenceTracker

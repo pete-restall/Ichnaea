@@ -187,6 +187,7 @@
     <Compile Include="Accounts\Replay\BalanceDebitedReplay.cs" />
     <Compile Include="Accounts\Replay\BalanceCreditedReplay.cs" />
     <Compile Include="Accounts\Replay\AccountOpenedReplay.cs" />
+    <Compile Include="CodeAnalysisJustification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\AccountSummaryIndex.cs" />
     <Compile Include="Web\Accounts\AccountQueryService.cs" />

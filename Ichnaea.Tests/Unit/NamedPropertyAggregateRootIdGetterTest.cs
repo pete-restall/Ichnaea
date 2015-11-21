@@ -6,6 +6,7 @@ using Xunit;
 
 namespace Restall.Ichnaea.Tests.Unit
 {
+	[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 	public class NamedPropertyAggregateRootIdGetterTest
 	{
 		private class AggregateRoot

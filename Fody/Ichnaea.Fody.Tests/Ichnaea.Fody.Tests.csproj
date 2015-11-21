@@ -89,6 +89,8 @@
     </ProjectReference>
     <ProjectReference Include="..\AssemblyToProcess\AssemblyToProcess.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <Project>{5C4AA39A-9F74-416D-B808-3BE551C775BE}</Project>
+      <Name>AssemblyToProcess</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

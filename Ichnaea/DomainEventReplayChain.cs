@@ -20,7 +20,7 @@ namespace Restall.Ichnaea
 
 		public bool CanReplay([AllowNull] TAggregateRoot aggregateRoot, [AllowNull] object domainEvent)
 		{
-			return replayChain.Any(x => x.CanReplay(aggregateRoot, domainEvent));
+			return this.replayChain.Any(x => x.CanReplay(aggregateRoot, domainEvent));
 		}
 
 		[return: AllowNull]

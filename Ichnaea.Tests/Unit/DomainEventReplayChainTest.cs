@@ -134,6 +134,8 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "PossibleMultipleEnumeration", Justification = CodeAnalysisJustification.TestingMultipleEnumerations)]
+		[SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed", Justification = CodeAnalysisJustification.MockVerification)]
 		public void CanReplay_CalledMultipleTimes_ExpectChainIsOnlyEnumeratedOnce()
 		{
 			var innerReplays = EnumerableTestDoubles.Mock<IReplayDomainEvents<object>>();
@@ -216,6 +218,8 @@ namespace Restall.Ichnaea.Tests.Unit
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "PossibleMultipleEnumeration", Justification = CodeAnalysisJustification.TestingMultipleEnumerations)]
+		[SuppressMessage("ReSharper", "ReturnValueOfPureMethodIsNotUsed", Justification = CodeAnalysisJustification.MockVerification)]
 		public void Replay_CalledMultipleTimes_ExpectChainIsOnlyEnumeratedOnce()
 		{
 			var innerReplays = EnumerableTestDoubles.Mock(CreateReplayStubbedForCanReplay(Arg.Any<object>(), Arg.Any<object>(), true));

@@ -33,7 +33,7 @@ namespace Restall.Ichnaea.Tests.Unit
 
 			protected override AggregateRootWithPrivateId Replay(AggregateRootWithPrivateId aggregateRoot, DomainEvent domainEvent)
 			{
-				return StronglyTypedReplay(aggregateRoot, domainEvent);
+				return this.StronglyTypedReplay(aggregateRoot, domainEvent);
 			}
 
 			public virtual AggregateRootWithPrivateId StronglyTypedReplay(AggregateRootWithPrivateId aggregateRoot, DomainEvent domainEvent)

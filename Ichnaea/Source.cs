@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using NullGuard;
 
 namespace Restall.Ichnaea
@@ -7,6 +8,7 @@ namespace Restall.Ichnaea
 	{
 		public class EventFluency
 		{
+			[SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = CodeAnalysisJustification.RequiredByWeaver)]
 			public void Of<T>([AllowNull] T domainEvent)
 			{
 				throw new NotImplementedException(

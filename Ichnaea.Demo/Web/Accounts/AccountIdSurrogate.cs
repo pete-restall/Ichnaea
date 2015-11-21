@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Restall.Ichnaea.Demo.Web.Accounts
 {
@@ -13,8 +14,10 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 
 		public Guid SurrogateId { get; }
 
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = CodeAnalysisJustification.UsedInView)]
 		public string SortCode { get; }
 
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = CodeAnalysisJustification.UsedInView)]
 		public string AccountNumber { get; }
 	}
 }

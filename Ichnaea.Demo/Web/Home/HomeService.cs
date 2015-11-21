@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Restall.Ichnaea.Demo.Web.Home
 {
+	[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.ReflectedByNancyServiceRouting)]
 	public class HomeService
 	{
 		private readonly RouteLinks links;
@@ -9,6 +12,7 @@ namespace Restall.Ichnaea.Demo.Web.Home
 			this.links = links;
 		}
 
+		[SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = CodeAnalysisJustification.ReflectedByNancyServiceRouting)]
 		public IndexResponse Index(IndexRequest request)
 		{
 			return new IndexResponse { GetAllAccountsUri = this.links.Relative("GetAllAccounts") };

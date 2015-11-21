@@ -6,6 +6,9 @@ namespace Restall.Ichnaea.Tests
 	public static class CodeAnalysisJustification
 	{
 		public const string DynamicProxyRequiresPublicTypes = "Castle.DynamicProxy requires public types";
+		public const string EnumerableIsMaterialisedBeforeDisposal = "Enumerable is materialised before disposal";
+		public const string IchnaeaSubscribes = "Ichnaea subscribes";
+		public const string MockVerification = "Mock verification";
 		public const string ParticipatesInPartialMocking = "Participates in partial mocking";
 		public const string ReflectivePropertyComparison = "Property is reflected as part of object comparisons";
 		public const string StubForTesting = "Stub for testing";

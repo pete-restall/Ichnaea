@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using NEventStore;
 
 namespace Restall.Ichnaea.NEventStore
 {
+	[SuppressMessage("ReSharper", "ClassWithVirtualMembersNeverInherited.Global", Justification = CodeAnalysisJustification.PartOfPublicApiExtensibility)]
 	public class PersistedEventStreamCreator<TAggregateRoot>: DisposableContainer
 		where TAggregateRoot: class
 	{

@@ -214,6 +214,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Dispose_Called_ExpectCreatedStreamsAreDisposed()
 		{
 			var eventStreams = MockAtLeastOneEventStream();
@@ -246,6 +247,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Dispose_Called_ExpectStreamsOpenedWithBucketAndStreamIdsAreDisposed()
 		{
 			var eventStreams = MockAtLeastOneEventStream();
@@ -262,6 +264,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Dispose_Called_ExpectStreamsOpenedWithSnapshotsAreDisposed()
 		{
 			var eventStreams = MockAtLeastOneEventStream();
@@ -277,6 +280,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Dispose_CalledMultipleTimes_ExpectEventStreamsAreNotDisposedMoreThanOnce()
 		{
 			var eventStreams = MockAtLeastOneEventStream();
@@ -291,6 +295,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Commit_CalledWithNoExplicitCommitId_ExpectAllEventStreamsAreCommittedWithNonEmptyId()
 		{
 			var eventStreams = MockAtLeastOneEventStream();
@@ -304,6 +309,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Commit_CalledWithNoExplicitCommitId_ExpectAllEventStreamsAreCommittedWithSameId()
 		{
 			var commitIds = new List<Guid>();
@@ -325,6 +331,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Commit_CalledMultipleTimesWithNoExplicitCommitId_ExpectAllEventStreamsAreCommittedWithDifferentIdsPerCall()
 		{
 			var commitIds = new List<Guid>();
@@ -342,6 +349,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void Commit_CalledWithExplicitCommitId_ExpectAllEventStreamsAreCommittedWithSameId()
 		{
 			var eventStreams = MockAtLeastOneEventStream();
@@ -356,6 +364,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 		}
 
 		[Fact]
+		[SuppressMessage("ReSharper", "AccessToDisposedClosure", Justification = CodeAnalysisJustification.EnumerableIsMaterialisedBeforeDisposal)]
 		public void ClearUncommitted_Called_ExpectAllEventStreamsAreCleared()
 		{
 			var eventStreams = MockAtLeastOneEventStream();
