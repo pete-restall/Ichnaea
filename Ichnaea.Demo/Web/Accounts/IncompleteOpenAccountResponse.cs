@@ -10,6 +10,8 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 
 		public Uri OpenAccountUri { get; set; }
 
+		public Uri GetAllAccountsUri { get; set; }
+
 		public string Message { get; set; }
 	}
 }

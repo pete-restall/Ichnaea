@@ -211,6 +211,7 @@
     <Compile Include="Web\Home\IndexResponse.cs" />
     <Compile Include="Web\IchnaeaBootstrapper.cs" />
     <Compile Include="Web\RouteLinks.cs" />
+    <Compile Include="Web\RouteNames.cs" />
     <Compile Include="Web\ServiceModule.cs" />
     <Compile Include="Web\StringHtmlEncodingExtensions.cs" />
     <Compile Include="Web\StringPluralisationExtensions.cs" />

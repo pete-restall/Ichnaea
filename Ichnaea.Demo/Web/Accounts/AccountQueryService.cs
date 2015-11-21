@@ -29,7 +29,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 						.AsProjection<AccountSummary>()
 						.ToArray(),
 
-					OpenAccountUri = this.links.Relative("OpenAccount")
+					OpenAccountUri = this.links.Relative(RouteNames.OpenAccount)
 				};
 		}
 
@@ -43,7 +43,8 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 					SortCode = account.Id.SortCode,
 					AccountNumber = account.Id.AccountNumber,
 					Holder = account.Holder,
-					Balance = account.Balance
+					Balance = account.Balance,
+					GetAllAccountsUri = this.links.Relative(RouteNames.GetAllAccounts)
 				};
 		}
 	}

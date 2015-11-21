@@ -15,5 +15,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 		public string Holder { get; set; }
 
 		public decimal Balance { get; set; }
+
+		public Uri GetAllAccountsUri { get; set; }
 	}
 }

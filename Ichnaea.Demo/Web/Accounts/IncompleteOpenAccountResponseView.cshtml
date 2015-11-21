@@ -15,19 +15,22 @@
 					<legend>Bank Account Details</legend>
 					<div>
 						<label for="SortCode">Sort Code:</label>
-						<input type="text" maxlength="8" required="" id="SortCode" name="SortCode" value="@Model.Request.SortCode.InHtmlAttribute()" />
+						<input type="text" maxlength="8" required="" id="SortCode" name="SortCode" value="@Model.Request.SortCode.InHtmlAttribute()"/>
 					</div>
 					<div>
 						<label for="AccountNumber">Account Number:</label>
-						<input type="text" maxlength="8" required="" id="AccountNumber" name="AccountNumber" value="@Model.Request.AccountNumber.InHtmlAttribute()" />
+						<input type="text" maxlength="8" required="" id="AccountNumber" name="AccountNumber" value="@Model.Request.AccountNumber.InHtmlAttribute()"/>
 					</div>
 					<div>
 						<label for="Holder">Name of Account Holder:</label>
-						<input type="text" maxlength="32" required="" id="Holder" name="Holder" value="@Model.Request.Holder.InHtmlAttribute()" />
+						<input type="text" maxlength="32" required="" id="Holder" name="Holder" value="@Model.Request.Holder.InHtmlAttribute()"/>
 					</div>
 				</fieldset>
 				<button type="submit">Open Account</button>
 			</form>
+			<p>
+				Go <a href="@Model.GetAllAccountsUri">Back to All Accounts</a>.
+			</p>
 		</section>
 		<section>
 			<h1>Page Description</h1>

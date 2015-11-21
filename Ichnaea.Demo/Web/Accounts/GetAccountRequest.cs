@@ -4,7 +4,7 @@ using Restall.Nancy.ServiceRouting;
 
 namespace Restall.Ichnaea.Demo.Web.Accounts
 {
-	[NamedRoute("GetAccount", "accounts/{id:guid}")]
+	[NamedRoute(RouteNames.GetAccount, "accounts/{id:guid}")]
 	[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = CodeAnalysisJustification.DtoParticipatesInSerialisation)]
 	public class GetAccountRequest
 	{

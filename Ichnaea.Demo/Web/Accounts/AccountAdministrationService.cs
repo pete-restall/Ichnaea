@@ -47,7 +47,11 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 			this.documents.Store(surrogateId, "AccountIdSurrogates/" + surrogateId.SurrogateId);
 			this.documents.SaveChanges();
 
-			return new OpenAccountResponse { Id = surrogateId.SurrogateId };
+			return new OpenAccountResponse
+				{
+					Id = surrogateId.SurrogateId,
+					GetAllAccountsUri = this.links.Relative(RouteNames.GetAllAccounts)
+				};
 		}
 
 		private object IncompleteOpenAccountResponse(OpenAccountRequest request, string message)
@@ -55,8 +59,9 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 			return new IncompleteOpenAccountResponse
 				{
 					Request = request,
-					OpenAccountUri = this.links.Relative("OpenAccount"),
-					Message = message
+					OpenAccountUri = this.links.Relative(RouteNames.OpenAccount),
+					GetAllAccountsUri = this.links.Relative(RouteNames.GetAllAccounts),
+                    Message = message
 				};
 		}
 	}

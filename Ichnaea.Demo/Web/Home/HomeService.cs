@@ -15,7 +15,7 @@ namespace Restall.Ichnaea.Demo.Web.Home
 		[SuppressMessage("ReSharper", "UnusedParameter.Global", Justification = CodeAnalysisJustification.ReflectedByNancyServiceRouting)]
 		public IndexResponse Index(IndexRequest request)
 		{
-			return new IndexResponse { GetAllAccountsUri = this.links.Relative("GetAllAccounts") };
+			return new IndexResponse { GetAllAccountsUri = this.links.Relative(RouteNames.GetAllAccounts) };
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace Restall.Ichnaea.Tests.Unit
 			public override IEnumerable<object[]> GetData(MethodInfo methodUnderTest, Type[] parameterTypes)
 			{
 				yield return new object[] {AggregateRoot.IsNotNull, DomainEvent.IsNotNull, ConstructWith.Enumerable};
-                yield return new object[] {AggregateRoot.IsNotNull, DomainEvent.IsNotNull, ConstructWith.Params};
+				yield return new object[] {AggregateRoot.IsNotNull, DomainEvent.IsNotNull, ConstructWith.Params};
 				yield return new object[] {AggregateRoot.IsNull, DomainEvent.IsNotNull, ConstructWith.Enumerable};
 				yield return new object[] {AggregateRoot.IsNull, DomainEvent.IsNotNull, ConstructWith.Params};
 				yield return new object[] {AggregateRoot.IsNotNull, DomainEvent.IsNull, ConstructWith.Enumerable};
