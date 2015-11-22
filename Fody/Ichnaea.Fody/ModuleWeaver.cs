@@ -7,8 +7,6 @@ namespace Restall.Ichnaea.Fody
 {
 	public class ModuleWeaver
 	{
-		// TODO: Calling Source.Event(new XXX { Prop1 = xxx, Prop2 = yyy, ... }) - (ie. where does the ldarg.0 go ?)
-		// TODO: Calling Source.Event(someMethodCall()) - (ie. where does the ldarg.0 go ?)
 		// TODO: Calling Source.Event(this.someField) - (ie. where does the ldarg.0 go ?)
 		// TODO: Calling Source.Event(this.someProperty) - (ie. where does the ldarg.0 go ?)
 		// TODO: Two events of different types - with Source.Event() call for both those exact types
@@ -22,7 +20,7 @@ namespace Restall.Ichnaea.Fody
 		// TODO: One event sourced (cast) with two declared events with two common base types - should work due to explicit cast
 		// TODO: Multiple (heterogenous) event source replacements in the same method
 		// TODO: Multiple methods sourcing events need replacements - works now but methods matched on names beginning with 'DoSomething()' !
-		// TODO: Search for classes based on [Aggregate] decorations
+		// TODO: Search for classes based on [AggregateRoot] decorations
 		// TODO: Protected methods - replacement of event sources
 		// TODO: Private methods - replacement of event sources
 		// TODO: Internal methods - replacement of event sources
@@ -39,7 +37,6 @@ namespace Restall.Ichnaea.Fody
 		// TODO: Value Type events...
 		// TODO: Interface events...
 		// TODO: Methods that access static fields that are NOT Event.Source (ie. don't replace those static field accesses !)
-		// TODO: Methods that call methods other than Event.Source.Of<>() (ie. don't replace those other calls !)
 		public void Execute()
 		{
 			if (this.ModuleDefinition == null)
@@ -48,7 +45,8 @@ namespace Restall.Ichnaea.Fody
 			var type = this.ModuleDefinition.GetType("Restall.Ichnaea.Fody.AssemblyToProcess.AggregateRootWithSingleEvent");
 			var eventSourcingMethod = this.CreateMethodToRaiseEvent(type);
 			type.Methods.Add(eventSourcingMethod);
-			foreach (var method in type.Methods.Where(x => x.Name.StartsWith("DoSomething")))
+
+            foreach (var method in type.Methods.Where(x => x.Name.StartsWith("DoSomething")))
 			{
 				var il = method.Body.GetILProcessor();
 				Instruction of;
@@ -56,7 +54,7 @@ namespace Restall.Ichnaea.Fody
 					il.Replace(of, il.Create(OpCodes.Ldarg_0));
 
 				Instruction call;
-				while ((call = method.Body.Instructions.FirstOrDefault(x => x.OpCode == OpCodes.Callvirt)) != null)
+				while ((call = method.Body.Instructions.FirstOrDefault(IsCallToSourceEventOf)) != null)
 					il.Replace(call, il.Create(OpCodes.Call, eventSourcingMethod));
 			}
 		}
@@ -94,6 +92,15 @@ namespace Restall.Ichnaea.Fody
 			il.Emit(OpCodes.Callvirt, eventDelegate);
 			il.Emit(OpCodes.Ret);
 			return eventSourcingMethod;
+		}
+
+		private static bool IsCallToSourceEventOf(Instruction instruction)
+		{
+			if (instruction.OpCode != OpCodes.Callvirt)
+				return false;
+
+			var method = ((MethodReference) instruction.Operand).GetElementMethod();
+			return method.FullName == "System.Void Restall.Ichnaea.Source/EventFluency::Of(!!0)";
 		}
 
 		public ModuleDefinition ModuleDefinition { private get; set; }

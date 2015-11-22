@@ -46,5 +46,35 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 		{
 			this.ExpectDynamicCallRaisesDomainEventWithSameToken(EventName, (x, token) => x.DoSomethingViaManipulatedLocalVariable(token));
 		}
+
+		[Fact]
+		public void DoSomethingWithVirtualCalls_Called_ExpectOnlyCallToSourceEventIsWovenToRaiseCliEvent()
+		{
+			this.ExpectDynamicCallRaisesDomainEventWithSameToken(EventName, (x, token) => x.DoSomethingWithVirtualCalls(token));
+		}
+
+		[Fact]
+		public void DoSomethingViaObjectInitialiserEvent_Called_ExpectCallToSourceEventIsWovenToRaiseCliEvent()
+		{
+			this.ExpectDynamicCallRaisesDomainEventWithSameTokenAndString(EventName, (x, token) => x.DoSomethingViaObjectInitialiserEvent(token));
+		}
+
+		[Fact]
+		public void DoSomethingViaComplexObjectInitialiserEvent_Called_ExpectCallToSourceEventIsWovenToRaiseCliEvent()
+		{
+			this.ExpectDynamicCallRaisesDomainEventWithSameTokenAndString(EventName, (x, token) => x.DoSomethingViaComplexObjectInitialiserEvent(token));
+		}
+
+		[Fact]
+		public void DoSomethingViaInstanceMethodCall_Called_ExpectCallToSourceEventIsWovenToRaiseCliEvent()
+		{
+			this.ExpectDynamicCallRaisesDomainEventWithSameToken(EventName, (x, token) => x.DoSomethingViaInstanceMethodCall(token));
+		}
+
+		[Fact]
+		public void DoSomethingViaStaticMethodCall_Called_ExpectCallToSourceEventIsWovenToRaiseCliEvent()
+		{
+			this.ExpectDynamicCallRaisesDomainEventWithSameToken(EventName, (x, token) => x.DoSomethingViaStaticMethodCall(token));
+		}
 	}
 }
