@@ -29,10 +29,10 @@ namespace Restall.Ichnaea.Fody.Tests.Unit
 
 		[Fact]
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
-		public void Constructor_CalledWithNullEventRaisingMethod_ExpectArgumentNullExceptionWithCorrectParamName()
+		public void Constructor_CalledWithNullEventSourcingMethod_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
 			Action constructor = () => new MethodWeaver(DummyMethodDefinition(), null);
-			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("eventRaisingMethod");
+			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("eventSourcingMethod");
 		}
 	}
 }
