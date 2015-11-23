@@ -14,13 +14,13 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 		[Fact]
 		public void DoSomething_Called_ExpectCallToSourceEventIsWovenToRaiseCliEvent()
 		{
-			this.ExpectDynamicCallRaisesDomainEventWithSameToken(EventName, (x, token) => x.DoSomething(token));
+			this.ExpectDynamicCallSourcesDomainEventWithSameToken(EventName, (x, token) => x.DoSomething(token));
 		}
 
 		[Fact]
 		public void AndAnotherThing_Called_ExpectCallToSourceEventIsWovenToRaiseCliEvent()
 		{
-			this.ExpectDynamicCallRaisesDomainEventWithSameToken(EventName, (x, token) => x.AndAnotherThing(token));
+			this.ExpectDynamicCallSourcesDomainEventWithSameToken(EventName, (x, token) => x.AndAnotherThing(token));
 		}
 	}
 }

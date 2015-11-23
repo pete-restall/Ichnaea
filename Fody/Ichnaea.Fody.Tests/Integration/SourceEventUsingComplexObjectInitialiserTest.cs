@@ -14,7 +14,7 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 		[Fact]
 		public void DoSomething_Called_ExpectCallToSourceEventIsWovenToRaiseCliEvent()
 		{
-			this.ExpectDynamicCallRaisesDomainEventWithSameObjectInitialisedToken(EventName, (x, token) => x.DoSomething(token));
+			this.ExpectDynamicCallSourcesDomainEventWithSameObjectInitialisedToken(EventName, (x, token) => x.DoSomething(token));
 		}
 	}
 }

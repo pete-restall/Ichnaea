@@ -12,7 +12,7 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 			this.AggregateRoot = aggregateRoot;
 		}
 
-		protected void ExpectDynamicCallRaisesDomainEventWithSameToken(string eventFieldName, Action<dynamic, Guid> action)
+		protected void ExpectDynamicCallSourcesDomainEventWithSameToken(string eventFieldName, Action<dynamic, Guid> action)
 		{
 			var token = this.InvokeTokenActionOnMonitoredAggregateRoot(action);
 			this.AggregateRoot
@@ -38,7 +38,7 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 			return args.GetType().Name == eventName && ((dynamic) args).Token == token;
 		}
 
-		protected void ExpectDynamicCallRaisesDomainEventWithSameObjectInitialisedToken(string eventFieldName, Action<dynamic, Guid> action)
+		protected void ExpectDynamicCallSourcesDomainEventWithSameObjectInitialisedToken(string eventFieldName, Action<dynamic, Guid> action)
 		{
 			var token = this.InvokeTokenActionOnMonitoredAggregateRoot(action);
 			this.AggregateRoot
@@ -46,7 +46,7 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 				.WithDomainEvent<object>(this.AggregateRoot, x => EventRaisedWithToken("ObjectInitialiserSomethingHappened", x, token));
 		}
 
-		protected void ExpectDynamicCallRaisesDerivedDomainEventWithSameToken(string eventFieldName, Action<dynamic, Guid> action)
+		protected void ExpectDynamicCallSourcesDerivedDomainEventWithSameToken(string eventFieldName, Action<dynamic, Guid> action)
 		{
 			var token = this.InvokeTokenActionOnMonitoredAggregateRoot(action);
 			this.AggregateRoot

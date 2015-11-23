@@ -16,25 +16,25 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 		[Fact]
 		public void SourceEventFromPrivateMethod_Called_ExpectCallToSourceEventIsWovenToRaiseCliEvent()
 		{
-			this.ExpectDynamicCallRaisesDomainEventWithSameToken(EventName, (x, token) => x.SourceEventFromPrivateMethod(token));
+			this.ExpectDynamicCallSourcesDomainEventWithSameToken(EventName, (x, token) => x.SourceEventFromPrivateMethod(token));
 		}
 
 		[Fact]
 		public void SourceEventFromProtectedMethod_Called_ExpectCallToSourceEventIsWovenToRaiseCliEvent()
 		{
-			this.ExpectDynamicCallRaisesDomainEventWithSameToken(EventName, (x, token) => x.SourceEventFromProtectedMethod(token));
+			this.ExpectDynamicCallSourcesDomainEventWithSameToken(EventName, (x, token) => x.SourceEventFromProtectedMethod(token));
 		}
 
 		[Fact]
 		public void SourceEventFromProtectedInternalMethod_Called_ExpectCallToSourceEventIsWovenToRaiseCliEvent()
 		{
-			this.ExpectDynamicCallRaisesDomainEventWithSameToken(EventName, (x, token) => x.SourceEventFromProtectedInternalMethod(token));
+			this.ExpectDynamicCallSourcesDomainEventWithSameToken(EventName, (x, token) => x.SourceEventFromProtectedInternalMethod(token));
 		}
 
 		[Fact]
 		public void SourceEventFromInternalMethod_Called_ExpectCallToSourceEventIsWovenToRaiseCliEvent()
 		{
-			this.ExpectDynamicCallRaisesDomainEventWithSameToken(EventName, (x, token) => x.SourceEventFromInternalMethod(token));
+			this.ExpectDynamicCallSourcesDomainEventWithSameToken(EventName, (x, token) => x.SourceEventFromInternalMethod(token));
 		}
 	}
 }
