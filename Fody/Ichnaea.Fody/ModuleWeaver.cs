@@ -17,12 +17,9 @@ namespace Restall.Ichnaea.Fody
 		// TODO: One event sourced with two declared events with two common base types - weave neither, ambiguous, so build error
 		// TODO: One event sourced (cast) with two declared events with two common base types - should work due to explicit cast
 		// TODO: Multiple (heterogenous) event source replacements in the same method
-		// TODO: Multiple methods sourcing events need replacements - works now but methods matched on names beginning with 'DoSomething()' !
-		// TODO: Search for classes based on [AggregateRoot] decorations
 		// TODO: Protected methods - replacement of event sources
 		// TODO: Private methods - replacement of event sources
 		// TODO: Internal methods - replacement of event sources
-		// TODO: Static methods - replacement of event sources should produce a runtime exception (NotImplementedException)
 		// TODO: Protected internal methods - replacement of event sources
 		// TODO: Property getters - replacement of event sources
 		// TODO: Property setters - replacement of event sources
@@ -56,13 +53,15 @@ namespace Restall.Ichnaea.Fody
 
 		private void WeaveRaiseEventIntoAggregateRoot(TypeDefinition type)
 		{
+			if (type.CustomAttributes.All(x => x.AttributeType.FullName != "Restall.Ichnaea.AggregateRootAttribute"))
+				return;
+
 			var eventSourcingMethod = this.CreateMethodToRaiseEvent(type);
 			if (eventSourcingMethod == null)
 				return;
 
 			type.Methods.Add(eventSourcingMethod);
-
-			foreach (var method in type.Methods.Where(x => x.Name.StartsWith("DoSomething")))
+			foreach (var method in type.Methods.Where(x => !x.IsStatic))
 			{
 				var il = method.Body.GetILProcessor();
 				Instruction of;

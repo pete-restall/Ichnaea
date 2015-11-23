@@ -15,7 +15,9 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 		protected void ExpectDynamicCallRaisesDomainEventWithSameToken(string eventFieldName, Action<dynamic, Guid> action)
 		{
 			var token = this.InvokeTokenActionOnMonitoredAggregateRoot(action);
-			this.AggregateRoot.ShouldRaise(eventFieldName).WithDomainEvent<object>(this.AggregateRoot, x => SomethingHappenedWithToken(x, token));
+			this.AggregateRoot
+				.ShouldRaise(eventFieldName)
+				.WithDomainEvent<object>(this.AggregateRoot, x => SomethingHappenedWithToken(x, token));
 		}
 
 		private Guid InvokeTokenActionOnMonitoredAggregateRoot(Action<dynamic, Guid> action)

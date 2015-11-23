@@ -12,7 +12,9 @@ namespace Restall.Ichnaea.Tests.Unit
 				.Where(ex =>
 					ex.PropertyName == propertyName &&
 					ex.AggregateRootType == typeof(TAggregateRoot) &&
-					ex.AggregateRootIdType == typeof(TAggregateRootId));
+					ex.AggregateRootIdType == typeof(TAggregateRootId),
+					because,
+					reasonArgs);
 		}
 	}
 }

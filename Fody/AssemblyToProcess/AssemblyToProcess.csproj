@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NoAggregateRootDecoration.cs" />
+    <Compile Include="SourceHomogenousEventFromTwoMethods.cs" />
+    <Compile Include="SourceEventFromStaticMethod.cs" />
     <Compile Include="SourceEventUsingInstanceProperty.cs" />
     <Compile Include="SourceEventUsingStaticField.cs" />
     <Compile Include="SourceEventUsingInstanceField.cs" />

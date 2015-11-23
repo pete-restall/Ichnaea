@@ -4,10 +4,10 @@ using Xunit;
 
 namespace Restall.Ichnaea.Fody.Tests.Integration
 {
-	public class NoEventSourceTest: AggregateRootTest
+	public class NoAggregateRootDecorationTest: AggregateRootTest
 	{
-		public NoEventSourceTest():
-			base(ModuleWeaverFixture.AggregateRootFactory.CreateAggregateRootFromClassNamed("NoEventSource"))
+		public NoAggregateRootDecorationTest():
+			base(ModuleWeaverFixture.AggregateRootFactory.CreateAggregateRootFromClassNamed("NoAggregateRootDecoration"))
 		{
 		}
 
