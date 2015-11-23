@@ -8,8 +8,6 @@ namespace Restall.Ichnaea.Fody
 		// TODO: Two events of different types - with Source.Event() call for both those exact types
 		// TODO: Two events of the same type when Source.Event() used - weave neither (ambiguous), and output a build error
 		// TODO: Two events of the same type when Source.Event() not used - no build error
-		// TODO: Event sourced with subtype but event declared with base type
-		// TODO: Event sourced with (cast) base type and event declared with base type
 		// TODO: Two events sourced with (cast) common base types and events declared with two common base types - should work due to explicit casts
 		// TODO: Two events sourced with subtypes and events declared with two common base types - weave neither, ambiguous, so build error
 		// TODO: One event sourced with two declared events with two common base types - weave neither, ambiguous, so build error
@@ -25,6 +23,7 @@ namespace Restall.Ichnaea.Fody
 		// TODO: Only detect events that are of type Source.Of<...>
 		// TODO: Value Type events...
 		// TODO: Interface events...
+		// TODO: Base of AggregateRoot declares the event, derived type sources the event
 		// TODO: Async methods...
 		// TODO: Source.Event() inside a closure
 		// TODO: Private events

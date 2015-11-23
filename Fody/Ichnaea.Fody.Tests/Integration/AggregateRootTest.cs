@@ -30,7 +30,12 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 
 		protected static bool SomethingHappenedWithToken(object args, Guid token)
 		{
-			return args.GetType().Name == "SomethingHappened" && ((dynamic) args).Token == token;
+			return EventRaisedWithToken("SomethingHappened", args, token);
+		}
+
+		private static bool EventRaisedWithToken(string eventName, object args, Guid token)
+		{
+			return args.GetType().Name == eventName && ((dynamic) args).Token == token;
 		}
 
 		protected void ExpectDynamicCallRaisesDomainEventWithSameObjectInitialisedToken(string eventFieldName, Action<dynamic, Guid> action)
@@ -38,12 +43,15 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 			var token = this.InvokeTokenActionOnMonitoredAggregateRoot(action);
 			this.AggregateRoot
 				.ShouldRaise(eventFieldName)
-				.WithDomainEvent<object>(this.AggregateRoot, x => ObjectInitialiserSomethingHappenedWithToken(x, token));
+				.WithDomainEvent<object>(this.AggregateRoot, x => EventRaisedWithToken("ObjectInitialiserSomethingHappened", x, token));
 		}
 
-		private static bool ObjectInitialiserSomethingHappenedWithToken(object args, Guid token)
+		protected void ExpectDynamicCallRaisesDerivedDomainEventWithSameToken(string eventFieldName, Action<dynamic, Guid> action)
 		{
-			return args.GetType().Name == "ObjectInitialiserSomethingHappened" && ((dynamic) args).Token == token;
+			var token = this.InvokeTokenActionOnMonitoredAggregateRoot(action);
+			this.AggregateRoot
+				.ShouldRaise(eventFieldName)
+				.WithDomainEvent<object>(this.AggregateRoot, x => EventRaisedWithToken("SomethingDerivedHappened", x, token));
 		}
 	}
 }

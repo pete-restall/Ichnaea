@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NoAggregateRootDecoration.cs" />
+    <Compile Include="SomethingDerivedHappened.cs" />
+    <Compile Include="SourceEventUsingDerivedTypeOfBaseEvent.cs" />
     <Compile Include="SourceEventFromNonPublicMethods.cs" />
     <Compile Include="SourceHomogenousEventFromTwoMethods.cs" />
     <Compile Include="SourceEventFromStaticMethod.cs" />
