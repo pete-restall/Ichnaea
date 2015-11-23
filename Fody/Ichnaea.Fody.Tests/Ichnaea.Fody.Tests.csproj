@@ -74,6 +74,8 @@
     <Compile Include="Integration\FodyNotWovenSourceOfExceptionAssertionExtensions.cs" />
     <Compile Include="Integration\AggregateRootTest.cs" />
     <Compile Include="Integration\NoAggregateRootDecorationTest.cs" />
+    <Compile Include="Integration\SourceEventFromStaticPropertyTest.cs" />
+    <Compile Include="Integration\SourceEventFromInstancePropertyTest.cs" />
     <Compile Include="Integration\SourceEventUsingDerivedTypeOfBaseEventTest.cs" />
     <Compile Include="Integration\SourceEventFromNonPublicMethodsTest.cs" />
     <Compile Include="Integration\SourceHomogenousEventFromTwoMethodsTest.cs" />
@@ -91,7 +93,7 @@
     <Compile Include="Integration\NoEventSourceTest.cs" />
     <Compile Include="Integration\TwoConsecutiveSourceEventCallsTest.cs" />
     <Compile Include="Integration\OneSourceEventCallTest.cs" />
-    <Compile Include="Integration\SourceEventUsingStaticProperty.cs" />
+    <Compile Include="Integration\SourceEventUsingStaticPropertyTest.cs" />
     <Compile Include="Integration\AssemblyVerificationTest.cs" />
     <Compile Include="ModuleWeaverFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -13,8 +13,6 @@ namespace Restall.Ichnaea.Fody
 		// TODO: One event sourced with two declared events with two common base types - weave neither, ambiguous, so build error
 		// TODO: One event sourced (cast) with two declared events with two common base types - should work due to explicit cast
 		// TODO: Multiple (heterogenous) event source replacements in the same method
-		// TODO: Property getters - replacement of event sources
-		// TODO: Property setters - replacement of event sources
 		// TODO: Check generated method attribute - MethodAttributes.Private
 		// TODO: Check generated method attribute - MethodAttributes.PrivateScope
 		// TODO: Check generated method attribute - MethodAttributes.Final
@@ -35,6 +33,8 @@ namespace Restall.Ichnaea.Fody
 		// TODO: Source.Event() CALLED IN METHOD IN (PROTECTED) NESTED CLASS
 		// TODO: Source.Event() CALLED IN METHOD IN (PROTECTED INTERNAL) NESTED CLASS
 		// TODO: Source.Event() CALLED IN METHOD IN (INTERNAL) NESTED CLASS
+		// TODO: Derived type has event, base has no event.  Base calls Source.Event.Of() - should error
+		// TODO: Abstract event
 		public void Execute()
 		{
 			if (this.ModuleDefinition == null)
