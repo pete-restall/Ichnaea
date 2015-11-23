@@ -91,6 +91,7 @@ namespace Restall.Ichnaea.Tests.Unit
 
 		private class ObservableWithStaticDomainEvent: HasEventConvenienceMethods
 		{
+			[SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 			public void SourceFirstEvent(object sender, object args)
 			{
 				SourceEvent(FirstEvent, sender, args);
