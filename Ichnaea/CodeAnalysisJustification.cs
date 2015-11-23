@@ -6,6 +6,7 @@ namespace Restall.Ichnaea
 	public static class CodeAnalysisJustification
 	{
 		public const string ExceptionPola = "Exception POLA";
+		public const string FacilitatesInjection = "Facilitates injection";
 		public const string PartOfPublicApiExtensibility = "Part of public API extensibility";
 		public const string RequiredByWeaver = "Required by IL Weaver";
 	}

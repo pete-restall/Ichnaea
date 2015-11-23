@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Restall.Ichnaea.Fody.Tests
 {
@@ -6,12 +7,8 @@ namespace Restall.Ichnaea.Fody.Tests
 	{
 		private const string AssemblyToProcessNamespace = "Restall.Ichnaea.Fody.AssemblyToProcess";
 
-		public object CreateAggregateRootWithSingleEvent()
-		{
-			return CreateAggregateRootFromClassNamed("AggregateRootWithSingleEvent");
-		}
-
-		private static object CreateAggregateRootFromClassNamed(string aggregateRootClassName)
+		[SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Global", Justification = CodeAnalysisJustification.FacilitatesInjection)]
+		public object CreateAggregateRootFromClassNamed(string aggregateRootClassName)
 		{
 			var type = ModuleWeaverFixture.Assembly.GetType(AssemblyToProcessNamespace + "." + aggregateRootClassName);
 			return Activator.CreateInstance(type);

@@ -31,7 +31,7 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 			return args.GetType().Name == "SomethingHappened" && ((dynamic) args).Token == token;
 		}
 
-		protected void ExpectDynamicCallRaisesDomainEventWithSameTokenAndString(string eventFieldName, Action<dynamic, Guid> action)
+		protected void ExpectDynamicCallRaisesDomainEventWithSameObjectInitialisedToken(string eventFieldName, Action<dynamic, Guid> action)
 		{
 			var token = this.InvokeTokenActionOnMonitoredAggregateRoot(action);
 			this.AggregateRoot

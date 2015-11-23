@@ -7,8 +7,6 @@ namespace Restall.Ichnaea.Fody
 {
 	public class ModuleWeaver
 	{
-		// TODO: Calling Source.Event(this.someField) - (ie. where does the ldarg.0 go ?)
-		// TODO: Calling Source.Event(this.someProperty) - (ie. where does the ldarg.0 go ?)
 		// TODO: Two events of different types - with Source.Event() call for both those exact types
 		// TODO: Two events of the same type when Source.Event() used - weave neither (ambiguous), and output a build error
 		// TODO: Two events of the same type when Source.Event() not used - no build error
@@ -36,21 +34,39 @@ namespace Restall.Ichnaea.Fody
 		// TODO: Only detect events that are of type Source.Of<...>
 		// TODO: Value Type events...
 		// TODO: Interface events...
-		// TODO: Methods that access static fields that are NOT Event.Source (ie. don't replace those static field accesses !)
+		// TODO: Async methods...
+		// TODO: Source.Event() inside a closure
+		// TODO: Private events
+		// TODO: Protected events
+		// TODO: Protected internal events
+		// TODO: Internal events
+		// TODO: Source.Event() CALLED IN METHOD IN (PUBLIC) NESTED CLASS
+		// TODO: Source.Event() CALLED IN METHOD IN (PRIVATE) NESTED CLASS
+		// TODO: Source.Event() CALLED IN METHOD IN (PROTECTED) NESTED CLASS
+		// TODO: Source.Event() CALLED IN METHOD IN (PROTECTED INTERNAL) NESTED CLASS
+		// TODO: Source.Event() CALLED IN METHOD IN (INTERNAL) NESTED CLASS
 		public void Execute()
 		{
 			if (this.ModuleDefinition == null)
 				throw new InvalidOperationException("ModuleDefinition cannot be null.  Is Fody integrated into the build correctly ?");
 
-			var type = this.ModuleDefinition.GetType("Restall.Ichnaea.Fody.AssemblyToProcess.AggregateRootWithSingleEvent");
+			foreach (var type in this.ModuleDefinition.GetTypes())
+				this.WeaveRaiseEventIntoAggregateRoot(type);
+		}
+
+		private void WeaveRaiseEventIntoAggregateRoot(TypeDefinition type)
+		{
 			var eventSourcingMethod = this.CreateMethodToRaiseEvent(type);
+			if (eventSourcingMethod == null)
+				return;
+
 			type.Methods.Add(eventSourcingMethod);
 
-            foreach (var method in type.Methods.Where(x => x.Name.StartsWith("DoSomething")))
+			foreach (var method in type.Methods.Where(x => x.Name.StartsWith("DoSomething")))
 			{
 				var il = method.Body.GetILProcessor();
 				Instruction of;
-				while ((of = method.Body.Instructions.FirstOrDefault(x => x.OpCode == OpCodes.Ldsfld)) != null)
+				while ((of = method.Body.Instructions.FirstOrDefault(IsLoadFieldSourceEvent)) != null)
 					il.Replace(of, il.Create(OpCodes.Ldarg_0));
 
 				Instruction call;
@@ -61,7 +77,10 @@ namespace Restall.Ichnaea.Fody
 
 		private MethodDefinition CreateMethodToRaiseEvent(TypeDefinition type)
 		{
-			var eventDefinition = type.Events[0];
+			var eventDefinition = type.Events.FirstOrDefault();
+			if (eventDefinition == null)
+				return null;
+
 			var eventField = type.Fields.Single(x => x.FullName == eventDefinition.FullName);
 			var domainEventType = ((GenericInstanceType) eventField.FieldType).GenericArguments[0];
 			var eventDelegate = this.ModuleDefinition.ImportReference(eventField.FieldType.Resolve().Methods.Single(x => x.Name == "Invoke").MakeGenericMethod(domainEventType));
@@ -92,6 +111,15 @@ namespace Restall.Ichnaea.Fody
 			il.Emit(OpCodes.Callvirt, eventDelegate);
 			il.Emit(OpCodes.Ret);
 			return eventSourcingMethod;
+		}
+
+		private static bool IsLoadFieldSourceEvent(Instruction instruction)
+		{
+			if (instruction.OpCode != OpCodes.Ldsfld)
+				return false;
+
+			var field = (FieldReference) instruction.Operand;
+			return field.FullName == "Restall.Ichnaea.Source/EventFluency Restall.Ichnaea.Source::Event";
 		}
 
 		private static bool IsCallToSourceEventOf(Instruction instruction)

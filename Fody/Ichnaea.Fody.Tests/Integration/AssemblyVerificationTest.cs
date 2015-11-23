@@ -9,7 +9,7 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 {
 	public class AssemblyVerificationTest
 	{
-		private static readonly string[] PeVerifyPossibleLocations = new[]
+		private static readonly string[] PeVerifyPossibleLocations =
 			{
 				@"%programfiles(x86)%\Microsoft SDKs\Windows\v7.0A\Bin\NETFX 4.0 Tools\PEVerify.exe",
 				@"%programfiles(x86)%\Microsoft SDKs\Windows\v8.0A\Bin\NETFX 4.0 Tools\PEVerify.exe"

@@ -43,7 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AggregateRootWithSingleEvent.cs" />
+    <Compile Include="SourceEventUsingInstanceProperty.cs" />
+    <Compile Include="SourceEventUsingStaticField.cs" />
+    <Compile Include="SourceEventUsingInstanceField.cs" />
+    <Compile Include="SourceEventUsingComplexObjectInitialiser.cs" />
+    <Compile Include="SourceEventUsingObjectInitialiser.cs" />
+    <Compile Include="SourceEventUsingStaticMethodCall.cs" />
+    <Compile Include="SourceEventUsingInstanceMethodCall.cs" />
+    <Compile Include="SourceEventUsingVirtualMethodCall.cs" />
+    <Compile Include="SourceEventUsingManipulatedLocalVariable.cs" />
+    <Compile Include="SourceEventUsingLocalVariable.cs" />
+    <Compile Include="NoEventSource.cs" />
+    <Compile Include="OneSourceEventCall.cs" />
+    <Compile Include="TwoConsecutiveSourceEventCalls.cs" />
+    <Compile Include="SourceEventUsingStaticProperty.cs" />
     <Compile Include="CodeAnalysisJustification.cs" />
     <Compile Include="ObjectInitialiserSomethingHappened.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
