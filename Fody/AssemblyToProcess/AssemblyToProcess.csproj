@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NoAggregateRootDecoration.cs" />
+    <Compile Include="SourceEventFromNonPublicMethods.cs" />
     <Compile Include="SourceHomogenousEventFromTwoMethods.cs" />
     <Compile Include="SourceEventFromStaticMethod.cs" />
     <Compile Include="SourceEventUsingInstanceProperty.cs" />

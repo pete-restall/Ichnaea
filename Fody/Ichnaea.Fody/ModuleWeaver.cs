@@ -15,10 +15,6 @@ namespace Restall.Ichnaea.Fody
 		// TODO: One event sourced with two declared events with two common base types - weave neither, ambiguous, so build error
 		// TODO: One event sourced (cast) with two declared events with two common base types - should work due to explicit cast
 		// TODO: Multiple (heterogenous) event source replacements in the same method
-		// TODO: Protected methods - replacement of event sources
-		// TODO: Private methods - replacement of event sources
-		// TODO: Internal methods - replacement of event sources
-		// TODO: Protected internal methods - replacement of event sources
 		// TODO: Property getters - replacement of event sources
 		// TODO: Property setters - replacement of event sources
 		// TODO: Check generated method attribute - MethodAttributes.Private
