@@ -8,8 +8,13 @@ namespace Restall.Ichnaea.Fody.Tests
 {
 	public static class AggregateRootDomainEventMonitorExtensions
 	{
-		[SuppressMessage("ReSharper", "PossibleNullReferenceException", Justification = "Null check is done by Fluent Assertions")]
 		public static void MonitorDomainEvent(this object aggregateRoot, string eventFieldName)
+		{
+			aggregateRoot.MonitorDomainEvent<object>(eventFieldName);
+		}
+
+		[SuppressMessage("ReSharper", "PossibleNullReferenceException", Justification = "Null check is done by Fluent Assertions")]
+		public static void MonitorDomainEvent<TDomainEvent>(this object aggregateRoot, string eventFieldName)
 		{
 			if (aggregateRoot == null)
 				throw new ArgumentNullException(nameof(aggregateRoot));
@@ -18,7 +23,8 @@ namespace Restall.Ichnaea.Fody.Tests
 			eventInfo.Should().NotBeNull("because event {0} should be declared in type {1}.", eventFieldName, aggregateRoot.GetType());
 
 			var eventRecorder = new EventRecorder(aggregateRoot, eventInfo.Name);
-			eventInfo.GetAddMethod(true).Invoke(aggregateRoot, new object[] {new Source.Of<object>((sender, args) => eventRecorder.RecordEvent(sender, args))});
+			var eventHandler = new Source.Of<TDomainEvent>((sender, args) => eventRecorder.RecordEvent(sender, args));
+			eventInfo.GetAddMethod(true).Invoke(aggregateRoot, new object[] {eventHandler});
 			EventMonitor.AddRecordersFor(aggregateRoot, obj => new[] {eventRecorder});
 		}
 	}

@@ -20,9 +20,14 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 				.WithDomainEvent<object>(this.AggregateRoot, x => SomethingHappenedWithToken(x, token));
 		}
 
-		private Guid InvokeTokenActionOnMonitoredAggregateRoot(string eventFieldName, Action<dynamic, Guid> action)
+		protected Guid InvokeTokenActionOnMonitoredAggregateRoot(string eventFieldName, Action<dynamic, Guid> action)
 		{
-			this.AggregateRoot.MonitorDomainEvent(eventFieldName);
+			return InvokeTokenActionOnMonitoredAggregateRoot<object>(eventFieldName, action);
+		}
+
+		protected Guid InvokeTokenActionOnMonitoredAggregateRoot<TDomainEvent>(string eventFieldName, Action<dynamic, Guid> action)
+		{
+			this.AggregateRoot.MonitorDomainEvent<TDomainEvent>(eventFieldName);
 			var token = Guid.NewGuid();
 			action(this.AggregateRoot, token);
 			return token;
@@ -35,7 +40,9 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 
 		private static bool EventRaisedWithToken(string eventName, object args, Guid token)
 		{
-			return args.GetType().Name == eventName && ((dynamic) args).Token == token;
+			var eventType = args.GetType();
+			var tokenProperty = eventType.GetProperty("Token");
+			return eventType.Name == eventName && tokenProperty != null && tokenProperty.GetValue(args).Equals(token);
 		}
 
 		protected void ExpectDynamicCallSourcesDomainEventWithSameObjectInitialisedToken(string eventFieldName, Action<dynamic, Guid> action)
