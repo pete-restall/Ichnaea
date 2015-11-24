@@ -18,7 +18,7 @@ namespace Restall.Ichnaea.Fody
 		// TODO: Check generated method attribute - MethodAttributes.Final
 		// TODO: Check generated method attribute - MethodAttributes.SpecialName
 		// TODO: Check generated method attribute - MethodAttributes.HideBySig
-		// TODO: Only detect events that are of type Source.Of<...>
+		// TODO: Mixture of Source.Of<> and non-Source.Of<> events
 		// TODO: Value Type events...
 		// TODO: Interface events...
 		// TODO: Base of AggregateRoot declares the event, derived type sources the event
@@ -28,13 +28,10 @@ namespace Restall.Ichnaea.Fody
 		// TODO: Protected events
 		// TODO: Protected internal events
 		// TODO: Internal events
-		// TODO: Source.Event() CALLED IN METHOD IN (PUBLIC) NESTED CLASS
-		// TODO: Source.Event() CALLED IN METHOD IN (PRIVATE) NESTED CLASS
-		// TODO: Source.Event() CALLED IN METHOD IN (PROTECTED) NESTED CLASS
-		// TODO: Source.Event() CALLED IN METHOD IN (PROTECTED INTERNAL) NESTED CLASS
-		// TODO: Source.Event() CALLED IN METHOD IN (INTERNAL) NESTED CLASS
 		// TODO: Derived type has event, base has no event.  Base calls Source.Event.Of() - should error
 		// TODO: Abstract event
+		// TODO: Abstract Aggregate Root with Event.SourceOf in the abstract class
+		// TODO: Abstract Aggregate Root with Event.SourceOf in the concrete class
 		public void Execute()
 		{
 			if (this.ModuleDefinition == null)

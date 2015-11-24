@@ -29,7 +29,10 @@ namespace Restall.Ichnaea.Fody
 
 		private bool IsTypeAggregateRoot()
 		{
-			return this.type.CustomAttributes.Any(x => x.AttributeType.FullName == "Restall.Ichnaea.AggregateRootAttribute") && this.type.Events.Any();
+			return
+				this.type.CustomAttributes.Any(x => x.AttributeType.FullName == "Restall.Ichnaea.AggregateRootAttribute") &&
+				this.type.Events.Any() &&
+				this.type.Events[0].EventType.FullName.StartsWith("Restall.Ichnaea.Source/Of`1<");
 		}
 
 		private MethodDefinition AddMethodToTypeForRaisingNativeEvent()

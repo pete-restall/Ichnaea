@@ -1,6 +1,4 @@
-﻿using System;
-using FluentAssertions;
-using Xunit;
+﻿using Xunit;
 
 namespace Restall.Ichnaea.Fody.Tests.Integration
 {

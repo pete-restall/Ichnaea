@@ -6,8 +6,6 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 {
 	public class SourceEventFromStaticPropertyTest: AggregateRootTest
 	{
-		private const string EventName = "EventSource";
-
 		public SourceEventFromStaticPropertyTest():
 			base(ModuleWeaverFixture.AggregateRootFactory.CreateAggregateRootFromClassNamed("SourceEventFromStaticProperty"))
 		{
