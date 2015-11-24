@@ -16,6 +16,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ichnaea.Tests", "Ichnaea.Tests\Ichnaea.Tests.csproj", "{0AC668AA-114E-40CE-A8B7-3F017478E0ED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ichnaea.Demo", "Ichnaea.Demo\Ichnaea.Demo.csproj", "{3ED39EF9-C50A-4EF7-8C50-51C85C79A932}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ED0A317E-9B6C-4385-8D05-989A32C23B99} = {ED0A317E-9B6C-4385-8D05-989A32C23B99}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ichnaea.NEventStore", "Ichnaea.NEventStore\Ichnaea.NEventStore.csproj", "{2BA85D45-253B-489D-8A2B-B1C1CB5163B7}"
 EndProject
