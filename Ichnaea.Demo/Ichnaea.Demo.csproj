@@ -194,6 +194,7 @@
     <Compile Include="Web\Accounts\AccountSummary.cs" />
     <Compile Include="Web\Accounts\AccountIdSurrogate.cs" />
     <Compile Include="Web\Accounts\AccountTransactionService.cs" />
+    <Compile Include="Web\Accounts\DebitBalanceRequest.cs" />
     <Compile Include="Web\Accounts\CreditBalanceRequest.cs" />
     <Compile Include="Web\Accounts\OpenAccountRequest.cs" />
     <Compile Include="Web\Accounts\OpenAccountResponse.cs" />
@@ -224,6 +225,7 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <Content Include="Web\Accounts\TransactionResponseView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ichnaea.NEventStore\Ichnaea.NEventStore.csproj">

@@ -18,7 +18,6 @@ namespace Restall.Ichnaea.Demo.Web
 				new DomainEventReplayChain<Account>(
 					new AccountOpenedReplay(),
 					new BalanceCreditedReplay(),
-					new BalanceCreditedReplay(),
 					new BalanceDebitedReplay(),
 					new OverdraftAdjustedReplay()));
 		}

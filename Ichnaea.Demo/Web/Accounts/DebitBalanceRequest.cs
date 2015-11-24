@@ -5,10 +5,10 @@ using Restall.Nancy.ServiceRouting;
 
 namespace Restall.Ichnaea.Demo.Web.Accounts
 {
-	[NamedRoute(RouteNames.CreditBalance, "accounts/{id:guid}/credit", "POST")]
+	[NamedRoute(RouteNames.DebitBalance, "accounts/{id:guid}/debit", "POST")]
 	[NullGuard(ValidationFlags.None)]
 	[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global", Justification = CodeAnalysisJustification.DtoParticipatesInSerialisation)]
-	public class CreditBalanceRequest
+	public class DebitBalanceRequest
 	{
 		public Guid Id { get; set; }
 

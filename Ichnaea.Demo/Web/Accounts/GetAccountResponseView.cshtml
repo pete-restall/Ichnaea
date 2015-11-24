@@ -17,6 +17,34 @@
 				</tbody>
 			</table>
 			<p>Current Balance: @Model.Balance</p>
+			<form method="POST" action="@Model.CreditAccountUri">
+				<fieldset>
+					<legend>Credit Account</legend>
+					<div>
+						<label for="CreditAmount">Amount:</label>
+						<input type="text" maxlength="8" required="" id="CreditAmount" name="Amount" />
+					</div>
+					<div>
+						<label for="CreditDescription">Description:</label>
+						<input type="text" maxlength="32" required="" id="CreditDescription" name="Description"/>
+					</div>
+					<input type="submit" value="Credit" />
+				</fieldset>
+			</form>
+			<form method="POST" action="@Model.DebitAccountUri">
+				<fieldset>
+					<legend>Debit Account</legend>
+					<div>
+						<label for="DebitAmount">Amount:</label>
+						<input type="text" maxlength="8" required="" id="DebitAmount" name="Amount" />
+					</div>
+					<div>
+						<label for="DebitDescription">Description:</label>
+						<input type="text" maxlength="32" required="" id="DebitDescription" name="Description" />
+					</div>
+					<input type="submit" value="Debit" />
+				</fieldset>
+			</form>
 			<p>
 				Go <a href="@Model.GetAllAccountsUri">Back to All Accounts</a>.
 			</p>
