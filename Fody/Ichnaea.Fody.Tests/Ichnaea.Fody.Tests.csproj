@@ -68,13 +68,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregateRootDomainEventMonitorExtensions.cs" />
     <Compile Include="AggregateRootFactory.cs" />
     <Compile Include="CodeAnalysisJustification.cs" />
     <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="Integration\FodyNotWovenSourceOfExceptionAssertionExtensions.cs" />
+    <Compile Include="FodyNotWovenSourceOfExceptionAssertionExtensions.cs" />
     <Compile Include="Integration\AggregateRootTest.cs" />
     <Compile Include="Integration\NoAggregateRootDecorationTest.cs" />
     <Compile Include="Integration\NonSourceOfEventTest.cs" />
+    <Compile Include="Integration\SourcePrivateEventTest.cs" />
+    <Compile Include="Integration\SourceInternalEventTest.cs" />
+    <Compile Include="Integration\SourceProtectedInternalEventTest.cs" />
+    <Compile Include="Integration\SourceProtectedEventTest.cs" />
     <Compile Include="Integration\SourceEventFromInternalNestedClassTest.cs" />
     <Compile Include="Integration\SourceEventFromProtectedInternalNestedClassTest.cs" />
     <Compile Include="Integration\SourceEventFromProtectedNestedClassTest.cs" />

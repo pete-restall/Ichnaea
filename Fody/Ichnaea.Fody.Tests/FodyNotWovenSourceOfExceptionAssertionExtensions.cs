@@ -1,7 +1,7 @@
 using System;
 using FluentAssertions;
 
-namespace Restall.Ichnaea.Fody.Tests.Integration
+namespace Restall.Ichnaea.Fody.Tests
 {
 	public static class FodyNotWovenSourceOfExceptionAssertionExtensions
 	{

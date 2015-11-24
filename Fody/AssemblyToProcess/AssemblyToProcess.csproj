@@ -45,6 +45,10 @@
   <ItemGroup>
     <Compile Include="NoAggregateRootDecoration.cs" />
     <Compile Include="NonSourceOfEvent.cs" />
+    <Compile Include="SourcePrivateEvent.cs" />
+    <Compile Include="SourceInternalEvent.cs" />
+    <Compile Include="SourceProtectedInternalEvent.cs" />
+    <Compile Include="SourceProtectedEvent.cs" />
     <Compile Include="SourceEventFromInternalNestedClass.cs" />
     <Compile Include="SourceEventFromProtectedInternalNestedClass.cs" />
     <Compile Include="SourceEventFromProtectedNestedClass.cs" />
