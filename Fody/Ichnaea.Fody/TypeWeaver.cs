@@ -7,6 +7,9 @@ namespace Restall.Ichnaea.Fody
 {
 	public class TypeWeaver
 	{
+		private const MethodAttributes SourceEventMethodAttributes =
+			MethodAttributes.Private | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
+
 		private readonly TypeDefinition type;
 
         public TypeWeaver(TypeDefinition type)
@@ -43,7 +46,7 @@ namespace Restall.Ichnaea.Fody
 			var eventDelegate = this.type.Module.ImportReference(eventField.FieldType.Resolve().Methods.Single(x => x.Name == "Invoke").MakeGenericMethod(domainEventType));
 
 			var noReturnValue = this.type.Module.TypeSystem.Void;
-			var eventSourcingMethod = new MethodDefinition("<Ichnaea>SourceEvent", MethodAttributes.Public, noReturnValue);
+			var eventSourcingMethod = new MethodDefinition("<Ichnaea>SourceEvent", SourceEventMethodAttributes, noReturnValue);
 			eventSourcingMethod.Parameters.Add(new ParameterDefinition("domainEvent", ParameterAttributes.None, domainEventType));
 			eventSourcingMethod.Body.Variables.Add(new VariableDefinition("eventSource", eventField.FieldType));
 			eventSourcingMethod.Body.MaxStackSize = 3;
