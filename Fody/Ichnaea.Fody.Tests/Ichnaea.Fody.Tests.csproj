@@ -75,6 +75,7 @@
     <Compile Include="FodyNotWovenSourceOfExceptionAssertionExtensions.cs" />
     <Compile Include="Integration\AggregateRootTest.cs" />
     <Compile Include="Integration\NoAggregateRootDecorationTest.cs" />
+    <Compile Include="Integration\TwoHomogenousEventsTest.cs" />
     <Compile Include="Integration\NonSourceOfEventTest.cs" />
     <Compile Include="Integration\SourceEventUsingInterfaceTest.cs" />
     <Compile Include="Integration\SourceEventUsingValueTypeTest.cs" />

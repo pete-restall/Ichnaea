@@ -75,6 +75,7 @@
     <Compile Include="SourceEventUsingLocalVariable.cs" />
     <Compile Include="NoEventSource.cs" />
     <Compile Include="OneSourceEventCall.cs" />
+    <Compile Include="TwoHomogenousEvents.cs" />
     <Compile Include="TwoConsecutiveSourceEventCalls.cs" />
     <Compile Include="SourceEventUsingStaticProperty.cs" />
     <Compile Include="CodeAnalysisJustification.cs" />

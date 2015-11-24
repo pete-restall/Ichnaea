@@ -6,7 +6,6 @@ namespace Restall.Ichnaea.Fody
 	public class ModuleWeaver
 	{
 		// TODO: Two events of different types - with Source.Event() call for both those exact types
-		// TODO: Two events of the same type when Source.Event() used - weave neither (ambiguous), and output a build error
 		// TODO: Two events of the same type when Source.Event() not used - no build error
 		// TODO: Two events sourced with (cast) common base types and events declared with two common base types - should work due to explicit casts
 		// TODO: Two events sourced with subtypes and events declared with two common base types - weave neither, ambiguous, so build error

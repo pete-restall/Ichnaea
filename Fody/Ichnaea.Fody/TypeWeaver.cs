@@ -22,7 +22,7 @@ namespace Restall.Ichnaea.Fody
 
 		public void WeaveRaiseEventIntoAggregateRoot()
 		{
-			if (!IsTypeAggregateRoot())
+			if (!this.IsTypeAggregateRoot() || !this.AreEventsDeclaredCorrectly())
 				return;
 
 			var eventRaisingMethod = this.AddMethodToTypeForRaisingNativeEvent();
@@ -32,10 +32,15 @@ namespace Restall.Ichnaea.Fody
 
 		private bool IsTypeAggregateRoot()
 		{
+			return this.type.CustomAttributes.Any(x => x.AttributeType.FullName == "Restall.Ichnaea.AggregateRootAttribute");
+		}
+
+		private bool AreEventsDeclaredCorrectly()
+		{
 			return
-				this.type.CustomAttributes.Any(x => x.AttributeType.FullName == "Restall.Ichnaea.AggregateRootAttribute") &&
 				this.type.Events.Any() &&
-				this.type.Events[0].EventType.FullName.StartsWith("Restall.Ichnaea.Source/Of`1<");
+				this.type.Events.All(x => x.EventType.FullName.StartsWith("Restall.Ichnaea.Source/Of`1<")) &&
+				this.type.Events.Select(x => x.EventType.FullName).Distinct().Count() == this.type.Events.Count;
 		}
 
 		private MethodDefinition AddMethodToTypeForRaisingNativeEvent()
