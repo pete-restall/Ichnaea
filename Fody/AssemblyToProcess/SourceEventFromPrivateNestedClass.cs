@@ -21,6 +21,7 @@ namespace Restall.Ichnaea.Fody.AssemblyToProcess
 			}
 		}
 
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.StubForTesting)]
 		public void DoSomething(Guid token)
 		{
 			new NestedClass(token).DoSomething();

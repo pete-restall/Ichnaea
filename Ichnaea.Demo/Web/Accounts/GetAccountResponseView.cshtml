@@ -17,6 +17,8 @@
 				</tbody>
 			</table>
 			<p>Current Balance: @Model.Balance</p>
+			<p>Overdraft: @Model.Overdraft</p>
+			<p>Available Balance: @(Model.Balance + Model.Overdraft)</p>
 			<form method="POST" action="@Model.CreditAccountUri">
 				<fieldset>
 					<legend>Credit Account</legend>

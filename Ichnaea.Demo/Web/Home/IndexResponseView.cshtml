@@ -39,7 +39,7 @@
 									<li>
 										Replay - Services to allow Domain Events to be replayed when constructing Aggregate Roots from persistent storage
 										<ul>
-											<li>AccountOpenedReplay - Applies an AccountOpened Domain Event</li>
+											<li>AccountOpenedReplay - Replays an AccountOpened Domain Event</li>
 										</ul>
 									</li>
 									<li>Account - The Aggregate Root</li>
@@ -60,8 +60,10 @@
 				</ul>
 			</p>
 			<p>
-				The application is built on Nancy (with Nancy.ServiceRouting for clean convention-based routing), so see Bootstrapper.cs for the global wire-up.  IchnaeaBootstrapper.cs contains the Ichnaea-specific wire-up.
-				NEventStore (using RavenDB) is the persistent store, and is wired up in the DatabaseBootstrapper.cs file.
+				The application is built on Nancy (with Nancy.ServiceRouting for clean convention-based routing), so see Bootstrapper.cs for the global wire-up.
+			</p>
+			<p>
+				IchnaeaBootstrapper.cs contains the Ichnaea-specific wire-up.  NEventStore (using RavenDB) is the persistent store, and is wired up in the DatabaseBootstrapper.cs file.
 			</p>
 		</section>
 		<section>

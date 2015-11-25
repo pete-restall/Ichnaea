@@ -12,6 +12,7 @@ namespace Restall.Ichnaea.Fody.AssemblyToProcess
 			Source.Event.Of(new SomethingHappened(token));
 		}
 
+		[SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global", Justification = CodeAnalysisJustification.IchnaeaSubscribes)]
 		protected internal event Source.Of<SomethingHappened> EventSource;
 	}
 }

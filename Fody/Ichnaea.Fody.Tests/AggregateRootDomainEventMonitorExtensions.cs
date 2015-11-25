@@ -8,11 +8,6 @@ namespace Restall.Ichnaea.Fody.Tests
 {
 	public static class AggregateRootDomainEventMonitorExtensions
 	{
-		public static void MonitorDomainEvent(this object aggregateRoot, string eventFieldName)
-		{
-			aggregateRoot.MonitorDomainEvent<object>(eventFieldName);
-		}
-
 		[SuppressMessage("ReSharper", "PossibleNullReferenceException", Justification = "Null check is done by Fluent Assertions")]
 		public static void MonitorDomainEvent<TDomainEvent>(this object aggregateRoot, string eventFieldName)
 		{

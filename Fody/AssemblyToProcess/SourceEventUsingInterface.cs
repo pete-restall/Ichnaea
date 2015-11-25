@@ -8,6 +8,8 @@ namespace Restall.Ichnaea.Fody.AssemblyToProcess
 	{
 		public interface ISomethingHappened
 		{
+			[SuppressMessage("ReSharper", "UnusedMemberInSuper.Global", Justification = CodeAnalysisJustification.StubForTesting)]
+			[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.StubForTesting)]
 			Guid Token { get; }
 		}
 

@@ -44,6 +44,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 					AccountNumber = account.Id.AccountNumber,
 					Holder = account.Holder,
 					Balance = account.Balance,
+					Overdraft = account.Overdraft,
 					CreditAccountUri = this.links.Relative(RouteNames.CreditBalance, new { id = request.Id }),
 					DebitAccountUri = this.links.Relative(RouteNames.DebitBalance, new { id = request.Id }),
 					GetAllAccountsUri = this.links.Relative(RouteNames.GetAllAccounts)

@@ -20,7 +20,7 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 				.WithDomainEvent<object>(this.AggregateRoot, x => SomethingHappenedWithToken(x, token));
 		}
 
-		protected Guid InvokeTokenActionOnMonitoredAggregateRoot(string eventFieldName, Action<dynamic, Guid> action)
+		private Guid InvokeTokenActionOnMonitoredAggregateRoot(string eventFieldName, Action<dynamic, Guid> action)
 		{
 			return InvokeTokenActionOnMonitoredAggregateRoot<object>(eventFieldName, action);
 		}

@@ -6,9 +6,6 @@ namespace Restall.Ichnaea.Fody
 {
 	public class TypeWeaver
 	{
-		private const MethodAttributes SourceEventMethodAttributes =
-			MethodAttributes.Private | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
-
 		private readonly TypeDefinition type;
 
         public TypeWeaver(TypeDefinition type)

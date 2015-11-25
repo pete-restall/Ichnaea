@@ -6,6 +6,7 @@ namespace Restall.Ichnaea.Fody.AssemblyToProcess
 	[AggregateRoot]
 	public class SourceEventFromInternalNestedClass
 	{
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = CodeAnalysisJustification.StubForTesting)]
 		internal class NestedClass
 		{
 			private readonly Guid token;
@@ -21,6 +22,7 @@ namespace Restall.Ichnaea.Fody.AssemblyToProcess
 			}
 		}
 
+		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.StubForTesting)]
 		public void DoSomething(Guid token)
 		{
 			new NestedClass(token).DoSomething();

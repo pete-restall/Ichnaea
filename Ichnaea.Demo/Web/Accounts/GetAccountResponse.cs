@@ -16,6 +16,8 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 
 		public decimal Balance { get; set; }
 
+		public decimal Overdraft { get; set; }
+
 		public Uri CreditAccountUri { get; set; }
 
 		public Uri DebitAccountUri { get; set; }

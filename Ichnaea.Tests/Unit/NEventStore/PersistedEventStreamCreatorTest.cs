@@ -288,7 +288,7 @@ namespace Restall.Ichnaea.Tests.Unit.NEventStore
 			using (var stream = new PersistedEventStreamCreator<object>(
 				StubEventStoreCreateStream(eventStoreStreams),
 				DummyBucketId(),
-				StubPrePersistenceDomainEventTrackerToSourceOneDomainEventPerAggregateRoot(aggregateRoots, domainEvents),
+				StubPrePersistenceDomainEventTrackerToSourceOneDomainEventPerAggregateRoot(aggregateRoots, domainEvents.Cast<object>().ToArray()),
 				DummyAggregateRootIdGetter,
 				x => (EventMessage) x))
 			{
