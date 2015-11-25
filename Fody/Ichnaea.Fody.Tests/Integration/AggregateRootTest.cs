@@ -22,7 +22,7 @@ namespace Restall.Ichnaea.Fody.Tests.Integration
 
 		private Guid InvokeTokenActionOnMonitoredAggregateRoot(string eventFieldName, Action<dynamic, Guid> action)
 		{
-			return InvokeTokenActionOnMonitoredAggregateRoot<object>(eventFieldName, action);
+			return this.InvokeTokenActionOnMonitoredAggregateRoot<object>(eventFieldName, action);
 		}
 
 		protected Guid InvokeTokenActionOnMonitoredAggregateRoot<TDomainEvent>(string eventFieldName, Action<dynamic, Guid> action)

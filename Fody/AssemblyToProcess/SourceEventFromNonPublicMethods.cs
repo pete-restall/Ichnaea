@@ -13,7 +13,7 @@ namespace Restall.Ichnaea.Fody.AssemblyToProcess
 	{
 		public void SourceEventFromPrivateMethod(Guid token)
 		{
-			PrivateMethod(token);
+			this.PrivateMethod(token);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
@@ -24,7 +24,7 @@ namespace Restall.Ichnaea.Fody.AssemblyToProcess
 
 		public void SourceEventFromProtectedMethod(Guid token)
 		{
-			ProtectedMethod(token);
+			this.ProtectedMethod(token);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
@@ -35,7 +35,7 @@ namespace Restall.Ichnaea.Fody.AssemblyToProcess
 
 		public void SourceEventFromProtectedInternalMethod(Guid token)
 		{
-			ProtectedInternalMethod(token);
+			this.ProtectedInternalMethod(token);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
@@ -46,7 +46,7 @@ namespace Restall.Ichnaea.Fody.AssemblyToProcess
 
 		public void SourceEventFromInternalMethod(Guid token)
 		{
-			InternalMethod(token);
+			this.InternalMethod(token);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]

@@ -28,7 +28,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 			account.Credit(request.Amount, request.Description);
 			this.eventStore.Commit();
 
-			return TransactionResponse(request.Id);
+			return this.TransactionResponse(request.Id);
 		}
 
 		private Account GetAccountById(Guid id)
@@ -52,7 +52,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 			account.Debit(request.Amount, request.Description);
 			this.eventStore.Commit();
 
-			return TransactionResponse(request.Id);
+			return this.TransactionResponse(request.Id);
 		}
 	}
 }
