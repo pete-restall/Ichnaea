@@ -4,7 +4,7 @@ using Mono.Cecil;
 
 namespace Restall.Ichnaea.Fody
 {
-	public static class TypeReferenceExtensions
+	internal static class TypeReferenceExtensions
 	{
 		public static bool IsAssignableFrom(this TypeReference baseType, TypeDefinition type)
 		{
