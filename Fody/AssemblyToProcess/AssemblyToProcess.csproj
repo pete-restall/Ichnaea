@@ -61,7 +61,7 @@
     <Compile Include="SomethingDerivedHappened.cs" />
     <Compile Include="SourceEventUsingDerivedTypeOfBaseEvent.cs" />
     <Compile Include="SourceEventFromNonPublicMethods.cs" />
-    <Compile Include="SourceHomogenousEventFromTwoMethods.cs" />
+    <Compile Include="SourceSameEventFromTwoMethods.cs" />
     <Compile Include="SourceEventFromStaticMethod.cs" />
     <Compile Include="SourceEventUsingInstanceProperty.cs" />
     <Compile Include="SourceEventUsingStaticField.cs" />
@@ -75,6 +75,7 @@
     <Compile Include="SourceEventUsingLocalVariable.cs" />
     <Compile Include="NoEventSource.cs" />
     <Compile Include="OneSourceEventCall.cs" />
+    <Compile Include="TwoHeterogenousEvents.cs" />
     <Compile Include="TwoHomogenousEvents.cs" />
     <Compile Include="TwoConsecutiveSourceEventCalls.cs" />
     <Compile Include="SourceEventUsingStaticProperty.cs" />

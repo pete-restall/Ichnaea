@@ -75,6 +75,7 @@
     <Compile Include="FodyNotWovenSourceOfExceptionAssertionExtensions.cs" />
     <Compile Include="Integration\AggregateRootTest.cs" />
     <Compile Include="Integration\NoAggregateRootDecorationTest.cs" />
+    <Compile Include="Integration\TwoHeterogenousEventsTest.cs" />
     <Compile Include="Integration\TwoHomogenousEventsTest.cs" />
     <Compile Include="Integration\NonSourceOfEventTest.cs" />
     <Compile Include="Integration\SourceEventUsingInterfaceTest.cs" />
@@ -92,7 +93,7 @@
     <Compile Include="Integration\SourceEventFromInstancePropertyTest.cs" />
     <Compile Include="Integration\SourceEventUsingDerivedTypeOfBaseEventTest.cs" />
     <Compile Include="Integration\SourceEventFromNonPublicMethodsTest.cs" />
-    <Compile Include="Integration\SourceHomogenousEventFromTwoMethodsTest.cs" />
+    <Compile Include="Integration\SourceSameEventFromTwoMethodsTest.cs" />
     <Compile Include="Integration\SourceEventFromStaticMethodTest.cs" />
     <Compile Include="Integration\SourceEventUsingInstancePropertyTest.cs" />
     <Compile Include="Integration\SourceEventUsingStaticFieldTest.cs" />
@@ -113,6 +114,8 @@
     <Compile Include="ModuleWeaverFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventRecorderAssertionExtensions.cs" />
+    <Compile Include="Unit\CecilTestDoubles.cs" />
+    <Compile Include="Unit\EventSourcingMethodTest.cs" />
     <Compile Include="Unit\ModuleWeaverTests.cs" />
     <Compile Include="Unit\MethodWeaverTest.cs" />
     <Compile Include="Unit\TypeWeaverTest.cs" />

@@ -6,6 +6,7 @@ namespace Restall.Ichnaea.Fody.Tests
 	public static class CodeAnalysisJustification
 	{
 		public const string FacilitatesInjection = "Facilitates injection";
+		public const string StubForTesting = "Stub for testing";
 		public const string TestingConstructorException = "Testing constructor exception";
 	}
 }

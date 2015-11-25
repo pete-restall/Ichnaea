@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Restall.Ichnaea.Fody.AssemblyToProcess
 {
 	[AggregateRoot]
-	public class SourceHomogenousEventFromTwoMethods
+	public class SourceSameEventFromTwoMethods
 	{
 		[SuppressMessage("ReSharper", "UnusedMember.Global", Justification = CodeAnalysisJustification.StubForTesting)]
 		public void DoSomething(Guid token)

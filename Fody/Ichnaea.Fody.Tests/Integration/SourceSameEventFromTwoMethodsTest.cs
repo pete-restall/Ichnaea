@@ -2,12 +2,12 @@
 
 namespace Restall.Ichnaea.Fody.Tests.Integration
 {
-	public class SourceHomogenousEventFromTwoMethodsTest: AggregateRootTest
+	public class SourceSameEventFromTwoMethodsTest: AggregateRootTest
 	{
 		private const string EventName = "EventSource";
 
-		public SourceHomogenousEventFromTwoMethodsTest():
-			base(ModuleWeaverFixture.AggregateRootFactory.CreateAggregateRootFromClassNamed("SourceHomogenousEventFromTwoMethods"))
+		public SourceSameEventFromTwoMethodsTest():
+			base(ModuleWeaverFixture.AggregateRootFactory.CreateAggregateRootFromClassNamed("SourceSameEventFromTwoMethods"))
 		{
 		}
 

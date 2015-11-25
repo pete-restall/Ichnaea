@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
-using Mono.Cecil;
 using Xunit;
 
 namespace Restall.Ichnaea.Fody.Tests.Unit
@@ -12,27 +11,21 @@ namespace Restall.Ichnaea.Fody.Tests.Unit
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullMethod_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new MethodWeaver(null, DummyMethodDefinition());
+			Action constructor = () => new MethodWeaver(null, DummyEventSourcingMethods());
 			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("method");
 		}
 
-		private static MethodDefinition DummyMethodDefinition()
+		private static EventSourcingMethod[] DummyEventSourcingMethods()
 		{
-			return new MethodDefinition("SomeMethod", MethodAttributes.Public, DummyTypeReference());
-		}
-
-		private static TypeReference DummyTypeReference()
-		{
-			var moduleDefinition = ModuleDefinition.CreateModule("SomeModule", new ModuleParameters());
-			return moduleDefinition.ImportReference(typeof(void));
+			return new EventSourcingMethod[0];
 		}
 
 		[Fact]
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
-		public void Constructor_CalledWithNullEventSourcingMethod_ExpectArgumentNullExceptionWithCorrectParamName()
+		public void Constructor_CalledWithNullEventSourcingMethods_ExpectArgumentNullExceptionWithCorrectParamName()
 		{
-			Action constructor = () => new MethodWeaver(DummyMethodDefinition(), null);
-			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("eventSourcingMethod");
+			Action constructor = () => new MethodWeaver(CecilTestDoubles.DummyMethodDefinition(), null);
+			constructor.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be("eventSourcingMethods");
 		}
 	}
 }

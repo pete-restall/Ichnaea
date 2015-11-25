@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Mono.Cecil;
-using Mono.Cecil.Cil;
 
 namespace Restall.Ichnaea.Fody
 {
@@ -20,14 +19,17 @@ namespace Restall.Ichnaea.Fody
 	        this.type = type;
 		}
 
-		public void WeaveRaiseEventIntoAggregateRoot()
+		public void WeaveSourceEventMethodIntoAggregateRoot()
 		{
 			if (!this.IsTypeAggregateRoot() || !this.AreEventsDeclaredCorrectly())
 				return;
 
-			var eventRaisingMethod = this.AddMethodToTypeForRaisingNativeEvent();
+			var eventSourcingMethods = this.type.Events.Select(x => new EventSourcingMethod(x)).ToArray();
+			foreach (var eventSourcingMethod in eventSourcingMethods)
+				eventSourcingMethod.WeaveSourceEventMethodIntoAggregateRoot();
+
 			foreach (var method in this.type.Methods)
-				new MethodWeaver(method, eventRaisingMethod).WeaveSourceEventIntoMethod();
+				new MethodWeaver(method, eventSourcingMethods).WeaveSourceEventCallsIntoMethod();
 		}
 
 		private bool IsTypeAggregateRoot()
@@ -41,43 +43,6 @@ namespace Restall.Ichnaea.Fody
 				this.type.Events.Any() &&
 				this.type.Events.All(x => x.EventType.FullName.StartsWith("Restall.Ichnaea.Source/Of`1<")) &&
 				this.type.Events.Select(x => x.EventType.FullName).Distinct().Count() == this.type.Events.Count;
-		}
-
-		private MethodDefinition AddMethodToTypeForRaisingNativeEvent()
-		{
-			var eventDefinition = this.type.Events[0];
-			var eventField = this.type.Fields.Single(x => x.FullName == eventDefinition.FullName);
-			var domainEventType = ((GenericInstanceType) eventField.FieldType).GenericArguments[0];
-			var eventDelegate = this.type.Module.ImportReference(eventField.FieldType.Resolve().Methods.Single(x => x.Name == "Invoke").MakeGenericMethod(domainEventType));
-
-			var noReturnValue = this.type.Module.TypeSystem.Void;
-			var eventSourcingMethod = new MethodDefinition("<Ichnaea>SourceEvent", SourceEventMethodAttributes, noReturnValue);
-			eventSourcingMethod.Parameters.Add(new ParameterDefinition("domainEvent", ParameterAttributes.None, domainEventType));
-			eventSourcingMethod.Body.Variables.Add(new VariableDefinition("eventSource", eventField.FieldType));
-			eventSourcingMethod.Body.MaxStackSize = 3;
-			eventSourcingMethod.Body.InitLocals = true;
-
-			var il = eventSourcingMethod.Body.GetILProcessor();
-			il.Emit(OpCodes.Ldarg_0);
-			il.Emit(OpCodes.Ldfld, eventField);
-			il.Emit(OpCodes.Stloc_0);
-			il.Emit(OpCodes.Ldloc_0);
-
-			var nullCheckPlaceholder = il.Create(OpCodes.Nop);
-			il.Append(nullCheckPlaceholder);
-			il.Emit(OpCodes.Ret);
-
-			var startOfCallSequence = il.Create(OpCodes.Ldloc_0);
-			il.Append(startOfCallSequence);
-			il.Replace(nullCheckPlaceholder, il.Create(OpCodes.Brtrue_S, startOfCallSequence));
-
-			il.Emit(OpCodes.Ldarg_0);
-			il.Emit(OpCodes.Ldarg_1);
-			il.Emit(OpCodes.Callvirt, eventDelegate);
-			il.Emit(OpCodes.Ret);
-
-			this.type.Methods.Add(eventSourcingMethod);
-			return eventSourcingMethod;
 		}
 	}
 }

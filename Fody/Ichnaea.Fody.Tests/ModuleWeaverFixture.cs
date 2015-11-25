@@ -33,9 +33,9 @@ namespace Restall.Ichnaea.Fody.Tests
 		{
 			var moduleDefinition = ModuleDefinition.ReadModule(WovenAssemblyFilename);
 			var weavingTask = new ModuleWeaver
-			{
-				ModuleDefinition = moduleDefinition
-			};
+				{
+					ModuleDefinition = moduleDefinition
+				};
 
 			weavingTask.Execute();
 			moduleDefinition.Write(WovenAssemblyFilename);

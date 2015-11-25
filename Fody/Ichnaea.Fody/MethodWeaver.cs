@@ -8,21 +8,21 @@ namespace Restall.Ichnaea.Fody
 	public class MethodWeaver
 	{
 		private readonly MethodDefinition method;
-		private readonly MethodDefinition eventSourcingMethod;
+		private readonly EventSourcingMethod[] eventSourcingMethods;
 
-		public MethodWeaver(MethodDefinition method, MethodDefinition eventSourcingMethod)
+		public MethodWeaver(MethodDefinition method, EventSourcingMethod[] eventSourcingMethods)
 		{
 			if (method == null)
 				throw new ArgumentNullException(nameof(method));
 
-			if (eventSourcingMethod == null)
-				throw new ArgumentNullException(nameof(eventSourcingMethod));
+			if (eventSourcingMethods == null)
+				throw new ArgumentNullException(nameof(eventSourcingMethods));
 
 			this.method = method;
-			this.eventSourcingMethod = eventSourcingMethod;
+			this.eventSourcingMethods = eventSourcingMethods;
 		}
 
-		public void WeaveSourceEventIntoMethod()
+		public void WeaveSourceEventCallsIntoMethod()
 		{
 			if (this.method.IsStatic)
 				return;
@@ -34,7 +34,7 @@ namespace Restall.Ichnaea.Fody
 
 			Instruction call;
 			while ((call = this.method.Body.Instructions.FirstOrDefault(IsCallToSourceEventOf)) != null)
-				il.Replace(call, il.Create(OpCodes.Call, this.eventSourcingMethod));
+				il.Replace(call, il.Create(OpCodes.Call, this.eventSourcingMethods.Single(x => x.CanReplaceCallToStub((MethodReference) call.Operand)).AsMethodReference()));
 		}
 
 		private static bool IsLoadFieldSourceEvent(Instruction instruction)

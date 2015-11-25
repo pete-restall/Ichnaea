@@ -5,8 +5,6 @@ namespace Restall.Ichnaea.Fody
 {
 	public class ModuleWeaver
 	{
-		// TODO: Two events of different types - with Source.Event() call for both those exact types
-		// TODO: Two events of the same type when Source.Event() not used - no build error
 		// TODO: Two events sourced with (cast) common base types and events declared with two common base types - should work due to explicit casts
 		// TODO: Two events sourced with subtypes and events declared with two common base types - weave neither, ambiguous, so build error
 		// TODO: One event sourced with two declared events with two common base types - weave neither, ambiguous, so build error
@@ -26,7 +24,7 @@ namespace Restall.Ichnaea.Fody
 				throw new InvalidOperationException("ModuleDefinition cannot be null.  Is Fody integrated into the build correctly ?");
 
 			foreach (var type in this.ModuleDefinition.GetTypes())
-				new TypeWeaver(type).WeaveRaiseEventIntoAggregateRoot();
+				new TypeWeaver(type).WeaveSourceEventMethodIntoAggregateRoot();
 		}
 
 		public ModuleDefinition ModuleDefinition { private get; set; }

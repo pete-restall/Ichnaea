@@ -9,7 +9,7 @@ namespace Restall.Ichnaea.Demo.Accounts
 		public Account(AccountId id, string holder)
 		{
 			if (holder.Trim().Length == 0)
-				throw new ArgumentException("Account Holder names cannot be empty", nameof(holder));
+				throw new ArgumentException("Account Holder name cannot be empty", nameof(holder));
 
 			this.Id = id;
 			this.Holder = holder;

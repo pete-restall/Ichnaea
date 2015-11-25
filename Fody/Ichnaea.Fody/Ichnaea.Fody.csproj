@@ -57,10 +57,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventSourcingMethod.cs" />
     <Compile Include="MethodReferenceExtensions.cs" />
     <Compile Include="ModuleWeaver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MethodWeaver.cs" />
+    <Compile Include="TypeReferenceExtensions.cs" />
     <Compile Include="TypeWeaver.cs" />
   </ItemGroup>
   <ItemGroup>
