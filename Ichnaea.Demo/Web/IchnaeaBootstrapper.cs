@@ -11,7 +11,6 @@ namespace Restall.Ichnaea.Demo.Web
 		public static void RegisterRequestScopeIchnaeaDependenciesInto(TinyIoCContainer container)
 		{
 			// TODO: PROPER FLUENT / CONVENTION-BASED CONFIGURATION
-			// TODO: CREATE AN IdAttribute AND AN IdAttributeAggregateRootIdGetter CLASS
 			// TODO: ADD AN IgnoredDomainEventReplay<TDomainEventType>, FOR HANDLING SUCH CASES AS OverdraftAdjustmentRejected
 			container.RegisterAggregateRoot(
 				new NamedPropertyAggregateRootIdGetter<Account, AccountId>("Id"),
