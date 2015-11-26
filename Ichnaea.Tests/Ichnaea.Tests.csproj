@@ -95,6 +95,8 @@
     <Compile Include="Unit\DomainEventStreamCannotBeReplayedExceptionTest.cs" />
     <Compile Include="Unit\ExceptionMessage.cs" />
     <Compile Include="Unit\BestPracticesExceptionTest.cs" />
+    <Compile Include="Unit\IdAttributeAggregateRootIdGetterTest.cs" />
+    <Compile Include="Unit\IdAttributeTest.cs" />
     <Compile Include="Unit\InMemoryDomainEventTrackerTest.cs" />
     <Compile Include="Unit\EnumerableExtensionsTest.cs" />
     <Compile Include="Unit\LambdaPostPersistenceDomainEventTrackerTest.cs" />

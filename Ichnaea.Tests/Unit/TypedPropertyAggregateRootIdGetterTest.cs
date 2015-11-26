@@ -37,6 +37,18 @@ namespace Restall.Ichnaea.Tests.Unit
 			private Guid PrivateGuidProperty { get; set; }
 		}
 
+		[SuppressMessage("ReSharper", "UnusedMember.Local", Justification = CodeAnalysisJustification.StubForTesting)]
+		[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = CodeAnalysisJustification.StubForTesting)]
+		private class DerivedAggregateRootWithSameIdTypes: AggregateRootWithPrivateId
+		{
+			public DerivedAggregateRootWithSameIdTypes(): base("anything")
+			{
+				
+			}
+
+			private string StringProperty { get; set; }
+		}
+
 		[Fact]
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWhenAggregateRootTypeDoesNotHavePropertyWithIdType_ExpectAggregateRootIdNotFoundExceptionWithCorrectTypes()
@@ -67,6 +79,22 @@ namespace Restall.Ichnaea.Tests.Unit
 		{
 			Action constructor = () => new TypedPropertyAggregateRootIdGetter<AggregateRootWithSameIdTypesAndDifferentVisibility, Guid>();
 			constructor.ShouldThrowAggregateRootIdNotFoundExceptionFor<AggregateRootWithSameIdTypesAndDifferentVisibility, Guid>();
+		}
+
+		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
+		public void Constructor_CalledWhenAggregateRootIsDerivedAndHasPropertiesOfCorrectTypeInBothClasses_ExpectAggregateRootIdNotFoundExceptionWithCorrectTypes()
+		{
+			Action constructor = () => new TypedPropertyAggregateRootIdGetter<DerivedAggregateRootWithSameIdTypes, string>();
+			constructor.ShouldThrowAggregateRootIdNotFoundExceptionFor<DerivedAggregateRootWithSameIdTypes, string>();
+		}
+
+		[Fact]
+		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
+		public void Constructor_CalledWhenPropertyIsShadowedAndAggregateRootIsDerived_ExpectAggregateRootIdNotFoundExceptionWithCorrectTypes()
+		{
+			Action constructor = () => new TypedPropertyAggregateRootIdGetter<AggregateRootWithShadowedId, string>();
+			constructor.ShouldThrowAggregateRootIdNotFoundExceptionFor<AggregateRootWithShadowedId, string>();
 		}
 
 		[Fact]
@@ -135,15 +163,6 @@ namespace Restall.Ichnaea.Tests.Unit
 			var aggregateRoot = new AggregateRootWithShadowedId(baseId, StringGenerator.AnyNonNull());
 			var getter = new TypedPropertyAggregateRootIdGetter<AggregateRootWithShadowedIdBase, string>();
 			getter.GetIdFrom(aggregateRoot).Should().BeSameAs(baseId);
-		}
-
-		[Fact]
-		public void GetIdFrom_CalledWhenPropertyIsShadowedAndAggregateRootIsDerived_ExpectValueOfDerivedPropertyIsReturned()
-		{
-			var derivedId = StringGenerator.AnyNonNull();
-			var aggregateRoot = new AggregateRootWithShadowedId(StringGenerator.AnyNonNull(), derivedId);
-			var getter = new TypedPropertyAggregateRootIdGetter<AggregateRootWithShadowedId, string>();
-			getter.GetIdFrom(aggregateRoot).Should().BeSameAs(derivedId);
 		}
 	}
 }

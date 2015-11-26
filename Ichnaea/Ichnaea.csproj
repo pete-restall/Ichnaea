@@ -57,6 +57,8 @@
     <Compile Include="DomainEventReplayChain.cs" />
     <Compile Include="DomainEventCannotBeReplayedException.cs" />
     <Compile Include="IAggregateRootIdGetter.cs" />
+    <Compile Include="IdAttribute.cs" />
+    <Compile Include="IdAttributeAggregateRootIdGetter.cs" />
     <Compile Include="IPostPersistenceDomainEventTracker.cs" />
     <Compile Include="DomainEventStreamCannotBeReplayedException.cs" />
     <Compile Include="IPrePersistenceDomainEventTracker.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypedDomainEventReplay.cs" />
     <Compile Include="TypedPropertyAggregateRootIdGetter.cs" />
+    <Compile Include="TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />

@@ -6,24 +6,28 @@ namespace Restall.Ichnaea
 	public class TypedPropertyAggregateRootIdGetter<TAggregateRoot, TAggregateRootId>: IAggregateRootIdGetter<TAggregateRoot, TAggregateRootId>
 		where TAggregateRoot: class
 	{
-		private readonly PropertyInfo idProperty;
+		private static readonly PropertyInfo IdProperty;
 
-		public TypedPropertyAggregateRootIdGetter()
+		static TypedPropertyAggregateRootIdGetter()
 		{
 			var properties = typeof(TAggregateRoot)
-				.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+				.GetAllProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
 				.Where(x => x.PropertyType == typeof(TAggregateRootId))
 				.ToArray();
 
-			if (properties.Length != 1)
-				throw new AggregateRootIdNotFoundException(typeof(TAggregateRoot), typeof(TAggregateRootId));
+			if (properties.Length == 1)
+				IdProperty = properties[0];
+		}
 
-			this.idProperty = properties.First();
+		public TypedPropertyAggregateRootIdGetter()
+		{
+			if (IdProperty == null)
+				throw new AggregateRootIdNotFoundException(typeof(TAggregateRoot), typeof(TAggregateRootId));
 		}
 
 		public TAggregateRootId GetIdFrom(TAggregateRoot aggregateRoot)
 		{
-			return (TAggregateRootId) this.idProperty.GetValue(aggregateRoot);
+			return (TAggregateRootId) IdProperty.GetValue(aggregateRoot);
 		}
 	}
 }
