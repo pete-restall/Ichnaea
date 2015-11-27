@@ -101,6 +101,8 @@ namespace Restall.Ichnaea.Tests.Unit
 			public static event Source.Of<object> FirstEvent;
 		}
 
+		// TODO: Base class events should also be funnelled - I think non-public base-class events won't be returned via Type.GetEvents(), much like non-public fields / properties...
+
 		[Fact]
 		[SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = CodeAnalysisJustification.TestingConstructorException)]
 		public void Constructor_CalledWithNullObservable_ExpectArgumentNullExceptionWithCorrectParamName()
