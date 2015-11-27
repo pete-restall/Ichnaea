@@ -13,10 +13,12 @@ namespace Restall.Ichnaea.Fody
 		// TODO: Base of AggregateRoot declares the event, derived type sources the event
 		// TODO: Async methods...
 		// TODO: Source.Event() inside a closure
+		// TODO: Source.Event() inside a 'yield return' method...
 		// TODO: Derived type has event, base has no event.  Base calls Source.Event.Of() - should error
 		// TODO: Abstract event
 		// TODO: Abstract Aggregate Root with Event.SourceOf in the abstract class
 		// TODO: Abstract Aggregate Root with Event.SourceOf in the concrete class
+		// TODO: If user attempts weirdness with Source.Of - if ldsfld is emitted in unanticipated places, such as { var x = Source.Event; x.Of(...); } and other variants; make sure these are not woven (or handled gracefully)
 		public void Execute()
 		{
 			if (this.ModuleDefinition == null)
