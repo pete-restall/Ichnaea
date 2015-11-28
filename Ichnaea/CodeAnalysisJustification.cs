@@ -8,5 +8,6 @@ namespace Restall.Ichnaea
 		public const string ExceptionPola = "Exception POLA";
 		public const string PartOfPublicApiExtensibility = "Part of public API extensibility";
 		public const string RequiredByWeaver = "Required by IL Weaver";
+		public const string OneFieldPerGenericTypeIsIntended = "One static field per generic type is intended";
 	}
 }

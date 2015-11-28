@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 
 namespace Restall.Ichnaea
@@ -6,6 +7,7 @@ namespace Restall.Ichnaea
 	public class TypedPropertyAggregateRootIdGetter<TAggregateRoot, TAggregateRootId>: IAggregateRootIdGetter<TAggregateRoot, TAggregateRootId>
 		where TAggregateRoot: class
 	{
+		[SuppressMessage("ReSharper", "StaticMemberInGenericType", Justification = CodeAnalysisJustification.OneFieldPerGenericTypeIsIntended)]
 		private static readonly PropertyInfo IdProperty;
 
 		static TypedPropertyAggregateRootIdGetter()

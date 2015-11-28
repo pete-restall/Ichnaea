@@ -5,6 +5,7 @@ using Xunit;
 
 namespace Restall.Ichnaea.Tests.Unit
 {
+	[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local", Justification = CodeAnalysisJustification.StubForTesting)]
 	public class IdAttributeAggregateRootIdGetterTest
 	{
 		private class AggregateRootWithoutDecoratedMembers
@@ -116,7 +117,7 @@ namespace Restall.Ichnaea.Tests.Unit
 		private class AggregateRootWithDecoratedStaticField
 		{
 #pragma warning disable 169
-			private static readonly int id;
+			private static readonly int Id;
 #pragma warning restore 169
 		}
 
