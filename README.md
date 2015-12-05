@@ -59,7 +59,7 @@ Aggregate Root.
 To enable
 [Ichnaea.Fody](https://github.com/pete-restall/Ichnaea/tree/master/Fody/Ichnaea.Fody)
 integration it is decorated with the
-[AggregateRoot](https://github.com/pete-restall/Ichnaea/Ichnaea/tree/master/AggregateRootAttribute.cs)
+[AggregateRoot](https://github.com/pete-restall/Ichnaea/tree/master/Ichnaea/AggregateRootAttribute.cs)
 attribute, which will automatically replace stub Event Sourcing calls with
 boilerplate methods to raise corresponding (declared) .NET Events.
 
