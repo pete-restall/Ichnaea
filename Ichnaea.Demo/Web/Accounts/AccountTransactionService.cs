@@ -10,7 +10,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 	public class AccountTransactionService
 	{
 		private readonly RouteLinks links;
-        private readonly IDocumentSession documents;
+		private readonly IDocumentSession documents;
 		private readonly NEventStoreSession eventStore;
 		private readonly AccountRepository repository;
 

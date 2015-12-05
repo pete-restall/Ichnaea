@@ -61,7 +61,7 @@ namespace Restall.Ichnaea.Demo.Web.Accounts
 					Request = request,
 					OpenAccountUri = this.links.Relative(RouteNames.OpenAccount),
 					GetAllAccountsUri = this.links.Relative(RouteNames.GetAllAccounts),
-                    Message = message
+					Message = message
 				};
 		}
 	}

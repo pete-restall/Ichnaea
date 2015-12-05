@@ -8,12 +8,12 @@ namespace Restall.Ichnaea.Fody
 	{
 		private readonly TypeDefinition type;
 
-        public TypeWeaver(TypeDefinition type)
+		public TypeWeaver(TypeDefinition type)
 		{
 			if (type == null)
 				throw new ArgumentNullException(nameof(type));
 
-	        this.type = type;
+			this.type = type;
 		}
 
 		public void WeaveSourceEventMethodIntoAggregateRoot()
