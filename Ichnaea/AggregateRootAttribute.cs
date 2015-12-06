@@ -2,7 +2,7 @@
 
 namespace Restall.Ichnaea
 {
-	// TODO: Should only be valid when applied to classes (no multi-instance)
+	[AttributeUsage(AttributeTargets.Class)]
 	public class AggregateRootAttribute: Attribute
 	{
 	}

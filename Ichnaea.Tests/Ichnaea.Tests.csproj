@@ -81,6 +81,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringGenerator.cs" />
     <Compile Include="TypeGenerator.cs" />
+    <Compile Include="Unit\AggregateRootAttributeTest.cs" />
     <Compile Include="Unit\AggregateRootIdNotFoundExceptionTest.cs" />
     <Compile Include="Unit\AggregateRootIdNotFoundExceptionAssertionExtensions.cs" />
     <Compile Include="Unit\AggregateRootNotBeingTrackedExceptionTest.cs" />
